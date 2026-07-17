@@ -76,39 +76,6 @@ const projects = [
   },
 ];
 
-const principles = [
-  {
-    n: "i",
-    title: "Distribution first",
-    body: "Software nobody finds is a hobby. Every product ships with its channel: SEO, communities, partnerships, or the exchange listings themselves.",
-  },
-  {
-    n: "ii",
-    title: "Small surface area",
-    body: "Fewer dependencies, fewer moving parts, fewer ways to break. This page is static HTML and CSS — zero client-side JavaScript.",
-  },
-  {
-    n: "iii",
-    title: "Local-first where it matters",
-    body: "User data stays on the user's machine unless there is a hard reason it can't. Keys never leave the device, nothing phones home.",
-  },
-  {
-    n: "iv",
-    title: "Speed is a feature",
-    body: "Static output, self-hosted fonts, sub-second loads on a cold cache. Performance budgets are design constraints, not afterthoughts.",
-  },
-  {
-    n: "v",
-    title: "Type does the work",
-    body: "Three typefaces, one accent colour, hairlines instead of shadows. Restraint reads as confidence; decoration reads as doubt.",
-  },
-  {
-    n: "vi",
-    title: "Ship, measure, cut",
-    body: "Weekly releases over quarterly plans. CopyScouts went from idea to revenue in six weeks; what doesn't move a number gets deleted.",
-  },
-];
-
 const stack = [
   "TypeScript",
   "Node.js",
@@ -120,7 +87,6 @@ const stack = [
   "Electron",
   "LLM pipelines",
   "RAG + agents",
-  "osascript / macOS automation",
 ];
 ---
 
@@ -152,7 +118,6 @@ const stack = [
         <ul class="nav-links">
           <li><a href="#track-record">track record</a></li>
           <li><a href="#building-now">building</a></li>
-          <li><a href="#how-i-build">how i build</a></li>
           <li><a href="#partnerships">partnerships</a></li>
           <li><a href="#work">work</a></li>
           <li><a href="#private-markets">private markets</a></li>
@@ -171,11 +136,6 @@ const stack = [
               Two exits. US$10bn+ in token value distributed at Clique. A decade across maritime,
               AI and crypto.
             </p>
-            <div class="hero-ctas">
-              <a class="text-cta" href={`mailto:${EMAIL}`}>email me →</a>
-              <a class="text-cta" href={LINKS.LINKEDIN} rel="noopener">linkedin →</a>
-              <a class="text-cta" href="#building-now">what i'm building →</a>
-            </div>
           </div>
           <div class="hero-media">
             {
@@ -264,37 +224,15 @@ const stack = [
               ))
             }
           </div>
-        </div>
-      </section>
-
-      <section id="how-i-build" class="section" aria-label="How I build">
-        <div class="wrap">
-          <p class="eyebrow">03 · HOW I BUILD</p>
-          <div class="grid grid--3 principles">
-            {
-              principles.map((p) => (
-                <article class="principle">
-                  <p class="principle-n">{p.n}</p>
-                  <p class="principle-title">{p.title}</p>
-                  <p class="principle-body">{p.body}</p>
-                </article>
-              ))
-            }
-          </div>
-          <p class="stack-label">working stack</p>
-          <ul class="chips">
-            {stack.map((s) => <li class="chip">{s}</li>)}
-          </ul>
-          <p class="colophon">
-            proof: this site is astro static, zero client js, self-hosted fonts, one request per
-            asset · <a href={LINKS.SOURCE} rel="noopener">view source →</a>
+          <p class="stack-line">
+            stack: {stack.join(" · ")} · <a href={LINKS.SOURCE} rel="noopener">view source →</a>
           </p>
         </div>
       </section>
 
       <section id="partnerships" class="section" aria-label="Partnerships">
         <div class="wrap">
-          <p class="eyebrow">04 · PARTNERSHIPS</p>
+          <p class="eyebrow">03 · PARTNERSHIPS</p>
           <p class="intro">
             I create tech and lifestyle content in English and Chinese. Selected partners:
           </p>
@@ -311,7 +249,7 @@ const stack = [
 
       <section id="work" class="section" aria-label="Work with me">
         <div class="wrap">
-          <p class="eyebrow">05 · WORK WITH ME</p>
+          <p class="eyebrow">04 · WORK WITH ME</p>
           <div class="grid grid--4">
             <a class="route" href={LINKS.ATTITEUD} rel="noopener">
               <p class="route-title">Selling a small SaaS</p>
@@ -335,7 +273,7 @@ const stack = [
 
       <section id="private-markets" class="section" aria-label="Private markets">
         <div class="wrap">
-          <p class="eyebrow">06 · PRIVATE MARKETS</p>
+          <p class="eyebrow">05 · PRIVATE MARKETS</p>
           <p class="statement">
             I broker pre-IPO secondaries and structured private deals, buy-side and sell-side.
           </p>
@@ -364,6 +302,9 @@ const stack = [
         <div class="wrap">
           <p class="bio-line">
             before tech: police special operations command. also: Mr World Singapore finalist.
+          </p>
+          <p class="colophon">
+            this site: astro static · zero client js · self-hosted type · ~180 KB total
           </p>
         </div>
       </section>
