@@ -21,18 +21,16 @@ automatically. One-time setup: repo Settings → Pages → Source → **GitHub A
 
 ## Tokens to fill
 
-Real URLs are missing for these. They live in one place — the `TOKENS` object at the top of
-`src/pages/index.astro`:
+One real URL is still missing — the `LINKS` object at the top of `src/pages/index.astro`:
 
-- `{{GATEKEEP_URL}}`
-- `{{ATTITEUD_URL}}`
-- `{{SIGNAL_URL}}`
-- `{{HANDLESTACK_URL}}`
-- `{{FDS_URL}}`
 - `{{TELEGRAM_URL}}`
 
 ## Assets
 
+- `public/logos/` — project marks pulled from each site's favicon (gatekeep.vc, attiteud.com,
+  clique.tech; nichesim.svg is a vector redraw of their ⧉ mark — replace when they ship a favicon).
 - `public/portrait.jpg` — 3:4 portrait. If missing, the page renders a bone-colored placeholder
   block instead; the build never breaks.
 - `public/og.png` — Open Graph image placeholder path referenced in meta tags. Not generated.
+
+Fonts are self-hosted via Fontsource (no third-party requests).

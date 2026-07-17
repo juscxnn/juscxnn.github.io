@@ -1,20 +1,26 @@
 ---
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/dm-sans/500.css";
+import "@fontsource/dm-sans/600.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
 import "../styles/global.css";
 import fs from "node:fs";
 
-// Fill these once real URLs exist. Leave the {{TOKEN}} strings as-is until then.
-const TOKENS = {
-  GATEKEEP_URL: "{{GATEKEEP_URL}}",
-  ATTITEUD_URL: "{{ATTITEUD_URL}}",
-  SIGNAL_URL: "{{SIGNAL_URL}}",
-  HANDLESTACK_URL: "{{HANDLESTACK_URL}}",
-  FDS_URL: "{{FDS_URL}}",
-  TELEGRAM_URL: "{{TELEGRAM_URL}}",
+const LINKS = {
+  GATEKEEP: "https://gatekeep.vc",
+  ATTITEUD: "https://attiteud.com",
+  NICHESIM: "https://nichesim.com",
+  CLIQUE: "https://clique.tech",
+  ZAOBAO: "https://www.zaobao.com.sg/news/singapore/story20240102-1459510",
+  LINKEDIN: "https://linkedin.com/in/justincxa",
+  GITHUB: "https://github.com/juscxnn",
+  SOURCE: "https://github.com/juscxnn/juscxnn.github.io",
+  TELEGRAM: "{{TELEGRAM_URL}}",
 };
-
 const EMAIL = "jcxa@proton.me";
-const LINKEDIN_URL = "https://linkedin.com/in/justincxa";
-const GITHUB_URL = "https://github.com/juscxnn";
 
 const hasPortrait = fs.existsSync(new URL("../../public/portrait.jpg", import.meta.url));
 
@@ -26,6 +32,96 @@ const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 const description =
   "I build software and get it distributed. Two exits, US$10bn+ distributed at Clique, a decade across maritime, AI and crypto.";
 const ogImage = new URL("/og.png", Astro.site);
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Justin Chua",
+  url: Astro.site?.toString(),
+  email: `mailto:${EMAIL}`,
+  description,
+  address: { "@type": "PostalAddress", addressLocality: "Taipei" },
+  knowsLanguage: ["en", "zh", "fr"],
+  sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD, LINKS.NICHESIM],
+});
+
+const projects = [
+  {
+    name: "Gatekeep",
+    desc: "Founder and VC discovery at scale.",
+    href: LINKS.GATEKEEP,
+    domain: "gatekeep.vc",
+    logo: "/logos/gatekeep.svg",
+  },
+  {
+    name: "Attiteud",
+    desc: "Buys and builds AI-native software.",
+    href: LINKS.ATTITEUD,
+    domain: "attiteud.com",
+    logo: "/logos/attiteud.png",
+  },
+  {
+    name: "Nichesim",
+    desc: "Simulate communities to test your ideas with AI.",
+    href: LINKS.NICHESIM,
+    domain: "nichesim.com",
+    logo: "/logos/nichesim.svg",
+  },
+  {
+    name: "Signal",
+    desc: "Exchange intelligence at Clique.",
+    href: LINKS.CLIQUE,
+    domain: "clique.tech",
+    logo: "/logos/clique.png",
+  },
+];
+
+const principles = [
+  {
+    n: "i",
+    title: "Distribution first",
+    body: "Software nobody finds is a hobby. Every product ships with its channel: SEO, communities, partnerships, or the exchange listings themselves.",
+  },
+  {
+    n: "ii",
+    title: "Small surface area",
+    body: "Fewer dependencies, fewer moving parts, fewer ways to break. This page is static HTML and CSS — zero client-side JavaScript.",
+  },
+  {
+    n: "iii",
+    title: "Local-first where it matters",
+    body: "User data stays on the user's machine unless there is a hard reason it can't. Keys never leave the device, nothing phones home.",
+  },
+  {
+    n: "iv",
+    title: "Speed is a feature",
+    body: "Static output, self-hosted fonts, sub-second loads on a cold cache. Performance budgets are design constraints, not afterthoughts.",
+  },
+  {
+    n: "v",
+    title: "Type does the work",
+    body: "Three typefaces, one accent colour, hairlines instead of shadows. Restraint reads as confidence; decoration reads as doubt.",
+  },
+  {
+    n: "vi",
+    title: "Ship, measure, cut",
+    body: "Weekly releases over quarterly plans. CopyScouts went from idea to revenue in six weeks; what doesn't move a number gets deleted.",
+  },
+];
+
+const stack = [
+  "TypeScript",
+  "Node.js",
+  "Next.js",
+  "Astro",
+  "Python",
+  "Postgres",
+  "SQLite",
+  "Electron",
+  "LLM pipelines",
+  "RAG + agents",
+  "osascript / macOS automation",
+];
 ---
 
 <!doctype html>
@@ -35,27 +131,30 @@ const ogImage = new URL("/og.png", Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Justin Chua</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.site} />
+    <meta name="theme-color" content="#F7F4EC" />
     <meta property="og:title" content="Justin Chua" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.site} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href={favicon} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
-    />
+    <script type="application/ld+json" set:html={jsonLd} />
   </head>
   <body>
+    <a class="skip-link" href="#top">skip to content</a>
+
     <header class="nav">
       <nav class="wrap nav-inner" aria-label="Primary">
         <a class="wordmark" href="#top">Justin Chua</a>
         <ul class="nav-links">
           <li><a href="#track-record">track record</a></li>
-          <li><a href="#work">work</a></li>
+          <li><a href="#building-now">building</a></li>
+          <li><a href="#how-i-build">how i build</a></li>
           <li><a href="#partnerships">partnerships</a></li>
+          <li><a href="#work">work</a></li>
           <li><a href="#private-markets">private markets</a></li>
           <li class="lang"><span title="中文版 coming soon">EN / 繁中</span></li>
         </ul>
@@ -72,6 +171,11 @@ const ogImage = new URL("/og.png", Astro.site);
               Two exits. US$10bn+ in token value distributed at Clique. A decade across maritime,
               AI and crypto.
             </p>
+            <div class="hero-ctas">
+              <a class="text-cta" href={`mailto:${EMAIL}`}>email me →</a>
+              <a class="text-cta" href={LINKS.LINKEDIN} rel="noopener">linkedin →</a>
+              <a class="text-cta" href="#building-now">what i'm building →</a>
+            </div>
           </div>
           <div class="hero-media">
             {
@@ -110,6 +214,9 @@ const ogImage = new URL("/og.png", Astro.site);
                 of Singapore's domestic harbour craft market digitalized at elxa, the country's #6
                 fastest-growing company. Four years inside ShipsFocus Ventures.
               </p>
+              <a class="card-link" href={LINKS.ZAOBAO} rel="noopener" lang="zh-Hans"
+                >featured in 联合早报 →</a
+              >
             </article>
             <article class="card">
               <p class="card-eyebrow">ai saas · 2022–24</p>
@@ -126,6 +233,7 @@ const ogImage = new URL("/og.png", Astro.site);
               <p class="card-body">
                 in token value distributed at Clique for Berachain, EigenLayer, Babylon and more.
               </p>
+              <a class="card-link" href={LINKS.CLIQUE} rel="noopener">clique.tech →</a>
             </article>
           </div>
         </div>
@@ -135,29 +243,58 @@ const ogImage = new URL("/og.png", Astro.site);
         <div class="wrap">
           <p class="eyebrow">02 · BUILDING NOW</p>
           <div class="grid grid--4">
-            <a class="tile" href={TOKENS.GATEKEEP_URL}>
-              <p class="tile-name">Gatekeep</p>
-              <p class="tile-desc">Founder and VC discovery at scale.</p>
-            </a>
-            <a class="tile" href={TOKENS.ATTITEUD_URL}>
-              <p class="tile-name">Attiteud</p>
-              <p class="tile-desc">Buys and builds AI-native software.</p>
-            </a>
-            <a class="tile" href={TOKENS.SIGNAL_URL}>
-              <p class="tile-name">Signal</p>
-              <p class="tile-desc">Exchange intelligence at Clique.</p>
-            </a>
-            <a class="tile" href={TOKENS.HANDLESTACK_URL}>
-              <p class="tile-name">Handlestack</p>
-              <p class="tile-desc">Free handle checker for founders.</p>
-            </a>
+            {
+              projects.map((p) => (
+                <a class="tile" href={p.href} rel="noopener">
+                  <span class="tile-head">
+                    <img
+                      class="tile-logo"
+                      src={p.logo}
+                      alt=""
+                      width="28"
+                      height="28"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span class="tile-name">{p.name}</span>
+                  </span>
+                  <span class="tile-desc">{p.desc}</span>
+                  <span class="tile-domain">{p.domain} →</span>
+                </a>
+              ))
+            }
           </div>
+        </div>
+      </section>
+
+      <section id="how-i-build" class="section" aria-label="How I build">
+        <div class="wrap">
+          <p class="eyebrow">03 · HOW I BUILD</p>
+          <div class="grid grid--3 principles">
+            {
+              principles.map((p) => (
+                <article class="principle">
+                  <p class="principle-n">{p.n}</p>
+                  <p class="principle-title">{p.title}</p>
+                  <p class="principle-body">{p.body}</p>
+                </article>
+              ))
+            }
+          </div>
+          <p class="stack-label">working stack</p>
+          <ul class="chips">
+            {stack.map((s) => <li class="chip">{s}</li>)}
+          </ul>
+          <p class="colophon">
+            proof: this site is astro static, zero client js, self-hosted fonts, one request per
+            asset · <a href={LINKS.SOURCE} rel="noopener">view source →</a>
+          </p>
         </div>
       </section>
 
       <section id="partnerships" class="section" aria-label="Partnerships">
         <div class="wrap">
-          <p class="eyebrow">03 · PARTNERSHIPS</p>
+          <p class="eyebrow">04 · PARTNERSHIPS</p>
           <p class="intro">
             I create tech and lifestyle content in English and Chinese. Selected partners:
           </p>
@@ -174,13 +311,13 @@ const ogImage = new URL("/og.png", Astro.site);
 
       <section id="work" class="section" aria-label="Work with me">
         <div class="wrap">
-          <p class="eyebrow">04 · WORK WITH ME</p>
+          <p class="eyebrow">05 · WORK WITH ME</p>
           <div class="grid grid--4">
-            <a class="route" href={TOKENS.ATTITEUD_URL}>
+            <a class="route" href={LINKS.ATTITEUD} rel="noopener">
               <p class="route-title">Selling a small SaaS</p>
               <p class="route-sub">Attiteud criteria</p>
             </a>
-            <a class="route" href={TOKENS.FDS_URL}>
+            <a class="route" href={LINKS.ATTITEUD} rel="noopener">
               <p class="route-title">Deploy AI in your team</p>
               <p class="route-sub">Forward Deployment Studio</p>
             </a>
@@ -198,7 +335,7 @@ const ogImage = new URL("/og.png", Astro.site);
 
       <section id="private-markets" class="section" aria-label="Private markets">
         <div class="wrap">
-          <p class="eyebrow">05 · PRIVATE MARKETS</p>
+          <p class="eyebrow">06 · PRIVATE MARKETS</p>
           <p class="statement">
             I broker pre-IPO secondaries and structured private deals, buy-side and sell-side.
           </p>
@@ -207,7 +344,7 @@ const ogImage = new URL("/og.png", Astro.site);
             collateral lending, tokenized + traditional
           </p>
           <div class="cta-row">
-            <a class="pill" href={TOKENS.TELEGRAM_URL}>
+            <a class="pill" href={LINKS.TELEGRAM}>
               <svg viewBox="0 0 24 24" aria-hidden="true"
                 ><path
                   d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"
@@ -215,7 +352,7 @@ const ogImage = new URL("/og.png", Astro.site);
               >
               message for the live deal sheet →
             </a>
-            <a class="text-cta" href={LINKEDIN_URL}>or DM on LinkedIn →</a>
+            <a class="text-cta" href={LINKS.LINKEDIN} rel="noopener">or DM on LinkedIn →</a>
           </div>
           <p class="disclaimer">
             accredited and professional investors · indications of interest only
@@ -236,21 +373,21 @@ const ogImage = new URL("/og.png", Astro.site);
       <div class="wrap footer-inner">
         <p class="footer-copy">© Justin Chua · Taipei</p>
         <div class="socials">
-          <a href={LINKEDIN_URL} aria-label="LinkedIn">
+          <a href={LINKS.LINKEDIN} aria-label="LinkedIn" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"
               ><path
                 d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
               /></svg
             >
           </a>
-          <a href={TOKENS.TELEGRAM_URL} aria-label="Telegram">
+          <a href={LINKS.TELEGRAM} aria-label="Telegram">
             <svg viewBox="0 0 24 24" aria-hidden="true"
               ><path
                 d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"
               /></svg
             >
           </a>
-          <a href={GITHUB_URL} aria-label="GitHub">
+          <a href={LINKS.GITHUB} aria-label="GitHub" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"
               ><path
                 d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
