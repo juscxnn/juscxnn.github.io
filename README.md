@@ -21,16 +21,17 @@ automatically. One-time setup: repo Settings → Pages → Source → **GitHub A
 
 ## Tokens to fill
 
-One real URL is still missing — the `LINKS` object at the top of `src/pages/index.astro`:
-
-- `{{TELEGRAM_URL}}`
+None. Telegram was removed until a real handle exists — the deal-sheet CTA routes to email.
+To restore it, add a `TELEGRAM` entry to `LINKS` in `src/pages/index.astro`.
 
 ## Assets
 
+- `public/shots/` — product screenshots (headless Chrome, 560w JPEG). Re-capture when the sites
+  change.
 - `public/logos/` — project marks pulled from each site's favicon (gatekeep.vc, attiteud.com,
   clique.tech; nichesim.svg is a vector redraw of their ⧉ mark — replace when they ship a favicon).
-- `public/portrait.jpg` — 3:4 portrait. If missing, the page renders a bone-colored placeholder
-  block instead; the build never breaks.
-- `public/og.png` — Open Graph image placeholder path referenced in meta tags. Not generated.
+- `public/og.png` — generated 1200×630 Open Graph card.
+- `public/portrait.jpg` — 3:4 portrait, optional. Missing file falls back to the asterisk mark;
+  the build never breaks.
 
 Fonts are self-hosted via Fontsource (no third-party requests).
