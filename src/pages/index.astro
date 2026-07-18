@@ -69,9 +69,30 @@ const stats = [
 ];
 
 const projects = [
-  { name: "Gatekeep", desc: "Founder · VC discovery", href: LINKS.GATEKEEP, domain: "gatekeep.vc", logo: "/logos/gatekeep.svg", shot: "/shots/gatekeep.jpg" },
-  { name: "Attiteud", desc: "Buys + builds AI software", href: LINKS.ATTITEUD, domain: "attiteud.com", logo: "/logos/attiteud.png", shot: "/shots/attiteud.jpg" },
-  { name: "Nichesim", desc: "Simulated-community testing", href: LINKS.NICHESIM, domain: "nichesim.com", logo: "/logos/nichesim.svg", shot: "/shots/nichesim.jpg" },
+  {
+    name: "Gatekeep",
+    blurb: "Pitch an AI VC panel. Pass the screen and your deck reaches the real ones.",
+    href: LINKS.GATEKEEP,
+    domain: "gatekeep.vc",
+    logo: "/logos/gatekeep.svg",
+    shot: "/shots/gatekeep.jpg",
+  },
+  {
+    name: "Attiteud",
+    blurb: "Forward-deployed engineers put AI inside your team. Acquires small SaaS too.",
+    href: LINKS.ATTITEUD,
+    domain: "attiteud.com",
+    logo: "/logos/attiteud.png",
+    shot: "/shots/attiteud.jpg",
+  },
+  {
+    name: "Nichesim",
+    blurb: "Test launches on simulated communities before going public.",
+    href: LINKS.NICHESIM,
+    domain: "nichesim.com",
+    logo: "/logos/nichesim.svg",
+    shot: "/shots/nichesim.jpg",
+  },
 ];
 
 const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
@@ -113,8 +134,9 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
 
         <section class="cell s8 hero" aria-label="Introduction">
           <p class="eyebrow">TAIPEI · SG · EN ZH FR</p>
-          <h1>I build software and get it distributed.</h1>
-          <p class="timeline">
+          <h1>I build and distribute software.</h1>
+          <p class="roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
+          <p class="timeline" tabindex="0" aria-label="Career timeline, scrolls horizontally">
             <span class="t">2014 police SOC</span><span class="dot">·</span><span class="t"
               >2017 robotics sales</span
             ><span class="dot">·</span><span class="t">2020 maritime</span><span class="dot">·</span
@@ -146,6 +168,8 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           }
         </section>
 
+        <p class="label s12">track record</p>
+
         {
           stats.map((s) => (
             <article class="cell s4 stat" aria-label={s.eyebrow}>
@@ -163,9 +187,11 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
         }
         <!-- PENDING internal clearance on figures. -->
 
+        <p class="label s12">building now</p>
+
         {
           projects.map((p) => (
-            <a class="cell s4 proj" href={p.href} rel="noopener" aria-label={`${p.name} — ${p.desc}`}>
+            <a class="cell s4 proj" href={p.href} rel="noopener" aria-label={`${p.name} — ${p.blurb}`}>
               <span class="live" aria-hidden="true" />
               <span class="proj-bar" aria-hidden="true">
                 <i /><i /><i />
@@ -178,12 +204,14 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
                 <span class="proj-head">
                   <img class="proj-logo" src={p.logo} alt="" width="18" height="18" loading="lazy" decoding="async" />
                   <span class="proj-name">{p.name}</span>
-                  <span class="proj-desc">{p.desc}</span>
                 </span>
+                <span class="proj-blurb">{p.blurb}</span>
               </span>
             </a>
           ))
         }
+
+        <p class="label s12">work with me</p>
 
         <a class="cell s3 route" href={LINKS.ATTITEUD} rel="noopener">
           <p class="route-title">Sell a SaaS · deploy AI</p>
@@ -208,9 +236,10 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           </p>
         </section>
 
+        <p class="label s12">private markets</p>
+
         <section class="cell s12 pm" id="private-markets" aria-label="Private markets">
           <div class="pm-text">
-            <p class="cell-eyebrow">private markets</p>
             <p class="statement">
               Pre-IPO secondaries and structured private deals, buy-side and sell-side.
             </p>
@@ -232,12 +261,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
 
     <footer class="foot">
       <div class="wrap foot-inner">
-        <div>
-          <p class="bio-line">
-            before tech: police special operations command. also: Mr World Singapore finalist.
-          </p>
-          <p class="foot-copy">© Justin Chua · Taipei</p>
-        </div>
+        <p class="foot-copy">© Justin Chua · Taipei</p>
         <div class="socials">
           <a href={LINKS.LINKEDIN} aria-label="LinkedIn" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"
