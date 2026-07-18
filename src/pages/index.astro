@@ -23,7 +23,7 @@ const EMAIL_GATEKEEP = "justin@gatekeep.vc";
 
 const hasPortrait = fs.existsSync("./public/portrait.jpg");
 
-const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#2E2D2A">${[0, 60, 120, 180, 240, 300]
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><style>@media (prefers-color-scheme: dark) { g { fill: #CFCDC6; } }</style><g fill="#2E2D2A">${[0, 60, 120, 180, 240, 300]
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
@@ -102,11 +102,11 @@ const projects = [
 const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
 
 const certs = [
-  { cap: "AI4I · AI Singapore", full: "/certs/ai4i.jpg", thumb: "/certs/thumbs/ai4i.jpg" },
-  { cap: "CrewAI · agents", full: "/certs/crewai.jpg", thumb: "/certs/thumbs/crewai.jpg" },
-  { cap: "UX · Vertical Inst.", full: "/certs/ux.jpg", thumb: "/certs/thumbs/ux.jpg" },
-  { cap: "Int'l Business · IBMI", full: "/certs/ibmi.jpg", thumb: "/certs/thumbs/ibmi.jpg" },
-  { cap: "CDMS", full: "/certs/cdms.jpg", thumb: "/certs/thumbs/cdms.jpg" },
+  { id: "cert-ai4i", cap: "AI4I · AI Singapore", full: "/certs/ai4i.jpg", thumb: "/certs/thumbs/ai4i.jpg" },
+  { id: "cert-crewai", cap: "CrewAI · agents", full: "/certs/crewai.jpg", thumb: "/certs/thumbs/crewai.jpg" },
+  { id: "cert-ux", cap: "UX · Vertical Inst.", full: "/certs/ux.jpg", thumb: "/certs/thumbs/ux.jpg" },
+  { id: "cert-ibmi", cap: "Int'l Business · IBMI", full: "/certs/ibmi.jpg", thumb: "/certs/thumbs/ibmi.jpg" },
+  { id: "cert-cdms", cap: "CDMS", full: "/certs/cdms.jpg", thumb: "/certs/thumbs/cdms.jpg" },
 ];
 ---
 
@@ -118,7 +118,9 @@ const certs = [
     <title>Justin Chua</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.site} />
-    <meta name="theme-color" content="#DFDDD7" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#DFDDD7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131311" />
     <meta property="og:title" content="Justin Chua" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -146,7 +148,7 @@ const certs = [
 
         <section class="cell s9 hero" aria-label="Introduction">
           <p class="eyebrow">TAIPEI · SG HK TW · EN ZH FR</p>
-          <h1>I build and distribute software.</h1>
+          <h1>Software, distribution, deals.</h1>
           <p class="roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
           <p class="timeline" tabindex="0" aria-label="Career timeline, scrolls horizontally">
             <span class="t">2014 police SOC</span><span class="dot">·</span><span class="t"
@@ -239,13 +241,26 @@ const certs = [
           <div class="certs-row">
             {
               certs.map((c) => (
-                <a class="cert" href={c.full} rel="noopener" aria-label={`Certificate: ${c.cap}`}>
+                <button class="cert" popovertarget={c.id} aria-label={`View certificate: ${c.cap}`}>
                   <img src={c.thumb} alt="" width="300" height="212" loading="lazy" decoding="async" />
                   <span class="cert-cap">{c.cap}</span>
-                </a>
+                </button>
               ))
             }
           </div>
+          {
+            certs.map((c) => (
+              <div id={c.id} popover="auto" class="cert-pop">
+                <div class="cert-pop-bar">
+                  <span>{c.cap}</span>
+                  <button class="cert-close" popovertarget={c.id} popovertargetaction="hide">
+                    close ✕
+                  </button>
+                </div>
+                <img src={c.full} alt={`Certificate: ${c.cap}`} loading="lazy" decoding="async" />
+              </div>
+            ))
+          }
           <p class="colophon">
             this site: astro static · zero client js · self-hosted type ·
             <a href={LINKS.SOURCE} rel="noopener">view source →</a>
