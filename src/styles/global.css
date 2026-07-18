@@ -266,7 +266,23 @@ h1 {
 .media {
   padding: 0;
   overflow: hidden;
-  min-height: 240px;
+  min-height: 300px;
+}
+
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.35) 50%, transparent 62%);
+  transform: translateX(-130%);
+  animation: sheen-once 1.3s ease-out 0.5s both;
+  pointer-events: none;
+}
+
+@keyframes sheen-once {
+  to {
+    transform: translateX(130%);
+  }
 }
 
 .portrait {
@@ -275,7 +291,7 @@ h1 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 22%;
+  object-position: 50% 30%;
 }
 
 .portrait-fallback {
@@ -305,6 +321,15 @@ h1 {
 .stat-line {
   font-size: 13.5px;
   color: var(--muted);
+  margin: 0 0 0.45rem;
+}
+
+.stat-sub {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  opacity: 0.85;
   margin: 0 0 0.8rem;
 }
 
@@ -335,8 +360,34 @@ h1 {
   100% { box-shadow: 0 0 0 0 rgba(28, 92, 58, 0); }
 }
 
+.proj-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 11px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.proj-bar i {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(20, 20, 15, 0.18);
+}
+
+.proj-url {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-left: 7px;
+}
+
 .proj-thumb {
   display: block;
+  position: relative;
+  overflow: hidden;
   border-bottom: 1px solid var(--hairline-soft);
   background: var(--surface);
 }
@@ -346,20 +397,40 @@ h1 {
   aspect-ratio: 8 / 5;
   object-fit: cover;
   object-position: top;
+  transition: transform 0.4s ease;
+}
+
+.proj:hover .proj-thumb img {
+  transform: scale(1.035);
+}
+
+.proj-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.4) 50%, transparent 62%);
+  transform: translateX(-130%);
+  transition: transform 0.65s ease;
+  pointer-events: none;
+}
+
+.proj:hover .proj-thumb::after {
+  transform: translateX(130%);
 }
 
 .proj-body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 11px 13px 12px;
+  justify-content: center;
+  padding: 10px 13px 11px;
 }
 
 .proj-head {
   display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 0.2rem;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
 }
 
 .proj-logo {
@@ -377,18 +448,15 @@ h1 {
 }
 
 .proj-desc {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--muted);
-  margin-bottom: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.proj-domain {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
-  color: var(--green);
-  margin-top: auto;
-  opacity: 0.85;
+.proj-logo {
+  align-self: center;
 }
 
 /* ---------- work routes ---------- */
@@ -495,6 +563,8 @@ h1 {
 }
 
 .pill {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -506,6 +576,22 @@ h1 {
   font-size: 13.5px;
   line-height: 1;
   transition: background 0.15s ease;
+}
+
+.pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.28) 50%, transparent 62%);
+  transform: translateX(-130%);
+  animation: pill-sheen 4.8s ease-in-out 1.4s infinite;
+  pointer-events: none;
+}
+
+@keyframes pill-sheen {
+  0% { transform: translateX(-130%); }
+  22% { transform: translateX(130%); }
+  100% { transform: translateX(130%); }
 }
 
 .pill:hover {
@@ -598,7 +684,8 @@ h1 {
     min-height: 300px;
   }
 
-  .stat:last-of-type {
+  .stat:last-of-type,
+  .proj:last-of-type {
     grid-column: span 12;
   }
 }
@@ -637,6 +724,21 @@ h1 {
 
   .live {
     animation: none;
+  }
+
+  .media::after,
+  .pill::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .proj-thumb::after {
+    transition: none;
+    opacity: 0;
+  }
+
+  .proj:hover .proj-thumb img {
+    transform: none;
   }
 
   *,

@@ -26,8 +26,8 @@ To restore it, add a `TELEGRAM` entry to `LINKS` in `src/pages/index.astro`.
 
 ## Assets
 
-- `public/shots/` — product screenshots (headless Chrome, 560w JPEG). Re-capture when the sites
-  change.
+- `public/shots/` — product screenshots (headless Chrome @2x, 880w JPEG). Re-capture when the
+  sites change.
 - `public/logos/` — project marks pulled from each site's favicon (gatekeep.vc, attiteud.com,
   clique.tech; nichesim.svg is a vector redraw of their ⧉ mark — replace when they ship a favicon).
 - `public/og.png` — generated 1200×630 Open Graph card.

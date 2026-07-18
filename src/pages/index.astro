@@ -37,6 +37,8 @@ const jsonLd = JSON.stringify({
   url: Astro.site?.toString(),
   email: `mailto:${EMAIL}`,
   description,
+  jobTitle: "Sales Lead & Product",
+  worksFor: { "@type": "Organization", name: "Clique", url: "https://clique.tech" },
   address: { "@type": "PostalAddress", addressLocality: "Taipei" },
   knowsLanguage: ["en", "zh", "fr"],
   sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD, LINKS.NICHESIM],
@@ -57,9 +59,10 @@ const stats = [
     line: "CopyScouts 14x · Podletter '24 · AI Starter #2 PH",
   },
   {
-    eyebrow: "crypto · 2025–",
+    eyebrow: "clique · 2025– · sales lead + product",
     number: "US$10bn+",
-    line: "token value distributed at Clique",
+    line: "distributed in 2 years · airdrops · bespoke distribution tooling",
+    sub: "75% of top-1000 coins that outsourced development",
     href: LINKS.CLIQUE,
     link: "clique.tech →",
   },
@@ -69,7 +72,6 @@ const projects = [
   { name: "Gatekeep", desc: "Founder · VC discovery", href: LINKS.GATEKEEP, domain: "gatekeep.vc", logo: "/logos/gatekeep.svg", shot: "/shots/gatekeep.jpg" },
   { name: "Attiteud", desc: "Buys + builds AI software", href: LINKS.ATTITEUD, domain: "attiteud.com", logo: "/logos/attiteud.png", shot: "/shots/attiteud.jpg" },
   { name: "Nichesim", desc: "Simulated-community testing", href: LINKS.NICHESIM, domain: "nichesim.com", logo: "/logos/nichesim.svg", shot: "/shots/nichesim.jpg" },
-  { name: "Signal", desc: "Exchange intel at Clique", href: LINKS.CLIQUE, domain: "clique.tech", logo: "/logos/clique.png", shot: "/shots/clique.jpg" },
 ];
 
 const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
@@ -126,7 +128,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
         <section class="cell s4 media" aria-label="Portrait">
           {
             hasPortrait ? (
-              <img class="portrait" src="/portrait.jpg" alt="Justin Chua" width="600" height="800" />
+              <img class="portrait" src="/portrait.jpg" alt="Justin Chua" width="620" height="931" />
             ) : (
               <div class="portrait-fallback" aria-hidden="true">
                 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -150,6 +152,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
               <p class="cell-eyebrow">{s.eyebrow}</p>
               <p class="stat-number">{s.number}</p>
               <p class="stat-line">{s.line}</p>
+              {s.sub && <p class="stat-sub">{s.sub}</p>}
               {s.href && (
                 <a class="cell-link" href={s.href} rel="noopener" lang={s.lang}>
                   {s.link}
@@ -162,18 +165,21 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
 
         {
           projects.map((p) => (
-            <a class="cell s3 proj" href={p.href} rel="noopener" aria-label={`${p.name} — ${p.desc}`}>
+            <a class="cell s4 proj" href={p.href} rel="noopener" aria-label={`${p.name} — ${p.desc}`}>
               <span class="live" aria-hidden="true" />
+              <span class="proj-bar" aria-hidden="true">
+                <i /><i /><i />
+                <span class="proj-url">{p.domain}</span>
+              </span>
               <span class="proj-thumb">
-                <img src={p.shot} alt="" width="560" height="350" loading="lazy" decoding="async" />
+                <img src={p.shot} alt="" width="880" height="550" loading="lazy" decoding="async" />
               </span>
               <span class="proj-body">
                 <span class="proj-head">
                   <img class="proj-logo" src={p.logo} alt="" width="18" height="18" loading="lazy" decoding="async" />
                   <span class="proj-name">{p.name}</span>
+                  <span class="proj-desc">{p.desc}</span>
                 </span>
-                <span class="proj-desc">{p.desc}</span>
-                <span class="proj-domain">{p.domain} →</span>
               </span>
             </a>
           ))
