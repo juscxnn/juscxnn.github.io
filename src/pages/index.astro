@@ -100,6 +100,14 @@ const projects = [
 ];
 
 const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
+
+const certs = [
+  "AI4I Foundations in AI · AI Singapore",
+  "CrewAI · multi-agent systems",
+  "UX Design · Vertical Institute",
+  "Economics & Int'l Business · IBMI",
+  "CDMS",
+];
 ---
 
 <!doctype html>
@@ -136,7 +144,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
         <i class="x x-bl" aria-hidden="true"></i>
         <i class="x x-br" aria-hidden="true"></i>
 
-        <section class="cell s8 hero" aria-label="Introduction">
+        <section class="cell s9 hero" aria-label="Introduction">
           <p class="eyebrow">TAIPEI · SG HK TW · EN ZH FR</p>
           <h1>I build and distribute software.</h1>
           <p class="roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
@@ -151,7 +159,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           </p>
         </section>
 
-        <section class="cell s4 media" aria-label="Portrait">
+        <section class="cell s3 media" aria-label="Portrait">
           {
             hasPortrait ? (
               <img class="portrait" src="/portrait.jpg" alt="Justin Chua" width="620" height="931" />
@@ -226,6 +234,10 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           <p class="cell-eyebrow">stack</p>
           <ul class="chips">
             {stack.map((s) => <li class="chip">{s}</li>)}
+          </ul>
+          <p class="cell-eyebrow">certs</p>
+          <ul class="chips">
+            {certs.map((c) => <li class="chip">{c}</li>)}
           </ul>
           <p class="colophon">
             this site: astro static · zero client js · self-hosted type ·
