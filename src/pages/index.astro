@@ -1,10 +1,9 @@
 ---
-import "@fontsource/instrument-serif/400.css";
-import "@fontsource/dm-sans/400.css";
-import "@fontsource/dm-sans/500.css";
-import "@fontsource/dm-sans/600.css";
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/geist-sans/400.css";
+import "@fontsource/geist-sans/500.css";
+import "@fontsource/geist-sans/600.css";
+import "@fontsource/geist-mono/400.css";
+import "@fontsource/geist-mono/500.css";
 import "../styles/global.css";
 import fs from "node:fs";
 
@@ -19,10 +18,12 @@ const LINKS = {
   SOURCE: "https://github.com/juscxnn/juscxnn.github.io",
 };
 const EMAIL = "jcxa@proton.me";
+const EMAIL_ATTITEUD = "justin@attiteud.com";
+const EMAIL_GATEKEEP = "justin@gatekeep.vc";
 
 const hasPortrait = fs.existsSync("./public/portrait.jpg");
 
-const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#1C5C3A">${[0, 60, 120, 180, 240, 300]
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#45D08C">${[0, 60, 120, 180, 240, 300]
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
@@ -71,27 +72,30 @@ const stats = [
 const projects = [
   {
     name: "Gatekeep",
-    blurb: "Pitch an AI VC panel. Pass the screen and your deck reaches the real ones.",
+    eyebrow: "founder",
+    blurb:
+      "AI investor personas stress-test your pitch and score it across 12 dimensions. Pass, and the report goes straight to real VCs.",
     href: LINKS.GATEKEEP,
     domain: "gatekeep.vc",
     logo: "/logos/gatekeep.svg",
-    shot: "/shots/gatekeep.jpg",
   },
   {
     name: "Attiteud",
-    blurb: "Forward-deployed engineers put AI inside your team. Acquires small SaaS too.",
+    eyebrow: "founder",
+    blurb:
+      "Forward-deployment studio — engineers embed in your team, audit workflows and ship AI that sticks. Also acquires small SaaS.",
     href: LINKS.ATTITEUD,
     domain: "attiteud.com",
     logo: "/logos/attiteud.png",
-    shot: "/shots/attiteud.jpg",
   },
   {
     name: "Nichesim",
-    blurb: "Test launches on simulated communities before going public.",
+    eyebrow: "founder",
+    blurb:
+      "Thousands of AI personas simulate how a community reacts to your product before you go public.",
     href: LINKS.NICHESIM,
     domain: "nichesim.com",
     logo: "/logos/nichesim.svg",
-    shot: "/shots/nichesim.jpg",
   },
 ];
 
@@ -106,7 +110,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
     <title>Justin Chua</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.site} />
-    <meta name="theme-color" content="#F7F4EC" />
+    <meta name="theme-color" content="#0A0A0A" />
     <meta property="og:title" content="Justin Chua" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -133,7 +137,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
         <i class="x x-br" aria-hidden="true"></i>
 
         <section class="cell s8 hero" aria-label="Introduction">
-          <p class="eyebrow">TAIPEI · SG · EN ZH FR</p>
+          <p class="eyebrow">TAIPEI · SG HK TW · EN ZH FR</p>
           <h1>I build and distribute software.</h1>
           <p class="roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
           <p class="timeline" tabindex="0" aria-label="Career timeline, scrolls horizontally">
@@ -154,7 +158,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
             ) : (
               <div class="portrait-fallback" aria-hidden="true">
                 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                  <g fill="#1C5C3A">
+                  <g fill="#45D08C">
                     <ellipse cx="16" cy="8.5" rx="4" ry="7.5" />
                     <ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(60 16 16)" />
                     <ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(120 16 16)" />
@@ -193,30 +197,23 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           projects.map((p) => (
             <a class="cell s4 proj" href={p.href} rel="noopener" aria-label={`${p.name} — ${p.blurb}`}>
               <span class="live" aria-hidden="true" />
-              <span class="proj-bar" aria-hidden="true">
-                <i /><i /><i />
-                <span class="proj-url">{p.domain}</span>
+              <p class="cell-eyebrow">{p.eyebrow}</p>
+              <span class="proj-head">
+                <img class="proj-logo" src={p.logo} alt="" width="20" height="20" loading="lazy" decoding="async" />
+                <span class="proj-name">{p.name}</span>
               </span>
-              <span class="proj-thumb">
-                <img src={p.shot} alt="" width="880" height="550" loading="lazy" decoding="async" />
-              </span>
-              <span class="proj-body">
-                <span class="proj-head">
-                  <img class="proj-logo" src={p.logo} alt="" width="18" height="18" loading="lazy" decoding="async" />
-                  <span class="proj-name">{p.name}</span>
-                </span>
-                <span class="proj-blurb">{p.blurb}</span>
-              </span>
+              <p class="proj-blurb">{p.blurb}</p>
+              <p class="cell-link">{p.domain} →</p>
             </a>
           ))
         }
 
         <p class="label s12">work with me</p>
 
-        <a class="cell s3 route" href={LINKS.ATTITEUD} rel="noopener">
+        <a class="cell s3 route" href={`mailto:${EMAIL_ATTITEUD}`}>
           <p class="route-title">Sell a SaaS · deploy AI</p>
           <p class="route-sub">acquisitions + forward deployment</p>
-          <p class="cell-link">attiteud.com →</p>
+          <p class="cell-link">justin@attiteud.com →</p>
         </a>
 
         <a class="cell s3 route" href={`mailto:${EMAIL}`}>
@@ -249,7 +246,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
             </p>
           </div>
           <div class="pm-cta">
-            <a class="pill" href={`mailto:${EMAIL}?subject=Deal%20sheet`}
+            <a class="pill" href={`mailto:${EMAIL_GATEKEEP}?subject=Deal%20sheet`}
               >request the deal sheet →</a
             >
             <a class="text-cta" href={LINKS.LINKEDIN} rel="noopener">or LinkedIn →</a>
