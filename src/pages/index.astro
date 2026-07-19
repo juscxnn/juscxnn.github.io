@@ -100,7 +100,7 @@ const projects = [
   },
 ];
 
-const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
+const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
 
 
 ---
@@ -165,7 +165,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
 
         <section class="cell s9 hero" aria-label="Introduction">
           <p class="eyebrow">TAIPEI · SG HK TW · EN ZH FR</p>
-          <h1>Software, distribution, deals.</h1>
+          <h1>Software, distribution, deals.<svg class="doodle-line" viewBox="0 0 340 14" fill="none" aria-hidden="true"><path d="M6 7 Q20 2 36 8 Q55 13 72 6 Q90 2 108 9 Q125 13 142 6 Q158 2 176 8 Q195 13 210 5 Q228 2 246 7 Q262 11 278 5 Q294 2 310 8 Q323 5 336 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/></svg></h1>
           <p class="lede">
             Taipei. A decade across maritime software, AI SaaS, and crypto infrastructure.
             My day job is product and distribution at Clique. On nights and weekends I'm
@@ -226,35 +226,57 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           </div>
         </div>
 
-                <section class="cell s12 os-chassis" aria-label="JustinOS — classic Macintosh Plus">
-          <div class="os-vent"></div>
-          <div class="os-screen">
-            <div class="os-bar">
-              <span class="os-apple">&#8984;</span>
-              <span>File</span><span>Edit</span><span>View</span><span>Special</span>
-              <span style="margin-left:auto;opacity:0.65">JustinOS v1.0</span>
-            </div>
-            <div class="os-desk" id="osDesk">
-              <div class="os-icon" data-win="about" ondblclick="osOpen('about')">
-                <span class="os-icon-pic">&#9998;</span><span class="os-icon-label">About</span>
+                <div class="cell s12 doodle-cta" aria-hidden="true">
+          <svg class="doodle-arrow" viewBox="0 0 300 48" fill="none"><path d="M24 28 Q44 21 66 26 Q92 33 112 24 Q128 18 148 26 Q168 32 186 22 Q200 16 218 24 Q232 30 250 22 Q264 16 278 12 M272 6 L280 12 L272 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/></svg>
+          <span class="doodle-label">play with the desktop &darr;</span>
+        </div>
+
+        <section class="cell s12 w98-chassis" aria-label="JustinOS — Windows 98 desktop">
+          <div class="w98-vent"></div>
+          <div class="w98-screen">
+            <div class="w98-desk" id="osDesk">
+              <div class="w98-icon" data-win="about" ondblclick="osOpen('about')">
+                <span class="w98-icon-pic" style="background:#3A6EA5">&#9998;</span>
+                <span class="w98-icon-label">About</span>
               </div>
-              <div class="os-icon" data-win="calc" ondblclick="osOpen('calc')">
-                <span class="os-icon-pic">&#9654;|</span><span class="os-icon-label">Calculator</span>
+              <div class="w98-icon" data-win="calculator" ondblclick="osOpen('calculator')">
+                <span class="w98-icon-pic" style="background:#808080">&#9632;</span>
+                <span class="w98-icon-label">Calculator</span>
               </div>
-              <div class="os-icon" data-win="projects" ondblclick="osOpen('projects')">
-                <span class="os-icon-pic">&#128451;</span><span class="os-icon-label">Projects</span>
+              <div class="w98-icon" data-win="projects" ondblclick="osOpen('projects')">
+                <span class="w98-icon-pic" style="background:#D4A017">&#128193;</span>
+                <span class="w98-icon-label">Projects</span>
               </div>
-              <div class="os-icon" data-win="timeline" ondblclick="osOpen('timeline')">
-                <span class="os-icon-pic">&#128339;</span><span class="os-icon-label">Timeline</span>
+              <div class="w98-icon" data-win="timeline" ondblclick="osOpen('timeline')">
+                <span class="w98-icon-pic" style="background:#2E8B57">&#128339;</span>
+                <span class="w98-icon-label">Timeline</span>
               </div>
-              <div class="os-icon" data-win="stack" ondblclick="osOpen('stack')">
-                <span class="os-icon-pic">{'>'}</span><span class="os-icon-label">Stack</span>
+              <div class="w98-icon" data-win="stack" ondblclick="osOpen('stack')">
+                <span class="w98-icon-pic" style="background:#6A0DAD">&#9881;</span>
+                <span class="w98-icon-label">Stack</span>
               </div>
             </div>
           </div>
-          <div class="os-brand">
-            <span class="os-logo">&#xF8FF;</span>
-            <div class="os-floppy"></div>
+          <div class="w98-taskbar">
+            <button class="w98-start-btn" onclick="toggleStart()">
+              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:middle;margin-right:3px"><rect x="1" y="1" width="6" height="6" fill="#FF5E18"/><rect x="9" y="1" width="6" height="6" fill="#00B928"/><rect x="1" y="9" width="6" height="6" fill="#0099FF"/><rect x="9" y="9" width="6" height="6" fill="#FFC000"/></svg>
+              <span>Start</span>
+            </button>
+            <div class="w98-tb-spacer"></div>
+            <div class="w98-clock" id="osClock">12:00 PM</div>
+          </div>
+          <div class="w98-start-menu" id="osStart" style="display:none">
+            <div class="w98-sm-side"><span class="w98-sm-label">JustinOS</span></div>
+            <div class="w98-sm-items">
+              <div class="w98-sm-item" onclick="osOpen('about');toggleStart()">About Justin</div>
+              <div class="w98-sm-sep"></div>
+              <div class="w98-sm-item" onclick="osOpen('calculator');toggleStart()">Calculator</div>
+              <div class="w98-sm-item" onclick="osOpen('projects');toggleStart()">Projects</div>
+              <div class="w98-sm-item" onclick="osOpen('timeline');toggleStart()">Timeline</div>
+              <div class="w98-sm-item" onclick="osOpen('stack');toggleStart()">Tech Stack</div>
+              <div class="w98-sm-sep"></div>
+              <div class="w98-sm-item sm-dim">Shut Down&hellip;</div>
+            </div>
           </div>
         </section>
 
@@ -362,7 +384,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           </ul>
 
           <p class="colophon">
-            this site: astro static · zero client js · self-hosted type ·
+            this site: static · zero client js · self-hosted type ·
             <a href={LINKS.SOURCE} rel="noopener">view source →</a>
           </p>
         </section>
@@ -549,23 +571,38 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
 (function(){
   var wins={},z=10,active=null,offX=0,offY=0,drag=null;
 
-  window.osOpen=function(id){if(wins[id]){focus(id);return}
-    var w=document.createElement("div");w.className="os-win";w.id="osWin-"+id;w.style.zIndex=++z;
-    var bar=document.createElement("div");bar.className="os-win-bar";
-    var cls=document.createElement("span");cls.className="os-win-close";cls.innerHTML="&#x25A3;";cls.addEventListener("click",function(e){e.stopPropagation();osClose(id)});
-    var ttl=document.createElement("span");ttl.className="os-win-title";ttl.textContent=({about:"About Justin",calc:"Calculator",projects:"Projects <- Gatekeep",timeline:"Timeline",stack:"Stack"})[id]||id;
-    bar.appendChild(cls);bar.appendChild(ttl);
-    bar.addEventListener("mousedown",function(e){if(e.target===cls)return;drag={win:w,ex:e.clientX,ey:e.clientY,sx:parseInt(w.style.left)||64,sy:parseInt(w.style.top)||64}});
-    var body=document.createElement("div");body.className="os-win-body";
-    if(id==="calc")body.innerHTML=calcHTML();else body.innerHTML=contentFor(id);
-    body.addEventListener("scroll",function(){/*noop*/});
-    w.appendChild(bar);w.appendChild(body);
-    w.addEventListener("mousedown",function(){focus(id)});
-    w.style.left=w.style.top="64px";document.getElementById("osDesk").appendChild(w);
-    wins[id]=w;focus(id)
+  window.osOpen=function(id){
+  var titles={about:"About Justin",calculator:"Calculator",projects:"Projects",timeline:"Timeline",stack:"Tech Stack"};
+  if(wins[id]){focus(id);return}
+  var w=document.createElement("div");w.className="w98-win";w.id="osWin-"+id;w.style.zIndex=++z;
+  var bar=document.createElement("div");bar.className="w98-win-bar";
+  var icon=document.createElement("span");icon.className="w98-win-icon";icon.innerHTML="&#9632;";
+  var ttl=document.createElement("span");ttl.className="w98-win-title";ttl.textContent=titles[id]||id;
+  var ctrls=document.createElement("div");ctrls.className="w98-win-ctrls";
+  var min=document.createElement("button");min.className="w98-win-min";min.textContent="_";min.addEventListener("click",function(e){e.stopPropagation()});
+  var max=document.createElement("button");max.className="w98-win-max";max.textContent="&#9633;";max.addEventListener("click",function(e){e.stopPropagation()});
+  var clsBtn=document.createElement("button");clsBtn.className="w98-win-close";clsBtn.textContent="&#10005;";clsBtn.addEventListener("click",function(e){e.stopPropagation();osClose(id)});
+  ctrls.appendChild(min);ctrls.appendChild(max);ctrls.appendChild(clsBtn);
+  bar.appendChild(icon);bar.appendChild(ttl);bar.appendChild(ctrls);
+  bar.addEventListener("mousedown",function(e){if(e.target.tagName==="BUTTON")return;drag={win:w,ex:e.clientX,ey:e.clientY,sx:parseInt(w.style.left)||28,sy:parseInt(w.style.top)||28}});
+  var body=document.createElement("div");body.className="w98-win-body";
+  if(id==="calculator")body.innerHTML=calcHTML();else body.innerHTML=contentFor(id);
+  w.appendChild(bar);w.appendChild(body);w.addEventListener("mousedown",function(){focus(id)});
+  w.style.left=w.style.top="28px";document.getElementById("osDesk").appendChild(w);
+  wins[id]=w;focus(id)
+};
+window.osClose=function(id){if(!wins[id])return;wins[id].remove();delete wins[id];if(active===id)active=null};
+  window.toggleStart=function(){
+    var menu=document.getElementById("osStart"),btn=document.querySelector(".w98-start-btn");
+    if(!menu||!btn)return;
+    var isOpen=menu.classList.contains("open");
+    if(isOpen){menu.classList.remove("open");menu.style.display="none";btn.style.borderTop="2px solid #fff";btn.style.borderLeft="2px solid #fff";btn.style.borderRight="2px solid #000";btn.style.borderBottom="2px solid #000"}
+    else{menu.style.display="flex";menu.classList.add("open");btn.style.borderTop="2px solid #000";btn.style.borderLeft="2px solid #000";btn.style.borderRight="2px solid #fff";btn.style.borderBottom="2px solid #fff"}
   };
-  window.osClose=function(id){if(!wins[id])return;wins[id].remove();delete wins[id];if(active===id)active=null};
-  function focus(id){if(!wins[id])return;active=id;z+=1;wins[id].style.zIndex=z}
+  (function clockTick(){var n=new Date(),h=n.getHours(),m=n.getMinutes(),a=h>=12?"PM":"AM";h=h%12||12;var c=document.getElementById("osClock");if(c)c.textContent=h+":"+(m<10?"0":"")+m+" "+a;setTimeout(clockTick,45000)})();
+  document.addEventListener("click",function(e){var menu=document.getElementById("osStart"),btn=document.querySelector(".w98-start-btn");if(!menu||!menu.classList.contains("open"))return;if(!menu.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){menu.classList.remove("open");menu.style.display="none";btn.style.borderTop="2px solid #fff";btn.style.borderLeft="2px solid #fff";btn.style.borderRight="2px solid #000";btn.style.borderBottom="2px solid #000"}});
+
+function focus(id){if(!wins[id])return;active=id;z+=1;wins[id].style.zIndex=z}
 
   document.addEventListener("mousemove",function(e){if(!drag)return;drag.win.style.left=(Math.max(0,drag.sx+e.clientX-drag.ex))+"px";drag.win.style.top=(Math.max(0,drag.sy+e.clientY-drag.ey))+"px"});
   document.addEventListener("mouseup",function(){drag=null});
@@ -581,15 +618,15 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
   }
 
   function calcHTML(){
-    var btns=[["C","&#8592;","%","/"],["7","8","9","*"],["4","5","6","-"],["1","2","3","+"],["0",".","="]];
-    var h='<div class="os-calc"><div class="os-calc-display" id="osCalcDisp">0</div>';
-    for(var r=0;r<btns.length;r++){h+='<div class="os-calc-row">';
-      for(var c=0;c<btns[r].length;c++){var cls="os-calc-btn";if(btns[r][c]==="=")cls+=" os-calc-eq";else if("+-*/".indexOf(btns[r][c])>=0)cls+=" os-calc-op";h+='<button class="'+cls+'" onclick="osCalcPress(this)">'+btns[r][c]+'</button>'}
+    var btns=[["C","CE","&#8592;","/"],["7","8","9","*"],["4","5","6","-"],["1","2","3","+"],["0",".","="]];
+    var h='<div class="w98-calc"><div class="w98-calc-display" id="osCalcDisp">0</div>';
+    for(var r=0;r<btns.length;r++){h+='<div class="w98-calc-row">';
+      for(var c=0;c<btns[r].length;c++){var lbl=btns[r][c];var cl="w98-calc-btn";if(lbl==="C"||lbl==="CE")cl+=" w98-calc-red";if(lbl==="=")cl+=" w98-calc-eq";h+='<button class="'+cl+'" onclick="osCalcPress(this)">'+lbl+'</button>'}
       h+="</div>"}
     return h+"</div>"
   }
 
-  window.osCalcPress=function(btn){
+window.osCalcPress=function(btn){
     var d=document.getElementById("osCalcDisp");if(!d)return;var v=btn.textContent.trim();
     if(v==="C"){d.textContent="0";d.setAttribute("data-a","0");d.setAttribute("data-op","");return}
     if(v==="\u2190"){var t=d.textContent;d.textContent=t.length>1?t.slice(0,-1):"0";return}
