@@ -75,31 +75,29 @@ a {
   background: var(--sel);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #131311;
-    --surface: #1A1A18;
-    --surface-alt: #201F1C;
-    --ink: #E8E6E1;
-    --muted: #96938B;
-    --green: #B4B1A9;
-    --deep: #CFCDC6;
-    --tint: rgba(232, 230, 225, 0.045);
-    --hairline: rgba(232, 230, 225, 0.14);
-    --hairline-soft: rgba(232, 230, 225, 0.08);
-    --cross: rgba(232, 230, 225, 0.32);
-    --chip-bg: rgba(232, 230, 225, 0.05);
-    --dot: 232, 230, 225;
-    --sel: rgba(232, 230, 225, 0.22);
-    --pm-border: rgba(232, 230, 225, 0.2);
-    --pill-hover: #D8D6D0;
-    --scrim: rgba(8, 8, 7, 0.65);
-  }
+[data-theme="dark"] {
+  --bg: #131311;
+  --surface: #1A1A18;
+  --surface-alt: #201F1C;
+  --ink: #E8E6E1;
+  --muted: #96938B;
+  --green: #B4B1A9;
+  --deep: #CFCDC6;
+  --tint: rgba(232, 230, 225, 0.045);
+  --hairline: rgba(232, 230, 225, 0.14);
+  --hairline-soft: rgba(232, 230, 225, 0.08);
+  --cross: rgba(232, 230, 225, 0.32);
+  --chip-bg: rgba(232, 230, 225, 0.05);
+  --dot: 232, 230, 225;
+  --sel: rgba(232, 230, 225, 0.22);
+  --pm-border: rgba(232, 230, 225, 0.2);
+  --pill-hover: #D8D6D0;
+  --scrim: rgba(8, 8, 7, 0.65);
+}
 
-  body::after {
-    opacity: 0.035;
-    filter: invert(1);
-  }
+[data-theme="dark"] body::after {
+  opacity: 0.035;
+  filter: invert(1);
 }
 
 .skip-link {
@@ -147,6 +145,29 @@ a {
   font-size: 11.5px;
   color: var(--muted);
   cursor: default;
+}
+
+.top-end {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.theme-btn {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+  background: var(--surface-alt);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
 }
 
 /* ---------- bento ---------- */
@@ -228,6 +249,58 @@ a.cell:hover {
 .x-tr { top: -6px; right: -6px; }
 .x-bl { bottom: -6px; left: -6px; }
 .x-br { bottom: -6px; right: -6px; }
+
+/* ---------- glass contact dash ---------- */
+
+.glass {
+  background: rgba(233, 231, 225, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: rgba(26, 26, 24, 0.12);
+}
+
+[data-theme="dark"] .glass {
+  background: rgba(26, 26, 24, 0.5);
+  border-color: rgba(232, 230, 225, 0.1);
+}
+
+.glass-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.glass-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.glass-item:hover {
+  background: var(--surface-alt);
+}
+
+.glass-item svg {
+  width: 17px;
+  height: 17px;
+}
+
+.glass-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.glass-save {
+  font-weight: 500;
+}
 
 /* ---------- group labels ---------- */
 
