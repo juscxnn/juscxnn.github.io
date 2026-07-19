@@ -101,13 +101,7 @@ const projects = [
 
 const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres", "SQLite", "Electron", "LLM pipelines", "RAG"];
 
-const certs = [
-  { id: "cert-ai4i", cap: "AI4I · AI Singapore", full: "/certs/ai4i.jpg", thumb: "/certs/thumbs/ai4i.jpg" },
-  { id: "cert-crewai", cap: "CrewAI · agents", full: "/certs/crewai.jpg", thumb: "/certs/thumbs/crewai.jpg" },
-  { id: "cert-ux", cap: "UX · Vertical Inst.", full: "/certs/ux.jpg", thumb: "/certs/thumbs/ux.jpg" },
-  { id: "cert-ibmi", cap: "Int'l Business · IBMI", full: "/certs/ibmi.jpg", thumb: "/certs/thumbs/ibmi.jpg" },
-  { id: "cert-cdms", cap: "CDMS", full: "/certs/cdms.jpg", thumb: "/certs/thumbs/cdms.jpg" },
-];
+
 ---
 
 <!doctype html>
@@ -150,8 +144,10 @@ const certs = [
           <p class="eyebrow">TAIPEI · SG HK TW · EN ZH FR</p>
           <h1>Software, distribution, deals.</h1>
           <p class="lede">
-            I'm Justin. Ten years across ships, SaaS and tokens — building things, then finding
-            the people they're for. Days at Clique, nights on Gatekeep and Attiteud.
+            Taipei. A decade across maritime software, AI SaaS, and crypto infrastructure.
+            My day job is product and distribution at Clique. On nights and weekends I'm
+            shipping Gatekeep, Attiteud, and Nichesim. I build things people want, then find
+            the channels that get them there.
           </p>
           <p class="roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
           <p class="timeline" tabindex="0" aria-label="Career timeline, scrolls horizontally">
@@ -222,6 +218,53 @@ const certs = [
           ))
         }
 
+        <p class="label s12">certificates</p>
+
+        <section class="cell s12 certs" aria-label="Certificates">
+          <div class="certs-row">
+            <button class="cert" popovertarget="cert-ai4i" aria-label="View certificate: AI4I · AI Singapore">
+              <img src="/certs/thumbs/ai4i.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
+              <span class="cert-cap">AI4I · AI Singapore</span>
+            </button>
+            <button class="cert" popovertarget="cert-crewai" aria-label="View certificate: CrewAI · agents">
+              <img src="/certs/thumbs/crewai.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
+              <span class="cert-cap">CrewAI · agents</span>
+            </button>
+            <button class="cert" popovertarget="cert-ux" aria-label="View certificate: UX · Vertical Inst.">
+              <img src="/certs/thumbs/ux.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
+              <span class="cert-cap">UX · Vertical Inst.</span>
+            </button>
+            <button class="cert" popovertarget="cert-ibmi" aria-label="View certificate: Intl Business · IBMI">
+              <img src="/certs/thumbs/ibmi.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
+              <span class="cert-cap">Intl Business · IBMI</span>
+            </button>
+            <button class="cert" popovertarget="cert-cdms" aria-label="View certificate: CDMS">
+              <img src="/certs/thumbs/cdms.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
+              <span class="cert-cap">CDMS</span>
+            </button>
+          </div>
+          <div id="cert-ai4i" popover="auto" class="cert-pop">
+            <div class="cert-pop-bar"><span>AI4I · AI Singapore</span><button class="cert-close" popovertarget="cert-ai4i" popovertargetaction="hide">close ✕</button></div>
+            <img src="/certs/ai4i.jpg" alt="Certificate: AI4I · AI Singapore" loading="lazy" decoding="async" />
+          </div>
+          <div id="cert-crewai" popover="auto" class="cert-pop">
+            <div class="cert-pop-bar"><span>CrewAI · agents</span><button class="cert-close" popovertarget="cert-crewai" popovertargetaction="hide">close ✕</button></div>
+            <img src="/certs/crewai.jpg" alt="Certificate: CrewAI · agents" loading="lazy" decoding="async" />
+          </div>
+          <div id="cert-ux" popover="auto" class="cert-pop">
+            <div class="cert-pop-bar"><span>UX · Vertical Inst.</span><button class="cert-close" popovertarget="cert-ux" popovertargetaction="hide">close ✕</button></div>
+            <img src="/certs/ux.jpg" alt="Certificate: UX · Vertical Inst." loading="lazy" decoding="async" />
+          </div>
+          <div id="cert-ibmi" popover="auto" class="cert-pop">
+            <div class="cert-pop-bar"><span>Intl Business · IBMI</span><button class="cert-close" popovertarget="cert-ibmi" popovertargetaction="hide">close ✕</button></div>
+            <img src="/certs/ibmi.jpg" alt="Certificate: Intl Business · IBMI" loading="lazy" decoding="async" />
+          </div>
+          <div id="cert-cdms" popover="auto" class="cert-pop">
+            <div class="cert-pop-bar"><span>CDMS</span><button class="cert-close" popovertarget="cert-cdms" popovertargetaction="hide">close ✕</button></div>
+            <img src="/certs/cdms.jpg" alt="Certificate: CDMS" loading="lazy" decoding="async" />
+          </div>
+        </section>
+
         <p class="label s12">work with me</p>
 
         <a class="cell s3 route" href={`mailto:${EMAIL_ATTITEUD}`}>
@@ -241,30 +284,7 @@ const certs = [
           <ul class="chips">
             {stack.map((s) => <li class="chip">{s}</li>)}
           </ul>
-          <p class="cell-eyebrow">certs</p>
-          <div class="certs-row">
-            {
-              certs.map((c) => (
-                <button class="cert" popovertarget={c.id} aria-label={`View certificate: ${c.cap}`}>
-                  <img src={c.thumb} alt="" width="300" height="212" loading="lazy" decoding="async" />
-                  <span class="cert-cap">{c.cap}</span>
-                </button>
-              ))
-            }
-          </div>
-          {
-            certs.map((c) => (
-              <div id={c.id} popover="auto" class="cert-pop">
-                <div class="cert-pop-bar">
-                  <span>{c.cap}</span>
-                  <button class="cert-close" popovertarget={c.id} popovertargetaction="hide">
-                    close ✕
-                  </button>
-                </div>
-                <img src={c.full} alt={`Certificate: ${c.cap}`} loading="lazy" decoding="async" />
-              </div>
-            ))
-          }
+
           <p class="colophon">
             this site: astro static · zero client js · self-hosted type ·
             <a href={LINKS.SOURCE} rel="noopener">view source →</a>

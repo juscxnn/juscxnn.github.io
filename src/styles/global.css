@@ -251,6 +251,10 @@ a.cell:hover {
   background: var(--hairline-soft);
 }
 
+.label:not(.s12:first-of-type) {
+  margin-top: 12px;
+}
+
 /* ---------- shared bits ---------- */
 
 .eyebrow,
@@ -293,10 +297,10 @@ a.cell:hover .cell-link {
 
 .lede {
   font-size: 14.5px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--muted);
   max-width: 52ch;
-  margin: 0;
+  margin: 0 0 0.25rem;
 }
 
 .roles {
@@ -500,11 +504,14 @@ h1 {
   margin-top: 0.3rem;
 }
 
+.certs {
+  padding-block: 14px 18px;
+}
+
 .certs-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin: 0 0 0.9rem;
+  gap: 10px;
 }
 
 .cert {
@@ -522,7 +529,7 @@ h1 {
 
 .cert img {
   width: 100%;
-  height: 62px;
+  height: 72px;
   object-fit: cover;
   object-position: top;
   border: 1px solid var(--hairline);
