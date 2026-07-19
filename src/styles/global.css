@@ -1386,6 +1386,11 @@ h1 {
 .w98-win-min,
 .w98-win-max,
 .w98-win-close {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 16px;
   height: 14px;
   line-height: 12px;
@@ -1459,6 +1464,11 @@ h1 {
 }
 
 .w98-calc-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
   font-family: var(--sans);
   font-size: 11.5px;
@@ -2213,4 +2223,64 @@ h1 {
     width: 180px;
     margin-left: -180px;
   }
+}
+
+/* ---------- more doodle indicators ---------- */
+
+.doodle-ring {
+  position: absolute;
+  top: -10px;
+  left: -8px;
+  width: calc(100% + 18px);
+  height: calc(100% + 18px);
+  color: var(--green);
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.doodle-wiggle {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  color: var(--green);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.doodle-pinch {
+  display: inline-block;
+  width: 28px;
+  height: auto;
+  vertical-align: middle;
+  color: var(--green);
+  opacity: 0.5;
+  margin-left: 4px;
+  margin-right: -2px;
+}
+
+.doodle-underline-stat {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 2px;
+  color: var(--muted);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.doodle-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.doodle-star {
+  display: inline-block;
+  width: 14px;
+  height: auto;
+  color: var(--green);
+  vertical-align: text-bottom;
+  opacity: 0.5;
+  margin-right: 2px;
 }
