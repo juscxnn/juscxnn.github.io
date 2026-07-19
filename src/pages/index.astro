@@ -226,28 +226,35 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           </div>
         </div>
 
-                <section class="cell s12 os" aria-label="JustinOS — classic Mac desktop">
-          <div class="os-bar">
-            <span class="os-apple">&#8984;</span>
-            <span>File</span><span>Edit</span><span>View</span><span>Special</span>
-            <span style="margin-left:auto;opacity:0.65">JustinOS v1.0</span>
+                <section class="cell s12 os-chassis" aria-label="JustinOS — classic Macintosh Plus">
+          <div class="os-vent"></div>
+          <div class="os-screen">
+            <div class="os-bar">
+              <span class="os-apple">&#8984;</span>
+              <span>File</span><span>Edit</span><span>View</span><span>Special</span>
+              <span style="margin-left:auto;opacity:0.65">JustinOS v1.0</span>
+            </div>
+            <div class="os-desk" id="osDesk">
+              <div class="os-icon" data-win="about" ondblclick="osOpen('about')">
+                <span class="os-icon-pic">&#9998;</span><span class="os-icon-label">About</span>
+              </div>
+              <div class="os-icon" data-win="calc" ondblclick="osOpen('calc')">
+                <span class="os-icon-pic">&#9654;|</span><span class="os-icon-label">Calculator</span>
+              </div>
+              <div class="os-icon" data-win="projects" ondblclick="osOpen('projects')">
+                <span class="os-icon-pic">&#128451;</span><span class="os-icon-label">Projects</span>
+              </div>
+              <div class="os-icon" data-win="timeline" ondblclick="osOpen('timeline')">
+                <span class="os-icon-pic">&#128339;</span><span class="os-icon-label">Timeline</span>
+              </div>
+              <div class="os-icon" data-win="stack" ondblclick="osOpen('stack')">
+                <span class="os-icon-pic">{'>'}</span><span class="os-icon-label">Stack</span>
+              </div>
+            </div>
           </div>
-          <div class="os-desk" id="osDesk">
-            <div class="os-icon" data-win="about" ondblclick="osOpen('about')">
-              <span class="os-icon-pic">&#9998;</span><span class="os-icon-label">About</span>
-            </div>
-            <div class="os-icon" data-win="calc" ondblclick="osOpen('calc')">
-              <span class="os-icon-pic">&#9654;|</span><span class="os-icon-label">Calculator</span>
-            </div>
-            <div class="os-icon" data-win="projects" ondblclick="osOpen('projects')">
-              <span class="os-icon-pic">&#128451;</span><span class="os-icon-label">Projects</span>
-            </div>
-            <div class="os-icon" data-win="timeline" ondblclick="osOpen('timeline')">
-              <span class="os-icon-pic">&#128339;</span><span class="os-icon-label">Timeline</span>
-            </div>
-            <div class="os-icon" data-win="stack" ondblclick="osOpen('stack')">
-              <span class="os-icon-pic">{'>'}</span><span class="os-icon-label">Stack</span>
-            </div>
+          <div class="os-brand">
+            <span class="os-logo">&#xF8FF;</span>
+            <div class="os-floppy"></div>
           </div>
         </section>
 
