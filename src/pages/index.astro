@@ -264,7 +264,7 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
 
         <p class="label s12">certificates</p>
 
-        <section class="cell s12 certs" aria-label="Certificates">
+        <section class="cell s12 certs" id="certificates" aria-label="Certificates">
           <div class="certs-row">
             <button class="cert" popovertarget="cert-ai4i" aria-label="View certificate: AI4I · AI Singapore">
               <img src="/certs/thumbs/ai4i.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
@@ -388,5 +388,130 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
         <div id="twin-mount"></div>
       </div>
     </footer>
-  </body>
+  
+<button class="kbtn" aria-label="Open command palette">&#8984;</button>
+<script>
+/* ── text scramble ── */
+(function(){
+  if(window.matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  const h1=document.querySelector("h1");
+  if(!h1||h1.textContent!=="Software, distribution, deals.")return;
+  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*_+-=[]{}|;:?~";
+  const text="Software, distribution, deals.",dur=350,stagger=28;
+  const start=performance.now();let running=true;
+  function tick(now){
+    let o="";const e=now-start;
+    for(let i=0;i<text.length;i++){
+      const d=i*stagger;
+      if(e<d){o+=text[i];continue}
+      if(e>d+dur){o+=text[i];continue}
+      if(text[i]===" "||text[i]==="."||text[i]===","){o+=text[i];continue}
+      o+=chars[Math.floor(Math.random()*chars.length)]
+    }
+    h1.textContent=o;
+    if(e<text.length*stagger+dur)requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+})();
+
+/* ── command palette ── */
+(function(){
+  const cmds=[
+    {label:"Email me",kw:["email","contact","mailto"],act:function(){location.href="mailto:jcxa@proton.me"}},
+    {label:"WhatsApp",kw:["whatsapp","message","wa","phone","sms"],act:function(){open("https://wa.me/6588175879","_blank")}},
+    {label:"LinkedIn",kw:["linkedin","social","li"],act:function(){open("https://linkedin.com/in/justincxa","_blank")}},
+    {label:"Save vCard",kw:["save","vcard","contact","card","download"],act:function(){var a=document.createElement("a");a.href="/contact.vcf";a.download="Justin_Chua.vcf";a.click()}},
+    {label:"Toggle dark mode",kw:["dark","light","theme","mode","toggle"],act:function(){if(window.toggleTheme)window.toggleTheme()}},
+    {label:"Gatekeep",kw:["gatekeep","vc"],act:function(){open("https://gatekeep.vc","_blank")}},
+    {label:"Attiteud",kw:["attiteud","studio","deployment","saas"],act:function(){open("https://attiteud.com","_blank")}},
+    {label:"Nichesim",kw:["nichesim","simulation","community","test","ai"],act:function(){open("https://nichesim.com","_blank")}},
+    {label:"View source",kw:["source","github","code","repo"],act:function(){open("https://github.com/juscxnn/juscxnn.github.io","_blank")}},
+    {label:"Clique",kw:["clique","crypto"],act:function(){open("https://clique.tech","_blank")}},
+    {label:"Certificates",kw:["certs","certificates","scroll"],act:function(){document.getElementById("certificates")?.scrollIntoView({behavior:"smooth"})}},
+    {label:"Zaobao feature",kw:["zaobao","press","article","maritime","ship"],act:function(){open("https://www.zaobao.com.sg/news/singapore/story20240102-1459510","_blank")}}
+  ];
+  function fuzzy(q,label,kw){
+    var t=q.toLowerCase();var targets=[label.toLowerCase()];
+    if(kw)kw.forEach(function(k){targets.push(k.toLowerCase())});
+    for(var i=0;i<targets.length;i++){
+      var ti=0;for(var j=0;j<targets[i].length&&ti<t.length;j++){if(targets[i][j]===t[ti])ti++}
+      if(ti===t.length)return true
+    }
+    return false
+  }
+  var scrim,palette,input,results,sel=-1,filtered=[];
+  function build(){
+    scrim=document.createElement("div");scrim.className="cmd-scrim";scrim.setAttribute("role","dialog");scrim.setAttribute("aria-label","Command palette");
+    palette=document.createElement("div");palette.className="cmd-palette";
+    input=document.createElement("input");input.className="cmd-input";input.setAttribute("placeholder","Type a command...");input.setAttribute("spellcheck","false");input.setAttribute("autocomplete","off");
+    results=document.createElement("div");results.className="cmd-results";
+    var hints=document.createElement("div");hints.className="cmd-hints";
+    hints.innerHTML="<span>&uarr;&darr; navigate</span><span>&#8629; select</span><span>esc close</span>";
+    palette.appendChild(input);palette.appendChild(results);palette.appendChild(hints);scrim.appendChild(palette);document.body.appendChild(scrim)
+  }
+  function render(q){
+    results.innerHTML="";sel=-1;filtered=[];
+    var all=q?cmds.filter(function(c){return fuzzy(q,c.label,c.kw)}):cmds;
+    for(var i=0;i<all.length;i++){
+      var c=all[i];filtered.push(c);
+      var el=document.createElement("div");el.className="cmd-item";
+      el.innerHTML="<span>"+c.label+"</span><span class=\"cmd-item-arrow\">\u2192</span>";
+      el.addEventListener("click",function(c){return function(){c.act();close()}}(c));
+      results.appendChild(el)
+    }
+    if(filtered.length)highlight(0)
+  }
+  function highlight(i){
+    sel=i;var items=results.querySelectorAll(".cmd-item");
+    items.forEach(function(el,j){el.classList.toggle("cmd-item--selected",j===i);if(j===i)el.scrollIntoView({block:"nearest"})})
+  }
+  function open(){
+    if(!scrim)build();
+    scrim.classList.add("open");input.value="";render("");input.focus();document.body.style.overflow="hidden"
+  }
+  function close(){
+    scrim.classList.remove("open");document.body.style.overflow=""
+  }
+  input&&input.addEventListener("input",function(){render(input.value)});
+  input&&input.addEventListener("keydown",function(e){
+    if(e.key==="ArrowDown"){e.preventDefault();highlight(Math.min(sel+1,filtered.length-1))}
+    else if(e.key==="ArrowUp"){e.preventDefault();highlight(Math.max(sel-1,0))}
+    else if(e.key==="Enter"){e.preventDefault();if(filtered[sel]){filtered[sel].act();close()}}
+    else if(e.key==="Escape"){if(input.value){input.value="";render("")}else close()}
+  });
+  build();
+  scrim.addEventListener("click",function(e){if(e.target===scrim)close()});
+  document.addEventListener("keydown",function(e){
+    if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();open();return}
+    if((e.key==="?"||e.key==="/")&&document.activeElement&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="TEXTAREA"&&document.activeElement.contentEditable!=="true"){e.preventDefault();open()}
+  });
+  var kbtn=document.querySelector(".kbtn");
+  if(kbtn)kbtn.addEventListener("click",open)
+})();
+
+/* ── physics ── */
+(function(){
+  if(window.matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  var bento=document.querySelector(".bento"),media=document.querySelector(".media"),glass=document.querySelector(".glass");
+  var mx=innerWidth/2,my=innerHeight/2,gx=mx,gy=my;
+  addEventListener("mousemove",function(e){mx=e.clientX;my=e.clientY});
+  addEventListener("mouseleave",function(){mx=innerWidth/2;my=innerHeight/2});
+  function tick(){
+    gx+=(mx-gx)*0.08;gy+=(my-gy)*0.08;
+    if(bento){bento.style.setProperty("--glow-x",gx+"px");bento.style.setProperty("--glow-y",gy+"px")}
+    if(media){
+      var r=media.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=mx-cx,dy=my-cy,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<400){var rx=(dy/(r.height/2))*-2,ry=(dx/(r.width/2))*2;media.style.transform="perspective(800px) rotateX("+rx.toFixed(1)+"deg) rotateY("+ry.toFixed(1)+"deg)"}else media.style.transform=""
+    }
+    requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick);
+  if(glass){var items=glass.querySelectorAll(".glass-item");
+    glass.addEventListener("mousemove",function(e){items.forEach(function(item){var r=item.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<140){var pull=(1-dist/140)*5;item.style.transform="translate("+(dx/dist*pull).toFixed(1)+"px,"+(dy/dist*pull).toFixed(1)+"px)"}else item.style.transform=""})});
+    glass.addEventListener("mouseleave",function(){items.forEach(function(item){item.style.transform=""})})
+  }
+})();
+</script>
+</body>
 </html>
