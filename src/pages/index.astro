@@ -226,6 +226,31 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
           </div>
         </div>
 
+                <section class="cell s12 os" aria-label="JustinOS — classic Mac desktop">
+          <div class="os-bar">
+            <span class="os-apple">&#8984;</span>
+            <span>File</span><span>Edit</span><span>View</span><span>Special</span>
+            <span style="margin-left:auto;opacity:0.65">JustinOS v1.0</span>
+          </div>
+          <div class="os-desk" id="osDesk">
+            <div class="os-icon" data-win="about" ondblclick="osOpen('about')">
+              <span class="os-icon-pic">&#9998;</span><span class="os-icon-label">About</span>
+            </div>
+            <div class="os-icon" data-win="calc" ondblclick="osOpen('calc')">
+              <span class="os-icon-pic">&#9654;|</span><span class="os-icon-label">Calculator</span>
+            </div>
+            <div class="os-icon" data-win="projects" ondblclick="osOpen('projects')">
+              <span class="os-icon-pic">&#128451;</span><span class="os-icon-label">Projects</span>
+            </div>
+            <div class="os-icon" data-win="timeline" ondblclick="osOpen('timeline')">
+              <span class="os-icon-pic">&#128339;</span><span class="os-icon-label">Timeline</span>
+            </div>
+            <div class="os-icon" data-win="stack" ondblclick="osOpen('stack')">
+              <span class="os-icon-pic">{'>'}</span><span class="os-icon-label">Stack</span>
+            </div>
+          </div>
+        </section>
+
         <p class="label s12">track record</p>
 
         {
@@ -510,6 +535,62 @@ const stack = ["TypeScript", "Node.js", "Next.js", "Astro", "Python", "Postgres"
     glass.addEventListener("mousemove",function(e){items.forEach(function(item){var r=item.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,dist=Math.sqrt(dx*dx+dy*dy);
       if(dist<140){var pull=(1-dist/140)*5;item.style.transform="translate("+(dx/dist*pull).toFixed(1)+"px,"+(dy/dist*pull).toFixed(1)+"px)"}else item.style.transform=""})});
     glass.addEventListener("mouseleave",function(){items.forEach(function(item){item.style.transform=""})})
+  }
+})();
+
+/* ── justinOS ── */
+(function(){
+  var wins={},z=10,active=null,offX=0,offY=0,drag=null;
+
+  window.osOpen=function(id){if(wins[id]){focus(id);return}
+    var w=document.createElement("div");w.className="os-win";w.id="osWin-"+id;w.style.zIndex=++z;
+    var bar=document.createElement("div");bar.className="os-win-bar";
+    var cls=document.createElement("span");cls.className="os-win-close";cls.innerHTML="&#x25A3;";cls.addEventListener("click",function(e){e.stopPropagation();osClose(id)});
+    var ttl=document.createElement("span");ttl.className="os-win-title";ttl.textContent=({about:"About Justin",calc:"Calculator",projects:"Projects <- Gatekeep",timeline:"Timeline",stack:"Stack"})[id]||id;
+    bar.appendChild(cls);bar.appendChild(ttl);
+    bar.addEventListener("mousedown",function(e){if(e.target===cls)return;drag={win:w,ex:e.clientX,ey:e.clientY,sx:parseInt(w.style.left)||64,sy:parseInt(w.style.top)||64}});
+    var body=document.createElement("div");body.className="os-win-body";
+    if(id==="calc")body.innerHTML=calcHTML();else body.innerHTML=contentFor(id);
+    body.addEventListener("scroll",function(){/*noop*/});
+    w.appendChild(bar);w.appendChild(body);
+    w.addEventListener("mousedown",function(){focus(id)});
+    w.style.left=w.style.top="64px";document.getElementById("osDesk").appendChild(w);
+    wins[id]=w;focus(id)
+  };
+  window.osClose=function(id){if(!wins[id])return;wins[id].remove();delete wins[id];if(active===id)active=null};
+  function focus(id){if(!wins[id])return;active=id;z+=1;wins[id].style.zIndex=z}
+
+  document.addEventListener("mousemove",function(e){if(!drag)return;drag.win.style.left=(Math.max(0,drag.sx+e.clientX-drag.ex))+"px";drag.win.style.top=(Math.max(0,drag.sy+e.clientY-drag.ey))+"px"});
+  document.addEventListener("mouseup",function(){drag=null});
+
+  function contentFor(id){
+    switch(id){
+      case "about":return '<p style="font-weight:700;margin:0 0 6px">Justin Chua</p><p>Taipei &middot; SG HK TW &middot; EN ZH FR</p><p>Software, distribution, deals.</p><p style="margin-top:8px">Day job: product &amp; distribution at Clique.<br>Nights: Gatekeep, Attiteud, Nichesim.</p><p style="margin-top:8px">jcxa@proton.me<br><a href="https://linkedin.com/in/justincxa" target="_blank" rel="noopener">linkedin.com/in/justincxa</a><br><a href="https://github.com/juscxnn" target="_blank" rel="noopener">github.com/juscxnn</a></p>';
+      case "projects":var p=[{n:"Gatekeep",d:"AI investor personas. Pitch, pass, meet VCs.",u:"https://gatekeep.vc"},{n:"Attiteud",d:"Forward-deployment studio. AI that ships.",u:"https://attiteud.com"},{n:"Nichesim",d:"Simulated-community launch testing.",u:"https://nichesim.com"}];var h="";for(var i=0;i<p.length;i++)h+='<div style="margin-bottom:6px"><strong>'+p[i].n+'</strong> &mdash; '+p[i].d+' <a href="'+p[i].u+'" target="_blank" rel="noopener" style="font-size:10px;color:var(--green)">open &rarr;</a></div>';return h;
+      case "timeline":return '2014 police SOC<br>2017 robotics sales<br>2020 maritime<br>2022 CopyScouts exit 14x<br>2024 Podletter exit 7x<br>2025 Clique<br>2026 Attiteud + Gatekeep';
+      case "stack":var s=["TypeScript","Node.js","Next.js","Astro","Python","Postgres","SQLite","Electron","LLM pipelines","RAG"];var h2="";for(var i=0;i<s.length;i++)h2+='<span style="font-size:11px;background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">'+s[i]+'</span>';return'<div style="line-height:2">'+h2+'</div>';
+      default:return""
+    }
+  }
+
+  function calcHTML(){
+    var btns=[["C","&#8592;","%","/"],["7","8","9","*"],["4","5","6","-"],["1","2","3","+"],["0",".","="]];
+    var h='<div class="os-calc"><div class="os-calc-display" id="osCalcDisp">0</div>';
+    for(var r=0;r<btns.length;r++){h+='<div class="os-calc-row">';
+      for(var c=0;c<btns[r].length;c++){var cls="os-calc-btn";if(btns[r][c]==="=")cls+=" os-calc-eq";else if("+-*/".indexOf(btns[r][c])>=0)cls+=" os-calc-op";h+='<button class="'+cls+'" onclick="osCalcPress(this)">'+btns[r][c]+'</button>'}
+      h+="</div>"}
+    return h+"</div>"
+  }
+
+  window.osCalcPress=function(btn){
+    var d=document.getElementById("osCalcDisp");if(!d)return;var v=btn.textContent.trim();
+    if(v==="C"){d.textContent="0";d.setAttribute("data-a","0");d.setAttribute("data-op","");return}
+    if(v==="\u2190"){var t=d.textContent;d.textContent=t.length>1?t.slice(0,-1):"0";return}
+    if("+-*/".indexOf(v)>=0){d.setAttribute("data-a",d.textContent);d.setAttribute("data-op",v);d.textContent="0";return}
+    if(v==="="||v==="%"){var a=parseFloat(d.getAttribute("data-a")||"0"),op=d.getAttribute("data-op"),b=parseFloat(d.textContent),r=0;
+      if(op==="+")r=a+b;else if(op==="-")r=a-b;else if(op==="*")r=a*b;else if(op==="/")r=b!==0?a/b:"Error";else if(v==="%")r=a/100*parseFloat(d.textContent||a);
+      d.textContent=isNaN(r)?"Error":String(Math.round(r*1e8)/1e8);d.setAttribute("data-a","0");d.setAttribute("data-op","");return}
+    var cur=d.textContent;d.textContent=cur==="0"||cur==="Error"?v:cur+v
   }
 })();
 </script>
