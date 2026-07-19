@@ -438,6 +438,11 @@ h1 {
   overflow: hidden;
 }
 
+.media, .media * {
+  perspective: 800px;
+  will-change: auto;
+}
+
 .media::after {
   content: "";
   position: absolute;
@@ -874,6 +879,8 @@ h1 {
 
   .media {
     max-width: 380px;
+    perspective: 800px;
+    will-change: transform;
   }
 
   .stat:last-of-type,
@@ -907,6 +914,8 @@ h1 {
 
   .media {
     max-width: 100%;
+    perspective: 800px;
+    will-change: transform;
   }
 
   .pm {
@@ -1107,15 +1116,3 @@ h1 {
     rgba(255, 255, 255, 0.035), transparent);
 }
 
-/* ---------- tilt ---------- */
-
-.media {
-  perspective: 800px;
-  will-change: transform;
-}
-
-/* ---------- magnetic spring ---------- */
-
-.glass-item {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
