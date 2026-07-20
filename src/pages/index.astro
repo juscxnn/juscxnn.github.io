@@ -152,7 +152,7 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
       <a class="wordmark" href="/">Justin Chua</a>
       <span class="top-end">
         <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
-        <span class="lang" title="中文版 coming soon">EN / 繁中</span>
+        <button class="lang" onclick="toggleLang()" title="切换中文">繁中</button>
       </span>
     </header>
 
@@ -164,23 +164,18 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
         <i class="x x-br" aria-hidden="true"></i>
 
         <section class="cell s9 hero" aria-label="Introduction">
-          <p class="eyebrow">TAIPEI · HONG KONG · SINGAPORE · EN ZH FR</p>
-          <h1>Software, distribution, deals.</h1>
-          <p class="lede">
-            Taipei. A decade across maritime software, AI SaaS, and crypto infrastructure.
-            My day job is product and distribution at Clique. On nights and weekends I'm
-            shipping Gatekeep, Attiteud, and Nichesim. I build things people want, then find
-            the channels that get them there.
-          </p>
-          <p class="roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
+          <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · HONG KONG · SINGAPORE · EN ZH FR</p>
+          <h1 data-i18n="hero.headline">Software, distribution, deals.</h1>
+          <p class="lede" data-i18n="hero.lede">Taipei. A decade across maritime software, AI SaaS, and crypto infrastructure. My day job is product and distribution at Clique. On nights and weekends I'm shipping Gatekeep, Attiteud, and Nichesim. I build things people want, then find the channels that get them there.</p>
+          <p class="roles" data-i18n="hero.roles">founder · sales lead + product @ Clique · pre-IPO broker</p>
           <p class="timeline" tabindex="0" aria-label="Career timeline, scrolls horizontally">
-            <span class="t">2014 police SOC</span><span class="dot">·</span><span class="t"
+            <span class="t" data-i18n="hero.timeline.0">2014 police SOC</span><span class="dot">·</span><span class="t"
               >2017 robotics sales</span
-            ><span class="dot">·</span><span class="t">2020 maritime</span><span class="dot">·</span
-            ><span class="t">2022 CopyScouts exit 14x</span><span class="dot">·</span><span class="t"
+            ><span class="dot">·</span><span class="t" data-i18n="hero.timeline.1">2020 maritime</span><span class="dot">·</span
+            ><span class="t" data-i18n="hero.timeline.2">2022 CopyScouts exit 14x</span><span class="dot">·</span><span class="t"
               >2024 Podletter exit 7x</span
-            ><span class="dot">·</span><span class="t">2025 Clique</span><span class="dot">·</span
-            ><span class="t t--now">2026 Attiteud + Gatekeep</span>
+            ><span class="dot">·</span><span class="t" data-i18n="hero.timeline.3">2025 Clique</span><span class="dot">·</span
+            ><span class="t t--now" data-i18n="hero.timeline.4">2026 Attiteud + Gatekeep</span>
           </p>
         </section>
 
@@ -209,19 +204,19 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
           <div class="glass-row">
             <a class="glass-item" href="https://wa.me/6588175879" rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h6"/></svg>
-              <span class="glass-label">WhatsApp</span>
+              <span class="glass-label" data-i18n="glass.whatsapp">WhatsApp</span>
             </a>
             <a class="glass-item" href={LINKS.LINKEDIN} rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/></svg>
-              <span class="glass-label">LinkedIn</span>
+              <span class="glass-label" data-i18n="glass.linkedin">LinkedIn</span>
             </a>
             <a class="glass-item" href={`mailto:${EMAIL}`}>
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-              <span class="glass-label">Email</span>
+              <span class="glass-label" data-i18n="glass.email">Email</span>
             </a>
             <a class="glass-item" href="/contact.vcf" download="Justin_Chua.vcf">
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span class="glass-label">Save vCard</span>
+              <span class="glass-label" data-i18n="glass.save">Save vCard</span>
             </a>
           </div>
         </div>
@@ -276,15 +271,15 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
           </div>
         </section>
 
-        <p class="label s12">track record</p>
+        <p class="label s12" data-i18n="label.track-record">track record</p>
 
         {
           stats.map((s, i) => (
             <article class="cell s4 stat" aria-label={s.eyebrow}>
-              <p class="cell-eyebrow">{s.eyebrow}</p>
+              <p class="cell-eyebrow" data-i18n={`stat.${i}.eyebrow`}>{s.eyebrow}</p>
               <p class="stat-number">{s.number}</p>
-              <p class="stat-line">{s.line}</p>
-              {s.sub && <p class="stat-sub">{s.sub}</p>}
+              <p class="stat-line" data-i18n={`stat.${i}.line`}>{s.line}</p>
+              {s.sub && <p class="stat-sub" data-i18n={`stat.${i}.sub`}>{s.sub}</p>}
               {s.href && (
                 <a class="cell-link" href={s.href} rel="noopener" lang={s.lang}>
                   {s.link}
@@ -295,10 +290,10 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
         }
         <!-- PENDING internal clearance on figures. -->
 
-        <p class="label s12">building now</p>
+        <p class="label s12" data-i18n="label.building-now">building now</p>
 
         {
-          projects.map((p) => (
+          projects.map((p, pi) => (
             <a class="cell s4 proj" href={p.href} rel="noopener" aria-label={`${p.name} — ${p.blurb}`}>
               <span class="live" aria-hidden="true" />
               <p class="cell-eyebrow">{p.eyebrow}</p>
@@ -306,13 +301,13 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
                 <img class="proj-logo" src={p.logo} alt="" width="20" height="20" loading="lazy" decoding="async" />
                 <span class="proj-name">{p.name}</span>
               </span>
-              <p class="proj-blurb">{p.blurb}</p>
+              <p class="proj-blurb" data-i18n={`proj.${pi}.blurb`}>{p.blurb}</p>
               <p class="cell-link">{p.domain} →</p>
             </a>
           ))
         }
 
-        <p class="label s12">certificates</p>
+        <p class="label s12" data-i18n="label.certificates">certificates</p>
 
         <section class="cell s12 certs" id="certificates" aria-label="Certificates">
           <div class="certs-row">
@@ -359,17 +354,17 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
           </div>
         </section>
 
-        <p class="label s12">work with me</p>
+        <p class="label s12" data-i18n="label.work-with-me">work with me</p>
 
         <a class="cell s3 route" href={`mailto:${EMAIL_ATTITEUD}`}>
-          <p class="route-title">Sell a SaaS · deploy AI</p>
-          <p class="route-sub">acquisitions + forward deployment</p>
+          <p class="route-title" data-i18n="route.0.title">Sell a SaaS · deploy AI</p>
+          <p class="route-sub" data-i18n="route.0.sub">acquisitions + forward deployment</p>
           <p class="cell-link">justin@attiteud.com →</p>
         </a>
 
         <a class="cell s3 route" href={`mailto:${EMAIL}`}>
-          <p class="route-title">Brand collaboration</p>
-          <p class="route-sub">EN · 中文 — Fieldy AI · Plaud · Aethir · Zalora</p>
+          <p class="route-title" data-i18n="route.1.title">Brand collaboration</p>
+          <p class="route-sub" data-i18n="route.1.sub">EN · 中文 — Fieldy AI · Plaud · Aethir · Zalora</p>
           <p class="cell-link">media kit →</p>
         </a>
 
@@ -380,20 +375,18 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
           </ul>
 
           <p class="colophon">
-            this site: static · zero client js · self-hosted type ·
+            <span data-i18n="colophon">this site: static · zero client js · self-hosted type ·</span>
             <a href={LINKS.SOURCE} rel="noopener">view source →</a>
           </p>
         </section>
 
-        <p class="label s12">private markets</p>
+        <p class="label s12" data-i18n="label.private-markets">private markets</p>
 
         <section class="cell s12 pm" id="private-markets" aria-label="Private markets">
           <div class="pm-text">
-            <p class="statement">
-              Pre-IPO secondaries and structured private deals, buy-side and sell-side.
-            </p>
+            <p class="statement" data-i18n="pm.statement">Pre-IPO secondaries and structured private deals, buy-side and sell-side.</p>
 
-            <p class="coverage">
+            <p class="coverage" data-i18n="pm.coverage">
               coverage: AI pre-IPO names you'd recognize · share tokenization · listco collateral
               lending
             </p>
@@ -403,7 +396,7 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
               >request the deal sheet →</a
             >
             <a class="text-cta" href={LINKS.LINKEDIN} rel="noopener">or LinkedIn →</a>
-            <p class="disclaimer">accredited + professional investors · IOI only</p>
+            <p class="disclaimer" data-i18n="pm.disclaimer">accredited + professional investors · IOI only</p>
           </div>
         </section>
       </div>
@@ -411,7 +404,7 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
 
     <footer class="foot">
       <div class="wrap foot-inner">
-        <p class="foot-copy">© Justin Chua · Taipei</p>
+        <p class="foot-copy" data-i18n="footer.copy">© Justin Chua · Taipei</p>
         <div class="socials">
           <a href={LINKS.LINKEDIN} aria-label="LinkedIn" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"
@@ -634,6 +627,68 @@ window.osCalcPress=function(btn){
     var cur=d.textContent;d.textContent=cur==="0"||cur==="Error"?v:cur+v
   }
 })();
+/* ── i18n ── */
+(function(){
+  var M={
+    zh:{
+      "hero.eyebrow":"\u53f0\u5317 \u00b7 \u9999\u6e2f \u00b7 \u65b0\u52a0\u5761 \u00b7 \u4e2d\u82f1\u6cd5",
+      "hero.headline":"\u8f6f\u4ef6 \u00b7 \u5206\u53d1 \u00b7 \u4ea4\u6613",
+      "hero.lede":"\u53f0\u5317\u3002\u5341\u5e74\u6a2a\u8de8\u6d77\u4e8b\u8f6f\u4ef6\u3001AI SaaS \u548c\u52a0\u5bc6\u57fa\u7840\u8bbe\u65bd\u3002\u767d\u5929\u5728 Clique \u8d1f\u8d23\u4ea7\u54c1\u548c\u5206\u53d1\u3002\u591c\u665a\u548c\u5468\u672b\u5728\u5f00\u53d1 Gatekeep\u3001Attiteud \u548c Nichesim\u3002\u6211\u6253\u9020\u4eba\u4eec\u60f3\u8981\u7684\u4e1c\u897f\uff0c\u7136\u540e\u627e\u5230\u8ba9\u5b83\u4eec\u5230\u8fbe\u7528\u6237\u7684\u6e20\u9053\u3002",
+      "hero.roles":"\u521b\u59cb\u4eba \u00b7 Clique \u9500\u552e\u4e3b\u7ba1 + \u4ea7\u54c1 \u00b7 \u4e0a\u5e02\u524d\u7ecf\u7eaa\u4eba",
+      "hero.timeline.0":"2014 \u8b66\u5bdf\u7279\u52e4",
+      "hero.timeline.1":"2017 \u673a\u5668\u4eba\u9500\u552e",
+      "hero.timeline.2":"2020 \u6d77\u4e8b",
+      "hero.timeline.3":"2022 CopyScouts 14x \u9000\u51fa",
+      "hero.timeline.4":"2024 Podletter 7x \u9000\u51fa",
+      "hero.timeline.5":"2025 Clique",
+      "hero.timeline.6":"2026 Attiteud + Gatekeep",
+      "label.track-record":"\u4e1a\u7ee9\u8bb0\u5f55",
+      "label.building-now":"\u6b63\u5728\u6253\u9020",
+      "label.certificates":"\u8bc1\u4e66",
+      "label.work-with-me":"\u4e0e\u6211\u5408\u4f5c",
+      "label.private-markets":"\u79c1\u52df\u5e02\u573a",
+      "stat.0.eyebrow":"\u6d77\u4e8b \u00b7 2020\u201324",
+      "stat.0.line":"\u65b0\u52a0\u5761\u6e2f\u52a1\u5e02\u573a 75% \u6570\u5b57\u5316 \u00b7 elxa",
+      "stat.1.eyebrow":"AI SaaS \u00b7 2022\u201324",
+      "stat.1.line":"CopyScouts 14x \u00b7 Podletter 7x \u00b7 AI Starter #2 PH",
+      "stat.1.sub":"AI \u5185\u5bb9 SaaS \u00b7 \u901a\u8baf\u5de5\u5177 \u00b7 AI \u542f\u52a8\u5e73\u53f0",
+      "stat.2.eyebrow":"Clique \u00b7 2025\u2013 \u00b7 \u9500\u552e\u4e3b\u7ba1 + \u4ea7\u54c1",
+      "stat.2.line":"2 \u5e74\u5185\u5206\u53d1 100\u4ebf+ \u7f8e\u5143 \u00b7 \u7a7a\u6295 \u00b7 \u5b9a\u5236\u5206\u53d1\u5de5\u5177",
+      "stat.2.sub":"75% \u7684\u5916\u5305\u5f00\u53d1\u524d 1000 \u5e01\u79cd",
+      "proj.0.blurb":"AI \u6295\u8d44\u4eba\u89d2\u8272\u626e\u6f14\u5bf9\u4f60\u7684\u63d0\u6848\u8fdb\u884c\u538b\u529b\u6d4b\u8bd5\uff0c\u8de8 12 \u4e2a\u7ef4\u5ea6\u8bc4\u5206\u3002\u901a\u8fc7\u540e\uff0c\u62a5\u544a\u76f4\u8fbe\u771f\u5b9e VC\u3002",
+      "proj.1.blurb":"\u524d\u5411\u90e8\u7f72\u5de5\u4f5c\u5ba4\u2014\u2014\u5de5\u7a0b\u5e08\u5d4c\u5165\u4f60\u7684\u56e2\u961f\uff0c\u5ba1\u8ba1\u5de5\u4f5c\u6d41\uff0c\u4ea4\u4ed8\u771f\u6b63\u843d\u5730\u7684 AI\u3002\u540c\u65f6\u6536\u8d2d\u5c0f\u578b SaaS\u3002",
+      "proj.2.blurb":"\u6570\u5343\u4e2a AI \u89d2\u8272\u6a21\u62df\u793e\u533a\u5bf9\u4f60\u4ea7\u54c1\u7684\u53cd\u5e94\uff0c\u5728\u4f60\u63a8\u5411\u5e02\u573a\u4e4b\u524d\u3002",
+      "route.0.title":"\u51fa\u552e SaaS \u00b7 \u90e8\u7f72 AI",
+      "route.0.sub":"\u6536\u8d2d + \u524d\u5411\u90e8\u7f72",
+      "route.1.title":"\u54c1\u724c\u5408\u4f5c",
+      "route.1.sub":"\u4e2d\u82f1\u53cc\u8bed \u00b7 Fieldy AI \u00b7 Plaud \u00b7 Aethir \u00b7 Zalora",
+      "colophon":"\u672c\u7ad9\uff1a\u9759\u6001 \u00b7 \u96f6\u5ba2\u6237\u7aef JS \u00b7 \u81ea\u6258\u7ba1\u5b57\u4f53 \u00b7",
+      "pm.statement":"\u4e0a\u5e02\u524d\u4e8c\u7ea7\u5e02\u573a\u548c\u7ed3\u6784\u5316\u79c1\u4eba\u4ea4\u6613\uff0c\u4e70\u65b9\u548c\u5356\u65b9\u3002",
+      "pm.coverage":"\u8986\u76d6\u8303\u56f4\uff1a\u4f60\u542c\u8fc7\u7684 AI \u4e0a\u5e02\u524d\u9879\u76ee \u00b7 \u80a1\u6743\u4ee3\u5e01\u5316 \u00b7 \u4e0a\u5e02\u516c\u53f8\u62b5\u62bc\u501f\u8d37",
+      "pm.cta":"\u7d22\u53d6\u4ea4\u6613\u6e05\u5355 \u2192",
+      "pm.disclaimer":"\u4ec5\u9650\u8ba4\u53ef\u548c\u4e13\u4e1a\u6295\u8d44\u8005 \u00b7 \u4ec5\u610f\u5411\u8868\u793a",
+      "glass.whatsapp":"WhatsApp",
+      "glass.linkedin":"LinkedIn",
+      "glass.email":"\u90ae\u4ef6",
+      "glass.save":"\u4fdd\u5b58\u540d\u7247",
+      "footer.copy":"\u00a9 \u8521\u732e\u5b89 \u00b7 \u53f0\u5317"
+    }
+  };
+  var cur="en";
+  window.applyLang=function(lang){
+    cur=lang;document.documentElement.setAttribute("data-lang",lang);
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k=el.getAttribute("data-i18n"),orig=el.getAttribute("data-i18n-orig");
+      if(!orig){el.setAttribute("data-i18n-orig",el.textContent);orig=el.textContent}
+      if(lang==="zh"&&M.zh[k])el.textContent=M.zh[k];
+      else el.textContent=orig
+    });
+    var b=document.querySelector(".lang");if(b)b.textContent=lang==="zh"?"EN":"\u7e41\u4e2d"
+  };
+  window.toggleLang=function(){applyLang(cur==="zh"?"en":"zh");localStorage.setItem("lang",cur)};
+  var s=localStorage.getItem("lang");if(s==="zh")applyLang("zh")
+})();
+
 </script>
 </body>
 </html>
