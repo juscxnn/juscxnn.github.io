@@ -222,55 +222,6 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
         </div>
 
         
-        <section class="cell s12 w98-chassis" aria-label="JustinOS — Windows 98 desktop">
-          <div class="w98-vent"></div>
-          <div class="w98-screen">
-            <div class="w98-desk" id="osDesk">
-              <div class="w98-icon" data-win="about" ondblclick="osOpen('about')">
-                <span class="w98-icon-pic" style="background:#3A6EA5">&#9998;</span>
-                <span class="w98-icon-label">About</span>
-              </div>
-              <div class="w98-icon" data-win="calculator" ondblclick="osOpen('calculator')">
-                <span class="w98-icon-pic" style="background:#808080">&#9632;</span>
-                <span class="w98-icon-label">Calculator</span>
-              </div>
-              <div class="w98-icon" data-win="projects" ondblclick="osOpen('projects')">
-                <span class="w98-icon-pic" style="background:#D4A017">&#128193;</span>
-                <span class="w98-icon-label">Projects</span>
-              </div>
-              <div class="w98-icon" data-win="timeline" ondblclick="osOpen('timeline')">
-                <span class="w98-icon-pic" style="background:#2E8B57">&#128339;</span>
-                <span class="w98-icon-label">Timeline</span>
-              </div>
-              <div class="w98-icon" data-win="stack" ondblclick="osOpen('stack')">
-                <span class="w98-icon-pic" style="background:#6A0DAD">&#9881;</span>
-                <span class="w98-icon-label">Stack</span>
-              </div>
-            </div>
-          </div>
-          <div class="w98-taskbar">
-            <button class="w98-start-btn" onclick="toggleStart()">
-              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:middle;margin-right:3px"><rect x="1" y="1" width="6" height="6" fill="#FF5E18"/><rect x="9" y="1" width="6" height="6" fill="#00B928"/><rect x="1" y="9" width="6" height="6" fill="#0099FF"/><rect x="9" y="9" width="6" height="6" fill="#FFC000"/></svg>
-              <span>Start</span>
-            </button>
-            <div class="w98-tb-spacer"></div>
-            <div class="w98-clock" id="osClock">12:00 PM</div>
-          </div>
-          <div class="w98-start-menu" id="osStart" style="display:none">
-            <div class="w98-sm-side"><span class="w98-sm-label">JustinOS</span></div>
-            <div class="w98-sm-items">
-              <div class="w98-sm-item" onclick="osOpen('about');toggleStart()">About Justin</div>
-              <div class="w98-sm-sep"></div>
-              <div class="w98-sm-item" onclick="osOpen('calculator');toggleStart()">Calculator</div>
-              <div class="w98-sm-item" onclick="osOpen('projects');toggleStart()">Projects</div>
-              <div class="w98-sm-item" onclick="osOpen('timeline');toggleStart()">Timeline</div>
-              <div class="w98-sm-item" onclick="osOpen('stack');toggleStart()">Tech Stack</div>
-              <div class="w98-sm-sep"></div>
-              <div class="w98-sm-item sm-dim">Shut Down&hellip;</div>
-            </div>
-          </div>
-        </section>
-
         <p class="label s12" data-i18n="label.track-record">track record</p>
 
         {
@@ -557,76 +508,6 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
   }
 })();
 
-/* ── justinOS ── */
-(function(){
-  var wins={},z=10,active=null,offX=0,offY=0,drag=null;
-
-  window.osOpen=function(id){
-  var titles={about:"About Justin",calculator:"Calculator",projects:"Projects",timeline:"Timeline",stack:"Tech Stack"};
-  if(wins[id]){focus(id);return}
-  var w=document.createElement("div");w.className="w98-win";w.id="osWin-"+id;w.style.zIndex=++z;
-  var bar=document.createElement("div");bar.className="w98-win-bar";
-  var icon=document.createElement("span");icon.className="w98-win-icon";icon.innerHTML="&#9632;";
-  var ttl=document.createElement("span");ttl.className="w98-win-title";ttl.textContent=titles[id]||id;
-  var ctrls=document.createElement("div");ctrls.className="w98-win-ctrls";
-  var min=document.createElement("button");min.className="w98-win-min";min.textContent="_";min.addEventListener("click",function(e){e.stopPropagation()});
-  var max=document.createElement("button");max.className="w98-win-max";max.textContent="&#9633;";max.addEventListener("click",function(e){e.stopPropagation()});
-  var clsBtn=document.createElement("button");clsBtn.className="w98-win-close";clsBtn.textContent="&#10005;";clsBtn.addEventListener("click",function(e){e.stopPropagation();osClose(id)});
-  ctrls.appendChild(min);ctrls.appendChild(max);ctrls.appendChild(clsBtn);
-  bar.appendChild(icon);bar.appendChild(ttl);bar.appendChild(ctrls);
-  bar.addEventListener("mousedown",function(e){if(e.target.tagName==="BUTTON")return;drag={win:w,ex:e.clientX,ey:e.clientY,sx:parseInt(w.style.left)||28,sy:parseInt(w.style.top)||28}});
-  var body=document.createElement("div");body.className="w98-win-body";
-  if(id==="calculator")body.innerHTML=calcHTML();else body.innerHTML=contentFor(id);
-  w.appendChild(bar);w.appendChild(body);w.addEventListener("mousedown",function(){focus(id)});
-  w.style.left=w.style.top="28px";document.getElementById("osDesk").appendChild(w);
-  wins[id]=w;focus(id)
-};
-window.osClose=function(id){if(!wins[id])return;wins[id].remove();delete wins[id];if(active===id)active=null};
-  window.toggleStart=function(){
-    var menu=document.getElementById("osStart"),btn=document.querySelector(".w98-start-btn");
-    if(!menu||!btn)return;
-    var isOpen=menu.classList.contains("open");
-    if(isOpen){menu.classList.remove("open");menu.style.display="none";btn.style.borderTop="2px solid #fff";btn.style.borderLeft="2px solid #fff";btn.style.borderRight="2px solid #000";btn.style.borderBottom="2px solid #000"}
-    else{menu.style.display="flex";menu.classList.add("open");btn.style.borderTop="2px solid #000";btn.style.borderLeft="2px solid #000";btn.style.borderRight="2px solid #fff";btn.style.borderBottom="2px solid #fff"}
-  };
-  (function clockTick(){var n=new Date(),h=n.getHours(),m=n.getMinutes(),a=h>=12?"PM":"AM";h=h%12||12;var c=document.getElementById("osClock");if(c)c.textContent=h+":"+(m<10?"0":"")+m+" "+a;setTimeout(clockTick,45000)})();
-  document.addEventListener("click",function(e){var menu=document.getElementById("osStart"),btn=document.querySelector(".w98-start-btn");if(!menu||!menu.classList.contains("open"))return;if(!menu.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){menu.classList.remove("open");menu.style.display="none";btn.style.borderTop="2px solid #fff";btn.style.borderLeft="2px solid #fff";btn.style.borderRight="2px solid #000";btn.style.borderBottom="2px solid #000"}});
-
-function focus(id){if(!wins[id])return;active=id;z+=1;wins[id].style.zIndex=z}
-
-  document.addEventListener("mousemove",function(e){if(!drag)return;drag.win.style.left=(Math.max(0,drag.sx+e.clientX-drag.ex))+"px";drag.win.style.top=(Math.max(0,drag.sy+e.clientY-drag.ey))+"px"});
-  document.addEventListener("mouseup",function(){drag=null});
-
-  function contentFor(id){
-    switch(id){
-      case "about":return '<p style="font-weight:700;margin:0 0 6px">Justin Chua</p><p>Taipei &middot; SG HK TW &middot; EN ZH FR</p><p>Software, distribution, deals.</p><p style="margin-top:8px">Day job: product &amp; distribution at Clique.<br>Nights: Gatekeep, Attiteud, Nichesim.</p><p style="margin-top:8px">jcxa@proton.me<br><a href="https://linkedin.com/in/justincxa" target="_blank" rel="noopener">linkedin.com/in/justincxa</a><br><a href="https://github.com/juscxnn" target="_blank" rel="noopener">github.com/juscxnn</a></p>';
-      case "projects":var p=[{n:"Gatekeep",d:"AI investor personas. Pitch, pass, meet VCs.",u:"https://gatekeep.vc"},{n:"Attiteud",d:"Forward-deployment studio. AI that ships.",u:"https://attiteud.com"},{n:"Nichesim",d:"Simulated-community launch testing.",u:"https://nichesim.com"}];var h="";for(var i=0;i<p.length;i++)h+='<div style="margin-bottom:6px"><strong>'+p[i].n+'</strong> &mdash; '+p[i].d+' <a href="'+p[i].u+'" target="_blank" rel="noopener" style="font-size:10px;color:var(--green)">open &rarr;</a></div>';return h;
-      case "timeline":return '2014 police SOC<br>2017 robotics sales<br>2020 maritime<br>2022 CopyScouts exit 14x<br>2024 Podletter exit 7x<br>2025 Clique<br>2026 Attiteud + Gatekeep';
-      case "stack":var s=["TypeScript","Node.js","Next.js","Astro","Python","Postgres","SQLite","Electron","LLM pipelines","RAG"];var h2="";for(var i=0;i<s.length;i++)h2+='<span style="font-size:11px;background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">'+s[i]+'</span>';return'<div style="line-height:2">'+h2+'</div>';
-      default:return""
-    }
-  }
-
-  function calcHTML(){
-    var btns=[["C","CE","&#8592;","/"],["7","8","9","*"],["4","5","6","-"],["1","2","3","+"],["0",".","="]];
-    var h='<div class="w98-calc"><div class="w98-calc-display" id="osCalcDisp">0</div>';
-    for(var r=0;r<btns.length;r++){h+='<div class="w98-calc-row">';
-      for(var c=0;c<btns[r].length;c++){var lbl=btns[r][c];var cl="w98-calc-btn";if(lbl==="C"||lbl==="CE")cl+=" w98-calc-red";if(lbl==="=")cl+=" w98-calc-eq";h+='<button class="'+cl+'" onclick="osCalcPress(this)">'+lbl+'</button>'}
-      h+="</div>"}
-    return h+"</div>"
-  }
-
-window.osCalcPress=function(btn){
-    var d=document.getElementById("osCalcDisp");if(!d)return;var v=btn.textContent.trim();
-    if(v==="C"){d.textContent="0";d.setAttribute("data-a","0");d.setAttribute("data-op","");return}
-    if(v==="\u2190"){var t=d.textContent;d.textContent=t.length>1?t.slice(0,-1):"0";return}
-    if("+-*/".indexOf(v)>=0){d.setAttribute("data-a",d.textContent);d.setAttribute("data-op",v);d.textContent="0";return}
-    if(v==="="||v==="%"){var a=parseFloat(d.getAttribute("data-a")||"0"),op=d.getAttribute("data-op"),b=parseFloat(d.textContent),r=0;
-      if(op==="+")r=a+b;else if(op==="-")r=a-b;else if(op==="*")r=a*b;else if(op==="/")r=b!==0?a/b:"Error";else if(v==="%")r=a/100*parseFloat(d.textContent||a);
-      d.textContent=isNaN(r)?"Error":String(Math.round(r*1e8)/1e8);d.setAttribute("data-a","0");d.setAttribute("data-op","");return}
-    var cur=d.textContent;d.textContent=cur==="0"||cur==="Error"?v:cur+v
-  }
-})();
 /* ── i18n ── */
 (function(){
   var M={
