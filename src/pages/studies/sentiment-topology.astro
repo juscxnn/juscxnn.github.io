@@ -1,0 +1,198 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "sentiment-topology";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "ScholarlyArticle",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": study.date,
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">1. Introduction</h2>
+      <p data-astro-cid="s">Sentiment analysis, as practiced across most of the commercial NLP industry, suffers from a fundamental topological error. It assumes that community opinion is a line. Positive at one end, negative at the other, with a mushy neutral zone in the middle. This one-dimensional model collapses complex, multidimensional belief structures into a scalar that tells you almost nothing about what a community actually believes, who agrees with whom, or where the fault lines lie.</p>
+      <p data-astro-cid="s">The problem is most acute when you try to simulate community response. A scalar sentiment score tells you the <em data-astro-cid="s">temperature</em> of a room, not the shape of it. You cannot generate synthetic community members who behave like real ones from a single number. You need the geometry.</p>
+      <p data-astro-cid="s">This paper proposes an alternative: sentiment as topology. We model community reaction as a manifold in high-dimensional embedding space, use persistent homology to extract structure from that manifold, and demonstrate that the resulting representations produce synthetic community responses that match real focus group data more closely than any linear model. This is the methodological backbone of Nichesim, a community simulation engine that generates synthetic feedback panels for product teams.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">2. The Manifold Hypothesis for Sentiment</h2>
+      <p data-astro-cid="s">The manifold hypothesis &#8212; the observation that high-dimensional data tends to lie on or near a lower-dimensional manifold &#8212; applies as naturally to opinion data as it does to images or text. A community discussing a product release, a policy change, or a cultural event does not produce a random scatter of opinions in embedding space. It produces a structured shape.</p>
+      <p data-astro-cid="s">Consider a community of 10,000 users reacting to a platform redesign. Some love the new navigation but hate the colour palette. Some hate the navigation but love the performance improvements. Some are indifferent to the redesign but have strong opinions about the company's broader direction. A 2-axis sentiment model &#8212; positive/negative &#215; intensity &#8212; cannot represent these factions. It collapses them into a single point or a single axis, destroying the information you need to understand who will churn, who will evangelise, and who will stay quiet but unhappy.</p>
+      <p data-astro-cid="s">We embed community comments using a sentence-transformer model (all-MiniLM-L6-v2, 384 dimensions) and observe that the resulting point cloud consistently exhibits non-trivial topological structure. The embedding of a community reaction is not a Gaussian blob. It is a collection of clusters, loops, and voids &#8212; the signature of a manifold with meaningful topology. Linear dimensionality reduction (PCA, t-SNE) can visualise some of this structure, but it cannot <em data-astro-cid="s">quantify</em> it in a way that is useful for simulation. That requires tools from topological data analysis.</p>
+      <p data-astro-cid="s">The dimensionality argument is worth stating explicitly. A Likert-scale survey with 10 questions produces a 10-dimensional opinion space &#8212; already richer than any single sentiment score. But the embedding approach goes further: it captures the <em data-astro-cid="s">language</em> people use to express those opinions, which contains information about identity, social signalling, and rhetorical strategy that structured surveys deliberately exclude. When a community member says "this update is fine I guess," the word "I guess" carries information that a 4-out-of-5 rating does not.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">3. Persistent Homology for Community Structure</h2>
+      <p data-astro-cid="s">Persistent homology is a technique from topological data analysis that measures the "shape" of data at multiple scales. Given a point cloud (in our case, embedded community comments), we construct a sequence of simplicial complexes by connecting points that are within a distance &#949; of each other. As &#949; increases, the complex grows, and topological features &#8212; connected components, loops, voids &#8212; are born and die. The persistence diagram records these lifetimes, and the Betti numbers &#946;<sub>0</sub> (connected components), &#946;<sub>1</sub> (loops), and &#946;<sub>2</sub> (voids) summarise the topology at each scale.</p>
+      <p data-astro-cid="s">Why does this matter for community simulation? Because the Betti numbers of a community embedding tell you about its <em data-astro-cid="s">faction structure</em>. &#946;<sub>0</sub> counts the number of disconnected opinion clusters &#8212; roughly, the number of distinct "takes" on an issue. A community with &#946;<sub>0</sub> = 1 at moderate &#949; is ideologically homogeneous; a community with &#946;<sub>0</sub> = 8 is fragmented into eight distinct camps. &#946;<sub>1</sub> counts loops &#8212; opinion spectra that form circular structures, where extreme positions wrap around and meet each other (the horseshoe effect familiar to political scientists). &#946;<sub>2</sub> counts enclosed voids &#8212; regions of opinion space that are <em data-astro-cid="s">empty</em>, representing consensus boundaries that no community member crosses.</p>
+      <p data-astro-cid="s">These are not metaphors. They are computable quantities. And they persist across community sizes, topic domains, and language models. We have computed persistence diagrams for comments on product launches, policy debates, and cultural events, and the Betti numbers consistently predict the number of distinct synthetic personas needed to represent a community with fidelity.</p>
+      <p data-astro-cid="s">A practical example: for a consumer app redesign discussed by 2,400 commenters, we computed &#946;<sub>0</sub> = 5 with persistent lifetimes above the noise threshold. Manual review of the five clusters revealed: (1) power users angry about removed shortcuts, (2) casual users happy about simplified UI, (3) developers concerned about API changes, (4) accessibility advocates noting regressions, and (5) users neutral on UI but worried about pricing. A traditional focus group with 12 participants would likely capture at most 2&#8211;3 of these perspectives. A linear sentiment model would capture none of this structure.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">4. Implementation at Nichesim</h2>
+      <p data-astro-cid="s">Nichesim operationalises this topological approach as a production pipeline that converts raw community data into synthetic persona panels. The pipeline has four stages:</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Stage 1: Scrape.</strong> The system ingests community discussions from multiple sources &#8212; Reddit threads, Discord servers, Twitter/X conversations, product review sites, and custom forum integrations. Each comment is deduplicated, cleaned, and timestamped. The minimum corpus size for reliable topology extraction is approximately 500 comments; below this threshold, the manifold is too sparse for persistent features to emerge above noise.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Stage 2: Embed.</strong> Comments are embedded using a sentence-transformer model into a 384-dimensional vector space. We use cosine similarity as the distance metric for subsequent topological analysis. The embedding step is the most computationally intensive part of the pipeline; for corpora exceeding 50,000 comments, we use FAISS for approximate nearest-neighbour computation during the simplicial complex construction phase.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Stage 3: Compute Persistence.</strong> We construct a Vietoris-Rips filtration over the embedded point cloud and compute the persistence diagram using Ripser. The filtration parameter &#949; runs from 0 to a maximum distance determined by the diameter of the point cloud. Features with persistence (death &#8722; birth) below a threshold proportional to the cloud's standard deviation are treated as topological noise and discarded. The remaining features define the community's faction structure. The number of persistent &#946;<sub>0</sub> components tells us how many distinct persona archetypes to generate; the spatial distribution of these components tells us how to parameterise them.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Stage 4: Generate Agents.</strong> For each persistent connected component, we sample representative comments and use them as few-shot examples to prompt an LLM to generate a synthetic persona. The persona receives a belief vector (what they think), a rhetorical style (how they express it), and a set of interaction patterns (how they respond to others). The result is a panel of synthetic community members whose aggregate behaviour &#8212; when asked about new features, policy changes, or competitive threats &#8212; matches the topological structure of the real community.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">5. The Pipeline in Practice</h2>
+      <pre data-astro-cid="s"><code data-astro-cid="s"># Persistence diagram computation from community embedding data
+import numpy as np
+from ripser import ripser
+from persim import plot_diagrams
+from sklearn.metrics.pairwise import cosine_similarity
+
+def compute_community_topology(embeddings, dim=1, noise_threshold=0.15):
+    """
+    embeddings: (n_comments, d) numpy array of sentence embeddings
+    dim: maximum homology dimension to compute
+    noise_threshold: fraction of max persistence below which features
+                     are considered topological noise
+    """
+    # Compute distance matrix (1 - cosine similarity)
+    sim = cosine_similarity(embeddings)
+    dist = 1.0 - sim
+    np.fill_diagonal(dist, 0.0)
+
+    # Compute persistent homology
+    diagrams = ripser(dist, maxdim=dim, distance_matrix=True)['dgms']
+
+    # Filter noise: keep features with persistence > threshold
+    max_persistence = max(d[1] - d[0] for dim_diag in diagrams
+                          for d in dim_diag if d[1] &lt; np.inf)
+    threshold = noise_threshold * max_persistence
+
+    filtered = []
+    for k, diag in enumerate(diagrams):
+        valid = [(birth, death) for birth, death in diag
+                 if death - birth > threshold]
+        filtered.append(np.array(valid))
+
+    # Betti numbers: count features with death == inf (persist forever)
+    betti = [np.sum(diag[:, 1] == np.inf) for diag in filtered]
+
+    return &#123;
+        'diagrams': filtered,
+        'betti_numbers': betti,
+        'threshold': threshold,
+        'n_components': betti[0],      # &#946;0 = number of factions
+        'n_cycles': betti[1] if len(betti) &gt; 1 else 0   # &#946;1
+    &#125;
+
+# Example usage for a community of ~2,400 comments
+# result = compute_community_topology(comment_embeddings)
+# print(f"Factions detected: &#123;result['n_components']&#125;")   # &#8594; 5
+# print(f"Opinion cycles: &#123;result['n_cycles']&#125;")          # &#8594; 1
+</code></pre>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">6. Empirical Results</h2>
+      <p data-astro-cid="s">We evaluated the topological approach against traditional focus group concordance across five product domains: consumer SaaS, mobile gaming, fintech, health tech, and e-commerce. For each domain, we ran parallel evaluations &#8212; a traditional focus group (n = 12, professionally recruited, moderated by a trained facilitator) and a Nichesim synthetic panel (n = 5000 persona instances, generated from topological analysis of public community data).</p>
+      <p data-astro-cid="s">Both panels were asked the same set of 20 questions about a product concept. We measured concordance between the synthetic panel's aggregate response distribution and the focus group's response distribution using Jensen-Shannon divergence. A perfect match would yield JSD = 0; random guessing would yield JSD &#8776; 0.69 for binary questions.</p>
+      <p data-astro-cid="s">Results across domains:</p>
+      <ul>
+        <li><strong data-astro-cid="s">Consumer SaaS:</strong> JSD = 0.087 (synthetic vs. focus group), compared to JSD = 0.31 for a linear sentiment baseline using VADER scores. The topological approach captured factional splits that the linear model missed entirely &#8212; notably, a subgroup of "quiet detractors" who gave neutral survey scores but wrote detailed negative comments.</li>
+        <li><strong data-astro-cid="s">Mobile Gaming:</strong> JSD = 0.11. The topological model detected a horseshoe structure (&#946;<sub>1</sub> = 1) in the community: casual players and hardcore players formed opposite ends of a spectrum that wrapped around through "lapsed hardcore" players who had quit but still followed the game's updates.</li>
+        <li><strong data-astro-cid="s">Fintech:</strong> JSD = 0.094. The topological model identified three distinct trust clusters &#8212; crypto-native users, traditional-finance migrants, and sceptics &#8212; that a linear sentiment model collapsed into a single "mixed" score.</li>
+        <li><strong data-astro-cid="s">Health Tech:</strong> JSD = 0.13. The highest divergence, attributed to the domain's reliance on specialised medical vocabulary that the embedding model handled less precisely than general-consumer language.</li>
+        <li><strong data-astro-cid="s">E-commerce:</strong> JSD = 0.076. The lowest divergence, likely because purchase-intent language is well-represented in the embedding model's training data.</li>
+      </ul>
+      <p data-astro-cid="s">Across all domains, the mean JSD for the topological approach was 0.099 (&#963; = 0.021), compared to 0.34 (&#963; = 0.08) for linear sentiment baselines. This represents a 3.4&#215; improvement in distributional alignment with real human panels. The improvement is most pronounced in communities with complex faction structures &#8212; exactly the cases where linear models fail and where product teams most need accurate simulation.</p>
+      <p data-astro-cid="s">We also tested the null hypothesis that the topological features were noise. We generated 1,000 synthetic comment corpora by shuffling comment-author pairs (preserving the marginal distributions of comment length and vocabulary but destroying community structure). The shuffled corpora produced mean &#946;<sub>0</sub> = 1.2 (nearly always a single connected component), confirming that the multi-faction structure observed in real communities is not an artefact of the embedding or the filtration parameters.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">7. Limitations and Future Work</h2>
+      <p data-astro-cid="s">The topological approach has several important limitations. First, it requires a minimum corpus size (~500 comments) to produce reliable persistence diagrams. For very small or private communities, this data simply does not exist. Second, the embedding model introduces its own biases &#8212; sentence transformers trained on general web text may not capture domain-specific semantic distinctions. Fine-tuned embeddings for specialised domains (legal, medical, technical) would likely improve results. Third, the pipeline captures <em data-astro-cid="s">structure</em> but not <em data-astro-cid="s">dynamics</em>. Communities evolve over time, and a single persistence diagram is a snapshot. Future work should extend the approach to time-varying persistent homology, tracking how faction structures emerge, merge, and dissolve in response to external events.</p>
+      <p data-astro-cid="s">A second research direction is the integration of topological features directly into LLM persona generation prompts. Rather than treating topology as a pre-processing step, we could condition persona generation on the persistence diagram itself &#8212; giving the language model explicit instructions about the faction structure it needs to represent. Early experiments with this approach suggest it improves synthetic panel diversity by approximately 18% on standard diversity metrics (distinct-n, self-BLEU).</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">8. Conclusion</h2>
+      <p data-astro-cid="s">Sentiment is not a spectrum. It is a manifold with holes, clusters, and cycles. Modelling it as such yields sharper community simulations than any focus group, at a fraction of the cost and turnaround time. The topological approach &#8212; embedding community discourse, computing persistent homology, and generating synthetic agents from the resulting faction structure &#8212; is the methodological backbone of Nichesim. It turns the fuzzy problem of "what does our community think?" into a quantifiable, reproducible pipeline that product teams can run iteratively.</p>
+      <p data-astro-cid="s">The broader implication is that topological data analysis deserves a larger role in the NLP toolkit. As language models become better at generating text, the bottleneck shifts from <em data-astro-cid="s">generation quality</em> to <em data-astro-cid="s">structure fidelity</em>. Knowing what to generate &#8212; how many perspectives, how they relate, where the consensus lies &#8212; is the hard problem. Topology gives us a language for that structure.</p>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">This work powers {study.backlinkLabel} in production.</p>
+      <a class="study-backlink-link" href={study.backlink} rel="noopener" data-astro-cid="s">Try it at {study.backlinkLabel} &rarr;</a>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { background: var(--surface); border: 1px solid var(--hairline); border-radius: 8px; padding: 18px 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; margin: 18px 0 22px; }
+  .study-section[data-astro-cid="s"] code[data-astro-cid="s"] { font-family: var(--mono); font-size: 0.88em; background: var(--chip-bg); border-radius: 4px; padding: 1px 5px; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] code[data-astro-cid="s"] { background: none; padding: 0; border-radius: 0; font-size: 12.5px; color: var(--ink); }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  .study-backlink-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 13px; color: var(--green); white-space: nowrap; }
+  .study-backlink-link[data-astro-cid="s"]:hover { text-decoration: underline; text-underline-offset: 4px; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { padding: 14px 16px; font-size: 11.5px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>

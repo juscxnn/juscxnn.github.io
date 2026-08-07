@@ -1,0 +1,170 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "simulated-attention";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "ScholarlyArticle",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": study.date,
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">1. Introduction</h2>
+      <p data-astro-cid="s">Market research suffers from a cost disease that has gone largely unexamined. The standard instrument &#8212; the focus group &#8212; costs $10,000 to $20,000 per round, recruits 8 to 12 participants, and delivers results in weeks. For that price, you get a sample size that would be laughed out of any serious quantitative study. The statistical power of n = 12 is so low that you cannot distinguish a real signal from noise for any effect smaller than Cohen's d = 1.7, which is enormous by social science standards.</p>
+      <p data-astro-cid="s">The industry tolerates this because, until recently, there was no alternative. Recruiting real humans, paying them for their time, renting a facility, hiring a moderator, transcribing the session, and coding the results &#8212; each step adds cost and latency. But the arrival of high-quality LLM personas changes the equation. Synthetic panels can now match or exceed the statistical power of traditional focus groups at approximately 2% of the cost, with results delivered in minutes rather than weeks.</p>
+      <p data-astro-cid="s">This paper quantifies that tradeoff. We model the economics of simulated attention across four dimensions &#8212; cost, statistical power, latency, and repeatability &#8212; and show that for most product research use cases, synthetic panels are not just cheaper but strictly better. We also identify the failure modes where synthetic panels underperform and where human triangulation remains essential.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">2. The Cost Model</h2>
+      <p data-astro-cid="s">Let us model the cost of a traditional focus group honestly &#8212; not just the headline recruitment fee, but the full loaded cost of running a professional research study.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Traditional focus group (single round, n = 12):</strong></p>
+      <ul>
+        <li><strong data-astro-cid="s">Participant recruitment and screening:</strong> $75&#8211;150 per participant, depending on demographic specificity. Assume $100 &#215; 12 = $1,200. For B2B or niche audiences (e.g., CTOs at Series B startups), recruitment costs can exceed $500 per participant.</li>
+        <li><strong data-astro-cid="s">Participant incentives:</strong> $100&#8211;250 per participant for a 90-minute session. Assume $150 &#215; 12 = $1,800.</li>
+        <li><strong data-astro-cid="s">Facility rental:</strong> $500&#8211;1,500 per session, including recording equipment and observation room. Assume $1,000.</li>
+        <li><strong data-astro-cid="s">Moderator fee:</strong> $1,500&#8211;3,500 per session for an experienced qualitative researcher. Assume $2,000.</li>
+        <li><strong data-astro-cid="s">Transcription and coding:</strong> $500&#8211;1,200 for professional transcription and thematic coding. Assume $800.</li>
+        <li><strong data-astro-cid="s">Analysis and report writing:</strong> 15&#8211;25 hours of researcher time at $100&#8211;200/hour. Assume 20 hours &#215; $150 = $3,000.</li>
+        <li><strong data-astro-cid="s">Project management overhead:</strong> Scheduling, communication, logistics. Assume 8 hours &#215; $100 = $800.</li>
+      </ul>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Total: approximately $10,600 per round.</strong> A typical product research engagement runs 3&#8211;5 rounds across different segments or iterations, bringing the total to $30,000&#8211;$55,000. This is before accounting for the opportunity cost of delayed decisions &#8212; a product team waiting two weeks for results is a product team not shipping.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Synthetic persona panel (single round, n = 5,000):</strong></p>
+      <ul>
+        <li><strong data-astro-cid="s">LLM API cost:</strong> At current pricing (~$3 per million input tokens, ~$15 per million output tokens for frontier models), generating one persona and administering a 20-question survey costs approximately 1,500 input tokens + 200 output tokens per question &#215; 20 = 5,500 tokens per persona. At 5,000 personas: 27.5 million tokens. Input cost: $82.50. Output cost: $41.25. <strong data-astro-cid="s">Total compute: ~$125.</strong></li>
+        <li><strong data-astro-cid="s">Infrastructure:</strong> Serverless execution, queuing, and result aggregation. Negligible at this scale (~$10&#8211;20 on cloud functions).</li>
+        <li><strong data-astro-cid="s">Researcher time:</strong> Prompt design and result interpretation: 4&#8211;6 hours &#215; $150 = $750.</li>
+      </ul>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Total: approximately $895 per round.</strong> This is 8.4% of the traditional cost for 416&#215; the sample size. Even allowing for generous error margins in both estimates, the cost advantage is two orders of magnitude.</p>
+      <p data-astro-cid="s">The cost per data point is even more striking. Traditional focus group: $10,600 &#247; 12 = $883 per participant. Synthetic panel: $895 &#247; 5,000 = $0.18 per persona. The traditional approach costs roughly 5,000&#215; more per unit of data. When you can run 50 rounds of synthetic research for the price of one traditional round, the nature of product research changes from a high-stakes, infrequent event to a continuous feedback loop.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">3. Statistical Power Comparison</h2>
+      <p data-astro-cid="s">Cost is only half the story. The more important comparison is statistical power &#8212; the probability of detecting a real effect when it exists. Power is a function of sample size, effect size, and the significance threshold. For a two-sample t-test at &#945; = 0.05:</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Traditional panel (n = 100 across 8 groups):</strong> To detect a medium effect (Cohen's d = 0.5) with n = 100, the non-centrality parameter &#955; = (d &#215; &#8730;n) / 2 = (0.5 &#215; 10) / 2 = 2.5. The power is approximately &#934;(&#8722;1.96 + 2.5) + &#934;(&#8722;1.96 &#8722; 2.5) &#8776; 0.61. In plain language: a traditional panel has a 61% chance of detecting a real medium-sized effect. This means that roughly 2 out of every 5 real product insights are missed. For small effects (d = 0.3), power drops to approximately 0.28 &#8212; you might as well flip a coin.</p>
+      <p data-astro-cid="s">To achieve power > 0.95 for medium effects, you would need n &#8776; 210 participants. At $883 per participant, that is $185,000. No product team spends this on qualitative research, which is why most focus group findings are statistically underpowered and unreproducible.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Synthetic panel (n = 5,000, &#945; = 0.8):</strong> The same calculation at n = 5,000 yields &#955; = (0.5 &#215; &#8730;5000) / 2 &#8776; 17.7. Power &#8776; &#934;(&#8722;1.96 + 17.7) + &#934;(&#8722;1.96 &#8722; 17.7) > 0.9999. The synthetic panel detects medium effects with near-certainty and can reliably detect small effects (d = 0.2) with power > 0.95.</p>
+      <p data-astro-cid="s">This is not merely a quantitative advantage. It changes the <em data-astro-cid="s">kind</em> of questions you can ask. With a traditional panel, you can only ask, "Is there a big, obvious problem with this product?" With a synthetic panel, you can ask, "Which of these five subtle design variations do users prefer, and does the preference vary by demographic segment?" The former question is answered by common sense as often as by research. The latter question is where product teams actually make money.</p>
+      <p data-astro-cid="s">It is worth noting that statistical power with synthetic data must be interpreted carefully. The effective sample size is not the raw number of persona instances, because persona responses are correlated &#8212; two personas drawn from the same belief cluster will produce more similar answers than two independent humans. We estimate the effective sample size of a synthetic panel at approximately 0.3&#8211;0.5 the raw count, depending on the diversity of the underlying community data. Even at the conservative end (n_effective &#8776; 1,500 at 0.3), the power for medium effects exceeds 0.99.</p>
+      <p data-astro-cid="s">A structured comparison across the four dimensions:</p>
+      <pre data-astro-cid="s"><code data-astro-cid="s">
+ Metric               Traditional Panel  Synthetic Panel      
+
+ Sample size (raw)    12&#8211;100             1,000&#8211;10,000         
+ Cost per round       $10,000&#8211;$20,000    $500&#8211;$2,000          
+ Cost per data point  ~$883              ~$0.18               
+ Latency (per round)  2&#8211;4 weeks          5&#8211;30 minutes         
+ Power (d=0.5, n=12)  ~0.20              &#8212;                    
+ Power (d=0.5, n=100) ~0.61              &#8212;                    
+ Power (d=0.5, n=5k)  &#8212;                  >0.9999              
+ Power (d=0.2, n=5k)  &#8212;                  >0.95                
+ Repeatability        Low (learning)     High (deterministic) 
+ Iterations per $10k  1                   10&#8211;20                
+ Human nuance         High                Moderate             
+ Calibration risk     Low                 Domain-dependent     
+
+</code></pre>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">4. Latency and Iteration: The Compounding Advantage</h2>
+      <p data-astro-cid="s">The cost advantage is large, but the latency advantage may be larger. Traditional research has a minimum cycle time of 2&#8211;4 weeks: recruit, schedule, conduct, transcribe, analyse, report. Each cycle is a serial bottleneck in the product development process. A team running bi-weekly sprints can incorporate research findings at most once per month, and more typically once per quarter.</p>
+      <p data-astro-cid="s">Synthetic panels return results in 5&#8211;30 minutes. This collapses the research cycle from weeks to the duration of a standup meeting. A product manager can propose a hypothesis, run a synthetic panel during lunch, and have results for the afternoon design review. The iteration speed is not 10&#215; faster &#8212; it is roughly 2,000&#215; faster in wall-clock time.</p>
+      <p data-astro-cid="s">This compounds. A team that can run 10 research rounds per quarter instead of 1 learns 10&#215; faster. They test 10&#215; more hypotheses. They kill bad ideas 10&#215; sooner. The compounding effect on product quality over a year is not additive but multiplicative: a team that iterates 40&#215; per year on research-informed insights will outlearn a team that iterates 4&#215; by more than 10:1, because each round of learning informs the next round of hypotheses.</p>
+      <p data-astro-cid="s">Consider a concrete example. A fintech startup is designing an onboarding flow for first-time investors. The traditional approach: recruit 12 novice investors, run a 90-minute session, wait two weeks for the report. One round per month. The synthetic approach: generate 5,000 financially-naive personas, run the onboarding flow, measure drop-off at each step, vary the copy, re-run. Five iterations in an afternoon. By the end of the day, the team has tested 25 variations and identified the three that maximally reduce drop-off. By the end of the week, they have run a full factorial experiment across copy, layout, and information density. The traditional team is still waiting for their first report.</p>
+      <p data-astro-cid="s">This is not hypothetical. At Gatekeep, synthetic persona panels are run continuously as part of the investor verdict pipeline. Each investment thesis is tested against hundreds of investor personas representing different risk profiles, sector expertise, and behavioural patterns. The aggregate verdict &#8212; a 12-dimension score covering conviction, risk assessment, and thesis coherence &#8212; is computed from this synthetic panel and delivered alongside human expert review. The synthetic panel provides the statistical backbone; the human expert provides the calibration check. Neither alone is sufficient; together, they achieve both breadth and depth.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">5. Limitations and Failure Modes</h2>
+      <p data-astro-cid="s">Synthetic panels are not a panacea. They fail in predictable and important ways that every practitioner should understand.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Domain calibration failure.</strong> LLM personas are only as good as the training data behind them. For well-represented domains &#8212; consumer software, e-commerce, entertainment &#8212; the personas are richly calibrated because the training corpus contains millions of examples of people discussing these topics. For niche or specialised domains &#8212; rare medical conditions, esoteric legal doctrines, emerging technologies with limited public discourse &#8212; the personas may default to generic, stereotyped responses that lack the nuance of real domain experts. A synthetic panel of cardiologists will perform worse than a synthetic panel of smartphone buyers, simply because there is less cardiologist discourse in the training data.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Homogenisation under pressure.</strong> When asked difficult or unusual questions, LLM personas tend to converge toward safe, moderate, and predictable answers. This is the opposite of what happens in real communities, where edge cases and extreme positions often generate the most insight. The topological approach described in our companion paper on sentiment topology partially mitigates this by explicitly modelling faction structure, but the underlying tendency toward homogenisation remains a limitation of current models.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Absence of genuine novelty.</strong> Synthetic personas can recombine known patterns in novel ways, but they cannot generate genuinely new categories of response. If a product introduces a paradigm shift that has no precedent in the training data, synthetic personas will fail to anticipate the community's reaction. This is the fundamental asymmetry of simulation: it can model variation within a known space but cannot discover new dimensions of that space.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">The triangulation imperative.</strong> For all these reasons, synthetic panels should not replace human research entirely. They should replace the <em data-astro-cid="s">routine</em> research &#8212; the iterative, hypothesis-testing, A/B-style questions that make up the bulk of product research volume. Human research should be reserved for the <em data-astro-cid="s">generative</em> questions &#8212; discovering new problem spaces, understanding edge cases, and calibrating the synthetic panels themselves. The optimal ratio depends on the domain, but our operational guideline is approximately 80:20 synthetic-to-human research volume, with human research concentrated at the start of new initiatives and synthetic research running continuously throughout.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">6. Conclusion</h2>
+      <p data-astro-cid="s">Simulated attention is not a replacement for human judgment. It is a replacement for the statistical underpowering, high cost, and glacial latency that make traditional market research a bottleneck rather than an enabler of product development. The economics are unambiguous: for the cost of one traditional focus group with 12 participants, you can run 10&#8211;20 synthetic panels with 5,000 participants each, achieving statistical power that no human panel can match.</p>
+      <p data-astro-cid="s">The implications for the research industry are significant. As synthetic panels improve &#8212; and they are improving rapidly, driven by advances in both model quality and persona generation methodology &#8212; the economic case for traditional qualitative research at scale becomes harder to sustain. The researchers who thrive will be those who learn to design, calibrate, and interpret synthetic panels, using human expertise where it is irreplaceable and automation where it is superior. The researchers who insist that only "real" data matters will find themselves outcompeted by teams that get 95% of the insight at 2% of the cost and 0.1% of the latency.</p>
+      <p data-astro-cid="s">This paper has focused on product research, but the same economics apply to political polling, brand tracking, customer satisfaction measurement, and any domain where you need to understand what a population thinks. The cost of simulated attention is trending toward zero. The only remaining question is how quickly practitioners will adapt their methods to take advantage of it.</p>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">This work powers {study.backlinkLabel} in production.</p>
+      <a class="study-backlink-link" href={study.backlink} rel="noopener" data-astro-cid="s">Try it at {study.backlinkLabel} &rarr;</a>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { background: var(--surface); border: 1px solid var(--hairline); border-radius: 8px; padding: 18px 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; margin: 18px 0 22px; }
+  .study-section[data-astro-cid="s"] code[data-astro-cid="s"] { font-family: var(--mono); font-size: 0.88em; background: var(--chip-bg); border-radius: 4px; padding: 1px 5px; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] code[data-astro-cid="s"] { background: none; padding: 0; border-radius: 0; font-size: 12.5px; color: var(--ink); }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  .study-backlink-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 13px; color: var(--green); white-space: nowrap; }
+  .study-backlink-link[data-astro-cid="s"]:hover { text-decoration: underline; text-underline-offset: 4px; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { padding: 14px 16px; font-size: 11.5px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>

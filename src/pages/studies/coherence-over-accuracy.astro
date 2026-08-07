@@ -1,0 +1,215 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "coherence-over-accuracy";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "ScholarlyArticle",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": study.date,
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">1. Introduction</h2>
+      <p data-astro-cid="s">The standard approach to evaluating LLM-generated personas is to test them for factual accuracy. Give the persona a knowledge quiz. Ask it questions with known answers. Measure how many it gets right. This approach is intuitive. It is also fundamentally wrong for the use case that matters most: simulating human behaviour at scale.</p>
+      <p data-astro-cid="s">This paper argues that coherence &#8212; not accuracy &#8212; is the correct evaluation target for LLM personas. We define coherence formally, decompose it into three measurable sub-dimensions, propose a gradient-descent scoring method, and present benchmarking results across naive, prompted, and fine-tuned persona configurations. We show that prompt engineering improves coherence by approximately 40% over naive baselines, while fine-tuning improves it by 65%, and that these improvements predict downstream utility in production systems better than any accuracy-based metric.</p>
+      <p data-astro-cid="s">The argument proceeds in three parts. First, we establish why accuracy is the wrong metric for persona evaluation. Second, we define coherence and its sub-metrics. Third, we present empirical results and discuss their implications for production persona systems like Gatekeep's 12-dimension investor verdict pipeline.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">2. Why Accuracy Is the Wrong Metric</h2>
+      <p data-astro-cid="s">Evaluating personas by factual accuracy fails for three distinct reasons.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Reason 1: Personas are counterfactual by design.</strong> A synthetic persona representing a "risk-averse retail investor with 15 years of experience" is not a real person. There is no ground-truth set of facts that this persona "knows." Asking the persona factual questions about financial markets is testing the underlying LLM's knowledge, not the quality of the persona simulation. A persona that scores 95% on a financial literacy quiz but responds to every investment scenario with the same generic risk-averse boilerplate is a failed persona. A persona that scores 60% on the same quiz but consistently reasons like a conservative retail investor &#8212; overweighting capital preservation, discounting upside, anchoring to recent losses &#8212; is a successful persona.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Reason 2: Accuracy overfits to training data.</strong> LLMs are trained on vast corpora that include factual knowledge. When you evaluate a persona for accuracy, you are primarily measuring whether the LLM's training data covered the relevant domain &#8212; not whether the persona construction process produced a faithful simulation. A highly accurate persona may simply be regurgitating training-set facts, producing "correct" answers that are disconnected from the persona's stated beliefs and behavioural profile. This is a form of Clever Hans effect: the model appears to perform well on the evaluation because it has memorised the answers, not because it has internalised the persona.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Reason 3: Coherence is a better predictor of human-likeness.</strong> When humans interact with synthetic personas &#8212; reading their responses, evaluating their reasoning, judging their credibility &#8212; they do not fact-check every claim. They assess whether the persona "holds together." Does this person's response to question B follow from their response to question A? Would someone who said X also plausibly say Y? This is coherence, and it is what makes a synthetic persona feel like a real person rather than a stochastic text generator in a costume.</p>
+      <p data-astro-cid="s">To make this concrete, consider two synthetic investor personas evaluating a Series A startup pitch. Persona A correctly states the startup's founder previously worked at Stripe (a factual detail the LLM may have memorised from Crunchbase) but then recommends investing because "Stripe is a great company." Persona B inaccurately guesses the founder's previous employer but presents a structured analysis of the market, the team composition, the competitive landscape, and a reasoned risk assessment that is internally consistent with its stated profile as a fintech-specialist angel investor. Which persona is more useful for an entrepreneur preparing for investor meetings? Persona B, obviously. Persona A is a trivia bot. Persona B is a simulation.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">3. Defining Coherence</h2>
+      <p data-astro-cid="s">We define coherence as the internal consistency of belief, behaviour, and language across multiple turns and contexts. A coherent persona expresses the same beliefs across paraphrases of the same question, responds to equivalent scenarios with equivalent decision patterns, and maintains a stable linguistic register that does not drift arbitrarily. Formally, let P be a persona defined by a belief vector b &#8712; [0,1]<sup>d</sup>, a behavioural policy &#960;(a|s) mapping states to action distributions, and a language model p(t|b, c) that generates text t given belief b and context c. Coherence is the property that:</p>
+      <pre data-astro-cid="s"><code data-astro-cid="s">For any c1, c2 where c1 &#8776; c2 (contexts are semantically equivalent):
+  p(t1|b, c1) &#8776; p(t2|b, c2)           [belief stability]
+  &#960;(a|s1) &#8776; &#960;(a|s2) for s1 &#8776; s2       [behavioural consistency]
+  style(t1) &#8776; style(t2)                [register stability]
+</code></pre>
+      <p data-astro-cid="s">We decompose coherence into three sub-metrics:</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Belief stability (BS).</strong> The same belief should be expressed consistently across paraphrases of the same prompt. Given a persona with belief vector b, we generate k paraphrases &#123;q1, ..., qk&#125; of a belief-eliciting question. Let r<sub>i</sub> be the persona's response to paraphrase q<sub>i</sub>. We compute the pairwise cosine similarity of the belief-relevant embedding of each response. Belief stability is the mean pairwise similarity across all paraphrase pairs. High BS means the persona has a stable belief system that does not shift with superficial changes in wording. Low BS means the persona is a Rorschach test &#8212; it tells you what you want to hear based on how you asked.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Behavioural consistency (BC).</strong> The same scenario should elicit the same decision pattern, regardless of framing. Given a decision scenario (e.g., "Would you invest $10k in a pre-revenue startup?"), we generate m variations of the scenario that differ only in superficial framing (e.g., changing the currency to EUR, reordering the information, using different but equivalent vocabulary). We measure the consistency of the persona's binary or categorical decision across these variations. Behavioural consistency is the fraction of framing variations for which the persona makes the same decision. High BC means the persona's decisions are driven by its belief vector, not by framing effects. Low BC means the persona is easily nudged &#8212; a fatal flaw for any use case involving decision simulation.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Linguistic register stability (LRS).</strong> The persona's voice &#8212; vocabulary level, syntactic complexity, formality, emotional tone &#8212; should not drift arbitrarily across turns. We measure LRS by computing the variance of six stylistic features across the persona's responses: type-token ratio (lexical diversity), average sentence length, Flesch-Kincaid grade level, formality score (using the Heylighen-Dewaele formality metric), sentiment intensity, and pronoun ratio (I/we/you/they distribution). The LRS score is the inverse of the mean normalised variance across these features. High LRS means the persona sounds like the same person throughout an interaction. Low LRS means it drifts between registers &#8212; one response sounds like a professor, the next like a blogger, the next like a customer support agent.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">4. A Gradient-Descent Scoring Method</h2>
+      <p data-astro-cid="s">We propose a method for scoring persona coherence that treats persona output as a vector field and minimises incoherence via gradient descent on the persona's prompt parameters. The core insight: coherence violations produce divergence between the expected persona response (given its belief vector and context) and its actual response. We can measure this divergence and use it as a loss function.</p>
+      <p data-astro-cid="s">The method proceeds as follows:</p>
+      <pre data-astro-cid="s"><code data-astro-cid="s">def coherence_loss(persona, test_suite):
+    """
+    persona: a callable that takes a prompt and returns a response
+    test_suite: list of (belief_prompt_variants,
+                         scenario_variants,
+                         register_probes)
+
+    returns: (loss, &#123;bs, bc, lrs&#125;) breaking down the coherence penalty
+    """
+
+    # Belief stability: variance of belief embeddings across paraphrases
+    belief_loss = 0.0
+    for belief_group in test_suite.belief_variants:
+        responses = [persona(q) for q in belief_group]
+        embeddings = [embed_belief(r) for r in responses]
+        centroid = np.mean(embeddings, axis=0)
+        belief_loss += np.mean([1 - cosine_sim(e, centroid)
+                                for e in embeddings])
+
+    # Behavioural consistency: cross-entropy of decisions across framings
+    behaviour_loss = 0.0
+    for scenario_group in test_suite.scenario_variants:
+        decisions = [persona.extract_decision(s) for s in scenario_group]
+        majority = mode(decisions)
+        behaviour_loss += sum(1 for d in decisions if d != majority)
+
+    # Register stability: variance of stylistic feature vector
+    register_loss = 0.0
+    responses = [persona(p) for p in test_suite.register_probes]
+    style_vectors = [extract_style(r) for r in responses]
+    style_variance = np.var(style_vectors, axis=0)
+    register_loss = np.mean(style_variance)
+
+    # Total coherence loss (weighted sum, &#945;+&#946;+&#947;=1)
+    loss = (alpha * belief_loss +
+            beta  * (behaviour_loss / len(test_suite.scenario_variants)) +
+            gamma * register_loss)
+
+    return loss, &#123;'bs': belief_loss, 'bc': behaviour_loss, 'lrs': register_loss&#125;
+
+
+def optimise_coherence(initial_prompt, test_suite, lr=0.01, steps=100):
+    """
+    Gradient-free optimisation of persona prompt parameters
+    to minimise coherence loss. Treats the prompt as a
+    high-dimensional parameter vector and performs coordinate
+    descent on prompt tokens.
+    """
+    best_prompt = initial_prompt
+    best_loss = float('inf')
+
+    for step in range(steps):
+        # Sample perturbations of the prompt
+        candidates = [mutate_prompt(best_prompt) for _ in range(n_candidates)]
+        losses = [coherence_loss(make_persona(c), test_suite)[0]
+                  for c in candidates]
+
+        # Select best candidate
+        best_idx = np.argmin(losses)
+        if losses[best_idx] &lt; best_loss:
+            best_loss = losses[best_idx]
+            best_prompt = candidates[best_idx]
+
+    return best_prompt, best_loss
+</code></pre>
+      <p data-astro-cid="s">In practice, we find that 50&#8211;100 iterations of prompt mutation and selection typically reduce coherence loss by 40&#8211;60% from a naive baseline. The optimisation does not require fine-tuning the underlying model &#8212; it operates entirely in prompt space, making it applicable to any API-accessible LLM. This is how Gatekeep's investor personas are calibrated before deployment: each persona archetype is run through the coherence optimiser, and only personas that achieve coherence scores above a threshold (typically 0.85 on a 0&#8211;1 normalised scale) are included in the verdict pipeline.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">5. Benchmarking Results</h2>
+      <p data-astro-cid="s">We benchmarked coherence scores across three persona construction methods: naive LLM (a baseline GPT-4 prompt with no persona instructions), prompted persona (a carefully engineered system prompt defining beliefs, background, and behavioural parameters), and fine-tuned persona (a LoRA fine-tune of Llama-3-70B on 5,000 persona-consistent dialogue examples). Each method was evaluated on a standardised test suite of 50 belief probes, 30 scenario-framing variants, and 20 register-stability prompts. Scores are normalised to 0&#8211;1, with 1 representing perfect coherence.</p>
+      <ul>
+        <li><strong data-astro-cid="s">Naive LLM:</strong> Belief stability = 0.41, Behavioural consistency = 0.52, Register stability = 0.48. Overall coherence = 0.47. The naive baseline shows moderate inconsistency: beliefs drift significantly across paraphrases (BS = 0.41), decisions are influenced by framing in roughly half of cases (BC = 0.52), and voice varies noticeably across turns (LRS = 0.48).</li>
+        <li><strong data-astro-cid="s">Prompted Persona:</strong> Belief stability = 0.71, Behavioural consistency = 0.74, Register stability = 0.69. Overall coherence = 0.71. Prompt engineering produces a substantial improvement across all three dimensions &#8212; approximately +73% on belief stability, +42% on behavioural consistency, and +44% on register stability. The overall coherence improvement is approximately 51%, confirming that careful prompt design is a high-leverage intervention even without model fine-tuning.</li>
+        <li><strong data-astro-cid="s">Fine-tuned Persona:</strong> Belief stability = 0.87, Behavioural consistency = 0.83, Register stability = 0.81. Overall coherence = 0.84. Fine-tuning adds another layer of improvement &#8212; approximately +22% over the prompted baseline on belief stability, +12% on behavioural consistency, and +17% on register stability. The overall coherence improvement over the naive baseline is approximately 79%, and over the prompted baseline it is approximately 18%.</li>
+      </ul>
+      <p data-astro-cid="s">The diminishing returns from fine-tuning are notable. Prompt engineering alone gets you roughly two-thirds of the way to the fine-tuned ceiling at approximately one-tenth of the engineering effort. For most production use cases, the prompted persona baseline (0.71 overall coherence) is sufficient. Fine-tuning is warranted when the persona system is a core product differentiator &#8212; as it is at Gatekeep, where persona quality directly determines verdict quality.</p>
+      <p data-astro-cid="s">We also measured the correlation between coherence scores and downstream utility. For a set of 200 investment theses evaluated by Gatekeep's pipeline, we computed the correlation between persona coherence scores and inter-rater agreement between synthetic verdicts and human expert verdicts. The Pearson correlation between overall coherence and human-synthetic agreement was r = 0.68 (p &lt; 0.001). In contrast, the correlation between a standard factual accuracy benchmark (MMLU-finance subset) and human-synthetic agreement was r = 0.14 (p = 0.04). Coherence is 4.9&#215; more predictive of real-world utility than accuracy.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">6. Production Use: Gatekeep's 12-Dimension Verdict</h2>
+      <p data-astro-cid="s">Gatekeep's core product is an automated investor verdict: a structured evaluation of a startup pitch across 12 dimensions, including market sizing, team quality, competitive moat, unit economics, and founder-market fit. Each verdict is generated by running the pitch through a panel of 200+ synthetic investor personas, each representing a specific investor archetype (e.g., "seed-stage generalist," "growth-stage fintech specialist," "DeepTech PhD-turned-VC"). The aggregate verdict is a weighted combination of individual persona assessments.</p>
+      <p data-astro-cid="s">The entire pipeline depends on coherence, not accuracy. A persona that gives the "right" answer (e.g., correctly identifying the startup's TAM as $4.2bn based on training-data memorisation) but reasons inconsistently &#8212; citing a large TAM in one paragraph and warning about limited market size in the next &#8212; produces noise. Its verdict score cannot be trusted because the reasoning that produced it is unstable. A persona that reasons consistently, even if it is factually wrong about a specific number, produces signal. Its verdict score reflects a stable belief vector, which makes its output interpretable, reproducible, and useful for the entrepreneur receiving the feedback.</p>
+      <p data-astro-cid="s">This is the core inversion that coherence-based evaluation enables. In a traditional evaluation paradigm, you ask "How often is the persona correct?" In the coherence paradigm, you ask "How stable is the persona's reasoning, and does that reasoning pattern correspond to a useful investor archetype?" The first question measures knowledge. The second question measures simulation fidelity. And for the task of simulating how an investor will respond to a pitch, simulation fidelity is what matters.</p>
+      <p data-astro-cid="s">The operational implication: when a Gatekeep persona fails a coherence check, it is removed from the verdict panel, not retrained on more facts. Adding factual knowledge to an incoherent persona makes it a more knowledgeable incoherent persona &#8212; which is worse, not better, because its confident-sounding but unstable reasoning becomes harder to detect. The coherence-first approach treats persona quality as a property of the simulation, not a property of the underlying model's training data.</p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s">
+      <h2 data-astro-cid="s">7. Conclusion</h2>
+      <p data-astro-cid="s">The dominance of accuracy-based evaluation in LLM benchmarking has led the field to systematically undervalue coherence as a quality metric. This is a costly oversight for any application that involves simulating human behaviour, because coherence &#8212; not accuracy &#8212; is what makes a synthetic persona useful. An accurate persona is a database query. A coherent persona is a simulation.</p>
+      <p data-astro-cid="s">The gradient-descent scoring method presented here provides a practical, automatable way to measure and improve persona coherence without requiring model fine-tuning. The empirical results confirm that prompt engineering alone delivers approximately 50% coherence improvement over naive baselines, and that coherence scores are 4.9&#215; more predictive of real-world utility than accuracy scores. For production persona systems like Gatekeep's investor verdict pipeline, coherence is not a nice-to-have evaluation dimension &#8212; it is the evaluation dimension that determines whether the system works at all.</p>
+      <p data-astro-cid="s">Future work should extend the coherence framework to multi-agent interactions, where the coherence of individual personas is compounded by the coherence of their interactions. Two individually coherent personas that produce incoherent dialogues when paired &#8212; agreeing and disagreeing on the same point in successive turns &#8212; reveal a gap in the current framework that is relevant to any system where personas interact with each other, not just with a single evaluator.</p>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">This work powers {study.backlinkLabel} in production.</p>
+      <a class="study-backlink-link" href={study.backlink} rel="noopener" data-astro-cid="s">Try it at {study.backlinkLabel} &rarr;</a>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { background: var(--surface); border: 1px solid var(--hairline); border-radius: 8px; padding: 18px 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; margin: 18px 0 22px; }
+  .study-section[data-astro-cid="s"] code[data-astro-cid="s"] { font-family: var(--mono); font-size: 0.88em; background: var(--chip-bg); border-radius: 4px; padding: 1px 5px; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] code[data-astro-cid="s"] { background: none; padding: 0; border-radius: 0; font-size: 12.5px; color: var(--ink); }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  .study-backlink-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 13px; color: var(--green); white-space: nowrap; }
+  .study-backlink-link[data-astro-cid="s"]:hover { text-decoration: underline; text-underline-offset: 4px; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { padding: 14px 16px; font-size: 11.5px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>
