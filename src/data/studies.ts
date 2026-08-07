@@ -2,7 +2,7 @@ export const studies = [
   {
     slug: "simulating-belief",
     title: "Simulating Belief: A Framework for AI Persona Generation",
-    date: "2025-03-14",
+    date: "2026-07-12",
     abstract:
       "Synthetic personas succeed when they model belief systems, not demographics. This paper formalises a 12-dimension belief vector architecture that powers investor persona simulation at scale — the cognitive engine behind Gatekeep.",
     keywords: [
@@ -34,7 +34,7 @@ export const studies = [
   {
     slug: "simulated-attention",
     title: "The Economics of Simulated Attention",
-    date: "2025-09-18",
+    date: "2026-07-28",
     abstract:
       "AI-generated personas match or exceed the statistical power of traditional focus groups at 2% of the cost. This paper quantifies the tradeoff across sample size, latency, and reliability — with reproducible benchmarks.",
     keywords: [
@@ -50,7 +50,7 @@ export const studies = [
   {
     slug: "coherence-over-accuracy",
     title: "Coherence, Not Accuracy: Evaluating LLM Personas at Scale",
-    date: "2026-01-10",
+    date: "2026-08-04",
     abstract:
       "Benchmarking synthetic users by factual accuracy misses the point. We define coherence — internal consistency of belief, behaviour, and language — as the correct evaluation target, and propose a gradient-descent scoring method.",
     keywords: [

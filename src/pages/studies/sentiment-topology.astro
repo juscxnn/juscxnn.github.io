@@ -8,7 +8,7 @@ const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long"
 const jsonLd = JSON.stringify({
   "@context": "https://schema.org", "@type": "ScholarlyArticle",
   "@id": `${Astro.site}/studies/${slug}`,
-  "headline": study.title, "datePublished": study.date,
+  "headline": study.title, "datePublished": new Date(study.date).toISOString(),
   "abstract": study.abstract, "keywords": study.keywords.join(", "),
   "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
     "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
