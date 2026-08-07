@@ -2104,3 +2104,59 @@ h1 {
 }
 
 
+
+/* ---------- study cards ---------- */
+
+.nav-studies {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-right: auto;
+  padding-right: 16px;
+  transition: color 0.15s;
+}
+
+.nav-studies:hover {
+  color: var(--green);
+}
+
+.study-card {
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.study-card:hover {
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.study-card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--green);
+  text-transform: uppercase;
+}
+
+.study-card-title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.study-card-meta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: auto;
+}
+
+@media (max-width: 767px) {
+  .nav-studies {
+    display: none;
+  }
+}

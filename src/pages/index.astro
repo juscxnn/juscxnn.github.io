@@ -6,6 +6,7 @@ import "@fontsource/geist-mono/400.css";
 import "@fontsource/geist-mono/500.css";
 import "../styles/global.css";
 import fs from "node:fs";
+import { studies } from "../data/studies";
 
 const LINKS = {
   GATEKEEP: "https://gatekeep.vc",
@@ -150,6 +151,7 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
 
     <header class="top wrap">
       <a class="wordmark" href="/">Justin Chua</a>
+      <a class="nav-studies" href="/studies">writings</a>
       <span class="top-end">
         <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
         <button class="lang" onclick="toggleLang()" title="切换中文">繁中</button>
@@ -256,6 +258,27 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
               <p class="cell-link">{p.domain} →</p>
             </a>
           ))
+        }
+
+                <p class="label s12">writings</p>
+
+        {
+          [...studies]
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 5)
+            .map((s) => {
+              const d = new Date(s.date).toLocaleDateString("en-US", {
+                month: "short",
+                year: "numeric",
+              });
+              return (
+                <a class="cell s4 study-card" href={`/studies/${s.slug}`}>
+                  <span class="study-card-label">{s.backlinkLabel}</span>
+                  <span class="study-card-title">{s.title}</span>
+                  <span class="study-card-meta">{d}</span>
+                </a>
+              );
+            })
         }
 
         <p class="label s12" data-i18n="label.certificates">certificates</p>

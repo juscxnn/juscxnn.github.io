@@ -80,20 +80,4 @@ export const studies = [
     backlink: "https://gatekeep.vc",
     backlinkLabel: "gatekeep.vc",
   },
-  {
-    slug: "distributed-consensus",
-    title: "Distributed Consensus as Product Signal",
-    date: "2026-04-22",
-    abstract:
-      "Token distribution mechanics do more than allocate supply — they function as early-adopter discovery mechanisms. Drawing on $10bn+ of distributed value at Clique, we map the relationship between on-chain participation and product-market signal.",
-    keywords: [
-      "tokenomics",
-      "product-market fit",
-      "distribution",
-      "on-chain analytics",
-      "consensus mechanisms",
-    ],
-    backlink: "https://clique.tech",
-    backlinkLabel: "clique.tech",
-  },
 ];
