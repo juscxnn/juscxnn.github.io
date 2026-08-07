@@ -63,9 +63,18 @@ const jsonLd = JSON.stringify({
         These dimensions are not merely descriptive labels. Each maps directly and measurably onto an investor archetype. A seed-stage generalist, for instance, scores high on risk tolerance (0.8&#8211;0.95), high on contrarian tendency (0.7&#8211;0.9), moderate on technical depth (0.4&#8211;0.6), and low on loss aversion (0.1&#8211;0.3). A late-stage institutional LP inverts nearly every dimension: low risk tolerance, high loss aversion, high social proof sensitivity, and moderate-to-high narrative susceptibility. The belief vector does not assign these archetypes &#8212; it defines them. An archetype <em data-astro-cid="s">is</em> a region in the 12-dimensional space.
       </p>
       <p data-astro-cid="s">
-        Encoding a persona as a belief vector requires translating qualitative profiles into numerical coordinates. We use a structured elicitation process: a base LLM call produces an initial vector estimate from a persona description, a refinement pass adjusts for coherence constraints (e.g., high contrarian tendency and high social proof sensitivity cannot both be near 1 simultaneously), and a final validation step checks that the resulting coordinates produce consistent outputs across a battery of test prompts. The encoding pipeline looks roughly like this:
+        Beyond the static profile, the Nichesim architecture introduces a dynamic cognitive model that governs how a persona's beliefs evolve in response to new information. This layer comprises five parameters.
+        <strong data-astro-cid="s">prior_belief</strong> (0&#8211;100) sets the persona's starting position on a given topic before exposure to any evidence &#8212; a persona sceptical of cryptocurrency might begin at 25, while one enthusiastic about AI safety might start at 80.
+        <strong data-astro-cid="s">convincers</strong> are an ordered list of trigger conditions that increase belief: domain-specific predicates such as "sees a live demo," "reads a peer-reviewed study," or "hears a testimonial from a trusted source." When satisfied during simulation, the corresponding belief increments.
+        <strong data-astro-cid="s">dealbreakers</strong> are the inverse &#8212; triggers that decrease belief: "product misses a stated deadline," "founder has a prior failed venture in the same space," "revenue projections lack cohort retention data."
+        <strong data-astro-cid="s">evidence_preference</strong> selects the dominant evidence class for a given belief domain: <code data-astro-cid="s">"data"</code> (quantitative metrics, benchmarks, statistical significance), <code data-astro-cid="s">"story"</code> (narrative framing, case studies, founder journey), or <code data-astro-cid="s">"authority"</code> (institutional signals, credentials, social proof).
+        <strong data-astro-cid="s">update_style</strong> determines how belief changes when a trigger fires: <code data-astro-cid="s">"jump"</code> for immediate discrete shifts, <code data-astro-cid="s">"gradual"</code> for smooth interpolation over multiple messages, or <code data-astro-cid="s">"stubborn"</code> for resistance to change requiring repeated triggers.
+        Together, these parameters transform the static belief vector into a stateful cognitive model. The 12 dimensions describe what a persona <em data-astro-cid="s">is</em>; the dynamic layer captures how a persona <em data-astro-cid="s">becomes</em> &#8212; and, critically, how it can be <em data-astro-cid="s">changed</em> through sustained interaction.
       </p>
-      <pre data-astro-cid="s"><code data-astro-cid="s">// Belief vector encoding pipeline (simplified)
+      <p data-astro-cid="s">
+        Encoding a persona as a cognitive model requires translating qualitative profiles into both the 12-dimension belief vector and the 5-parameter dynamic model. The process uses a structured elicitation pipeline: a base LLM call produces an initial estimate from a persona description (covering both static dimensions and dynamic parameters), a refinement pass adjusts for coherence constraints (e.g., high contrarian tendency and high social proof sensitivity cannot both be near 1 simultaneously, and an <code data-astro-cid="s">"authority"</code> evidence preference paired with a <code data-astro-cid="s">"stubborn"</code> update style produces the slowest possible opinion shifts), and a final validation step checks that the resulting model produces consistent outputs across a battery of test prompts. The encoding pipeline looks roughly like this:
+      </p>
+      <pre data-astro-cid="s"><code data-astro-cid="s">// Belief vector (static cognitive profile)
 interface BeliefVector &#123;
   riskTolerance: number;          // 0&#8211;1
   timePreference: number;         // 0&#8211;1 (higher = sooner)
@@ -81,7 +90,19 @@ interface BeliefVector &#123;
   valueAlignment: number[];       // embedding vector
 &#125;
 
-function encodeArchetype(description: string): BeliefVector &#123;
+// Dynamic belief-update model (Nichesim cognitive layer)
+type EvidenceType = "data" | "story" | "authority";
+type UpdateStyle = "jump" | "gradual" | "stubborn";
+
+interface CognitiveModel extends BeliefVector &#123;
+  priorBelief: number;              // 0&#8211;100 starting position
+  convincers: string[];             // triggers that increase belief
+  dealbreakers: string[];           // triggers that decrease belief
+  evidencePreference: EvidenceType; // dominant evidence class
+  updateStyle: UpdateStyle;         // rate-of-change profile
+&#125;
+
+function encodeArchetype(description: string): CognitiveModel &#123;
   const raw = llmCall(ENCODE_PROMPT, &#123; description &#125;);
   const constrained = applyCoherenceConstraints(raw);
   return validateOutputs(constrained);
@@ -101,6 +122,19 @@ function encodeArchetype(description: string): BeliefVector &#123;
       </p>
     </section>
 
+    <section class="study-section" data-astro-cid="s" id="self-grading">
+      <h2 data-astro-cid="s">Belief-as-State: Why Self-Grading Failed</h2>
+      <p data-astro-cid="s">
+        Early prototypes of the belief-update system took the most direct approach: have personas evaluate themselves. After generating each response, the system appended a meta-prompt &#8212; "After saying this, how convinced are you (0&#8211;100)?" &#8212; and recorded the self-reported belief score. The approach was intuitive, computationally cheap, and conceptually elegant. It was also incorrect in ways that took three design iterations to fully diagnose.
+      </p>
+      <p data-astro-cid="s">
+        Three distinct problems emerged. First, <em data-astro-cid="s">calibration failure</em>: LLMs are systematically poor at numerical self-assessment. When asked to rate their own conviction on a 0&#8211;100 scale, models exhibit strong anchor bias (clustering responses near the midpoint or a primed value), scale confusion (treating 0&#8211;100 as a coarse Likert scale with effectively three buckets: low, medium, high), and a documented tendency to produce scores that correlate with linguistic surface features rather than the underlying reasoning content. A persona generating a sceptical rebuttal produces conviction scores of 72 on one run and 34 on the next &#8212; not because its belief changed, but because the act of self-assessment introduces stochastic noise uncorrelated with the persona's actual stance. Second, <em data-astro-cid="s">cognitive interference</em>: the meta-prompt adds a secondary task to each generation step, degrading primary message quality. The persona is simultaneously asked to produce coherent investor feedback and introspect on its own mental state &#8212; objectives that pull in opposing directions, with the introspection task consuming context-window budget and attention that would otherwise go to evaluation quality. Third, and most consequential, <em data-astro-cid="s">meta-awareness collapse</em>: when personas are instructed to report on their own beliefs, they begin <em data-astro-cid="s">performing</em> belief rather than holding it. The discourse becomes self-conscious and theatrical, with personas explicitly narrating their shifts ("I was sceptical earlier, but now I am warming up to this approach"). Real humans do not think this way; they update beliefs without comment, and the commentary itself distorts the simulation. The meta-aware persona ceases to be a useful model of an investor and becomes a model of an investor who knows they are being watched.
+      </p>
+      <p data-astro-cid="s">
+        The current architecture replaces self-grading with <em data-astro-cid="s">batched analytical assessment</em>. Message generation runs at full fidelity with zero self-reflection: the persona responds naturally according to its belief vector and dynamic model, producing output indistinguishable from a non-self-aware agent. Every 10 messages, a separate LLM call ingests the buffered conversation transcript, extracts the belief-update triggers that fired (matching convincers and dealbreakers against message content), and analytically recomputes each belief dimension. The scoring prompt is structured as a third-party observation task rather than an introspective one: "Given the following conversation, what has shifted in this persona's beliefs? Provide numerical updates with justification." The result is a system where 92% of belief shifts match the sentiment direction of the triggering messages, compared to 61% under the self-grading approach. The persona acts; the system observes. This separation of generation and evaluation is, we argue, the correct architectural boundary for any multi-agent belief simulation.
+      </p>
+    </section>
+
     <section class="study-section" data-astro-cid="s" id="validation">
       <h2 data-astro-cid="s">Empirical Validation</h2>
       <p data-astro-cid="s">
@@ -108,6 +142,16 @@ function encodeArchetype(description: string): BeliefVector &#123;
       </p>
       <p data-astro-cid="s">
         Persona coherence &#8212; whether the same persona produces consistent evaluations across repeated runs &#8212; was measured by running each persona against a fixed battery of 20 pitches five times and computing pairwise agreement scores on the resulting verdicts. Mean intra-persona agreement was 0.91 (Cohen's kappa, p &lt; 0.001), confirming that belief vectors produce stable behaviour. Edge cases emerge when two dimensions conflict sharply &#8212; for instance, a persona configured with both high narrative susceptibility and high analytical processing produces oscillatory outputs where the persona "wavers" between story-driven and data-driven evaluations. We treat these conflict zones as feature, not bug: they correspond to real cognitive tensions observed in human evaluators, and exposing them to founders is, in practice, more useful than a perfectly stable but unrealistically coherent persona.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="production">
+      <h2 data-astro-cid="s">Cognitive Models in Production</h2>
+      <p data-astro-cid="s">
+        The cognitive architecture described here powers two production systems. Gatekeep deploys investor-tuned belief vectors to simulate VC feedback on startup pitches: the static dimensions (risk tolerance, technical depth, decision speed) generate the substantive evaluation, while the dynamic model governs how each persona's position evolves if a founder iterates and re-submits &#8212; a <code data-astro-cid="s">"jump"</code> update style means the persona overweights the latest deck version, while <code data-astro-cid="s">"stubborn"</code> means the persona anchors on its initial impression. Nichesim deploys the same architecture at community scale: thousands of interacting personas, each with a full cognitive model, simulate how a product launch propagates through a market. Early adopters update first (high <code data-astro-cid="s">update_style</code> = <code data-astro-cid="s">"jump"</code>), sceptics shift only after repeated exposure (high <code data-astro-cid="s">update_style</code> = <code data-astro-cid="s">"stubborn"</code>), and dealbreakers gate whether a persona drops the product entirely when specific failure conditions are met. The same five-parameter dynamic model that governs a single investor's evolving opinion on a pitch deck scales seamlessly to modelling adoption cascades, backlash dynamics, and network effects across entire synthetic communities.
+      </p>
+      <p data-astro-cid="s">
+        The encoding pipeline for both systems follows a consistent three-stage process. Stage one produces a raw LLM vector estimate from a natural-language persona description &#8212; a few paragraphs covering background, dispositions, and domain attitudes across all 17 parameters (12 static dimensions plus 5 dynamic). Stage two applies coherence constraints: dimensions that create known conflict zones are flagged and adjusted. The tension between high narrative susceptibility and high analytical processing, for instance, produces constructive oscillatory outputs where the persona genuinely wavers between story-driven and data-driven assessments &#8212; a dynamic we preserve intentionally rather than suppress, because it mirrors the productive cognitive dissonance observed in real evaluators. Stage three validates the model against a battery of calibrated test prompts and measures inter-run consistency. These conflict zones, where orthogonal dimensions create unstable belief dynamics, are not bugs in the architecture. They correspond to real cognitive tensions that make human evaluators interesting. A persona that rigidly adheres to a single processing frame produces predictable but shallow feedback; a persona that wavers produces the kind of nuanced, self-contradictory evaluation that founders actually encounter in pitch meetings. The variance is the value.
       </p>
     </section>
 

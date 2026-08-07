@@ -1,0 +1,211 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "nichesim-architecture";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "ScholarlyArticle",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": new Date(study.date).toISOString(),
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" data-astro-cid="s" id="introduction">
+      <h2 data-astro-cid="s">Introduction</h2>
+      <p data-astro-cid="s">
+        NicheSim is a three-tier, streaming-first simulation platform for modeling authentic community discourse around product ideas. The system generates 80&#8211;150 message conversations between 5&#8211;8 psychologically coherent personas, producing in ~90 seconds what traditional user research delivers in weeks at 100&#215; the cost. Unlike synthetic survey response generators that treat each user as an independent data point, NicheSim models <em data-astro-cid="s">interaction</em> &#8212; personas read each other's messages, form alliances, dispute claims, change their minds, and produce the emergent social dynamics that define how real communities evaluate new ideas.
+      </p>
+      <p data-astro-cid="s">
+        The platform was built to solve a structural problem in product research: traditional methods are slow (2&#8211;6 weeks per round), expensive ($15K+ per round for moderated studies), and statistically underpowered (n=8&#8211;12 focus group participants cannot capture the combinatorial space of reactions across belief profiles). NicheSim collapses the cost-to-insight ratio by generating synthetic communities with calibrated belief models, running them through controlled conversation scenarios, and surfacing not just "what people think" but the <em data-astro-cid="s">trajectories</em> of belief &#8212; who converts, who hardens, and why. This paper presents the full technical architecture: the three-tier system design, the burst generation engine that enables organic multi-agent dialogue, the belief-as-state tracking infrastructure, the conversation phase system, the grounded verdict pipeline, and the cross-simulation learning corpus that compounds quality with every run.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="architecture">
+      <h2 data-astro-cid="s">System Architecture</h2>
+      <p data-astro-cid="s">
+        NicheSim is designed as a three-tier system with clean separation between presentation, application logic, and persistent state. The <strong data-astro-cid="s">presentation layer</strong> uses React 18 with Next.js 14, leveraging Server-Sent Events (SSE) for real-time streaming of message generation. Users see conversations unfold message-by-message as the backend generates them, with typed indicators, typing pauses, and social dynamics cues (&#8220;Alex agreed with Jordan&#8217;s point&#8221;) rendered inline. The streaming architecture is critical to the user experience: a synchronous 90-second black box would feel slow and opaque; the same 90 seconds rendered as a live conversation feels immediate and transparent.
+      </p>
+      <p data-astro-cid="s">
+        The <strong data-astro-cid="s">application layer</strong> is a Node.js API server that orchestrates six core engines. The <strong data-astro-cid="s">generation engine</strong> manages LLM calls using burst generation (batched multi-message generation with scene directives) to produce organic conversation dynamics. The <strong data-astro-cid="s">interaction engine</strong> tracks reply chains, mention networks, and social graph formation within each simulation. The <strong data-astro-cid="s">analysis engine</strong> performs the batched analytical pass that tracks belief trajectories without burdening the generation pipeline with self-assessment. The <strong data-astro-cid="s">belief tracker</strong> maintains discrete belief state vectors for each persona across conversation turns. The <strong data-astro-cid="s">learning engine</strong> writes structured learnings from each completed simulation into the cross-simulation corpus. The <strong data-astro-cid="s">research integrator</strong> fetches real-world context &#8212; competitor data, market data, news articles &#8212; and injects it as structured context during persona and scenario generation.
+      </p>
+      <p data-astro-cid="s">
+        The <strong data-astro-cid="s">data layer</strong> runs on PostgreSQL 17 via Neon serverless, with 20+ tables covering users, simulations, personas, conversation turns, belief snapshots, objectional ledgers, conversation networks, learning entries, persona templates, message exemplars, research context, and simulation metadata. External dependencies are minimal by design: Anthropic Claude Sonnet 4 serves as the sole LLM provider, and web search APIs (SerpAPI, Tavily) provide the research integration layer. The architecture diagram captures the flow:
+      </p>
+      <pre data-astro-cid="s"><code data-astro-cid="s">&#9500;&#9472;&#9472; Presentation Layer (React 18 + Next.js 14 + SSE streaming)
+&#9502;   &#9500;&#9472;&#9472; Simulation Dashboard
+&#9502;   &#9500;&#9472;&#9472; Real-time Message Stream
+&#9502;   &#9492;&#9472;&#9472; Verdict &amp; Analytics View
+&#9502;
+&#9500;&#9472;&#9472; Application Layer (Node.js API)
+&#9502;   &#9500;&#9472;&#9472; Generation Engine
+&#9502;   &#9502;   &#9500;&#9472;&#9472; Burst Generator (batched LLM calls)
+&#9502;   &#9502;   &#9492;&#9472;&#9472; Scene Directive System
+&#9502;   &#9500;&#9472;&#9472; Interaction Engine
+&#9502;   &#9502;   &#9500;&#9472;&#9472; Reply Chain Tracker
+&#9502;   &#9502;   &#9492;&#9472;&#9472; Mention Network Builder
+&#9502;   &#9500;&#9472;&#9472; Analysis Engine
+&#9502;   &#9502;   &#9500;&#9472;&#9472; Belief Trajectory Analyzer
+&#9502;   &#9502;   &#9492;&#9472;&#9472; Batched Analytical Pass (every 10 msgs)
+&#9502;   &#9500;&#9472;&#9472; Belief Tracker
+&#9502;   &#9500;&#9472;&#9472; Learning Engine
+&#9502;   &#9492;&#9472;&#9472; Research Integrator
+&#9502;
+&#9492;&#9472;&#9472; Data Layer (PostgreSQL 17 / Neon serverless)
+    &#9500;&#9472;&#9472; simulations, personas, messages
+    &#9500;&#9472;&#9472; belief_snapshots, objection_ledgers
+    &#9500;&#9472;&#9472; conversation_networks, persona_templates
+    &#9500;&#9472;&#9472; message_exemplars, learning_corpus
+    &#9492;&#9472;&#9472; research_context, simulation_metadata</code></pre>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="persona-generation">
+      <h2 data-astro-cid="s">Persona Generation</h2>
+      <p data-astro-cid="s">
+        NicheSim generates personas that are psychologically coherent agents with distinct linguistic fingerprints and internally consistent cognitive models &#8212; not just demographic shells with LLM-style personas tacked on. Each persona is defined by a rich attribute set: an <strong data-astro-cid="s">identity</strong> block (username, bio, avatar, account age), a <strong data-astro-cid="s">communication style</strong> fingerprint (syntax patterns, vocabulary register, emoji usage frequency and palette, average message length, capitalization habits), a <strong data-astro-cid="s">cognitive model</strong> (<code data-astro-cid="s">prior_belief</code> strength on a 0&#8211;1 scale, a <code data-astro-cid="s">convincers[]</code> array of argument types that shift their position, a <code data-astro-cid="s">dealbreakers[]</code> array of red lines that trigger rejection, an <code data-astro-cid="s">evidence_preference</code> enum of &#123;anecdotal, statistical, authoritative, experiential&#125;, and an <code data-astro-cid="s">update_style</code> enum of &#123;gradual, threshold, resistant, volatile&#125;), an <strong data-astro-cid="s">expertise model</strong> (domain knowledge areas with confidence scores), and <strong data-astro-cid="s">engagement triggers</strong> (knowledge blindspots that provoke curiosity-driven questions, proof triggers that demand citations, emotional hot buttons).
+      </p>
+      <p data-astro-cid="s">
+        Personas are not generated from scratch for each simulation. The learning engine queries the <code data-astro-cid="s">persona_templates</code> table for high-quality archetypes that match the simulation&#8217;s niche context, then applies an exploration policy to inject 10&#8211;30% novelty into the attribute set. This means a simulation about a developer tool will draw from proven templates of developers, engineering managers, indie hackers, and skeptics, while introducing controlled mutations &#8212; a developer who is unusually skeptical of open-source licensing models, or an indie hacker who overweights design aesthetics in product evaluation. The exploration-exploitation balance ensures that each simulation benefits from accumulated pattern quality without becoming repetitive. The persona generation pipeline also incorporates real-world research context: if the simulation targets a specific market (e.g., productivity SaaS for remote teams), the research integrator fetches recent news, competitor information, and community sentiment to ground each persona in authentic, time-relevant context.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="burst-generation">
+      <h2 data-astro-cid="s">Burst Generation Engine</h2>
+      <p data-astro-cid="s">
+        The burst generation engine is NicheSim&#8217;s key architectural innovation and the subject of a companion paper (Chua, &#8220;Burst Generation: Scene-Directed Multi-Agent Dialogue,&#8221; 2025). Traditional multi-agent systems run a round-robin loop: select an agent, generate one message, repeat. This produces 80+ sequential LLM calls for an 80-message conversation, each call blocked on the previous one, and the resulting discourse is stilted &#8212; agents respond to each other mechanically, each waiting their turn, with none of the overlapping energy, pile-ons, or rapid back-and-forth that characterizes real online conversation.
+      </p>
+      <p data-astro-cid="s">
+        Burst generation solves this by generating 2&#8211;4 messages in a <em data-astro-cid="s">single LLM call</em> with a <strong data-astro-cid="s">scene directive</strong> that sets the interaction pattern for that burst. Scene directives include: <strong data-astro-cid="s">pile-on</strong> (multiple agents reinforce a shared sentiment), <strong data-astro-cid="s">alliance</strong> (two agents find common ground and build on each other&#8217;s points), <strong data-astro-cid="s">debate</strong> (structured disagreement with point-counterpoint), <strong data-astro-cid="s">derail</strong> (a tangent that pulls conversation off-topic before returning), <strong data-astro-cid="s">callback</strong> (reference to an earlier message, creating narrative continuity), and <strong data-astro-cid="s">normal</strong> (standard sequential replies). The LLM receives: the conversation state so far, the selected scene directive, the participant personas in the burst (2&#8211;4 selected from the pool), their current belief states, and the target interaction dynamic. It returns 2&#8211;4 fully formatted messages with speaker attribution, reply-to references, and optional metadata (emoji reactions, quote embeds).
+      </p>
+      <p data-astro-cid="s">
+        Participant selection for each burst uses a weighted scoring function: <code data-astro-cid="s">score = base_weight + opinion_strength_factor + trigger_topic_match + expert_boost - balance_penalty + random_jitter</code>. The <code data-astro-cid="s">base_weight</code> ensures every persona gets a baseline chance to speak. <code data-astro-cid="s">opinion_strength_factor</code> boosts personas with strong, unexpressed views on the current topic. <code data-astro-cid="s">trigger_topic_match</code> activates personas whose engagement triggers align with the current conversation thread. <code data-astro-cid="s">expert_boost</code> gives a 1.5&#215; multiplier to personas with domain expertise on the active topic. <code data-astro-cid="s">balance_penalty</code> suppresses personas who have dominated recent bursts, preventing a single voice from drowning out the conversation. <code data-astro-cid="s">random_jitter</code> (&#177;15%) introduces controlled stochasticity so that repeated simulations with the same product generate different interaction patterns. The distribution of scene directives also varies by conversation phase: pile-ons cluster in the engagement phase, debates peak during deep dive, derails are most common in wind-down, and alliances appear uniformly.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="belief-tracking">
+      <h2 data-astro-cid="s">Belief Tracking Engine</h2>
+      <p data-astro-cid="s">
+        NicheSim models belief as a persistent state that evolves across a conversation, but it <em data-astro-cid="s">decouples</em> belief tracking from message generation. This is a deliberate architectural choice born from a failed initial approach. The first prototype attempted <strong data-astro-cid="s">self-grading</strong> &#8212; each persona evaluated its own belief shift after every message, producing a numerical delta (e.g., &#8220;belief 0.72 &#8594; 0.68&#8221;). This failed on three dimensions. First, LLMs are demonstrably poor at numerical self-assessment: they produce optimistic, low-variance estimates that under-report genuine belief change. Second, self-grading adds cognitive load to the generation prompt, degrading message quality by forcing the LLM to simultaneously produce natural dialogue and introspect on its internal state. Third, self-grading creates a form of meta-awareness that is unnatural in conversation &#8212; real people do not consciously recalculate their beliefs sentence by sentence, and prompting an LLM to do so introduces a reflective tone that leaks into the dialogue itself, producing messages that feel like debate-club analysis rather than casual conversation.
+      </p>
+      <p data-astro-cid="s">
+        The solution is a <strong data-astro-cid="s">batched analytical pass</strong> that runs asynchronously every 10 messages. A separate LLM call &#8212; using a dedicated analysis prompt, not the generation prompt &#8212; receives the full conversation segment, the persona&#8217;s prior belief state, and their cognitive model (convincers, dealbreakers, update style). The analysis prompt asks: &#8220;Given this persona&#8217;s cognitive model and the messages they&#8217;ve read, how should their beliefs shift?&#8221; The output is a structured belief delta with confidence scores and a natural-language reasoning trace. This separated architecture produces more accurate belief tracking (the analyzer can focus entirely on belief inference without the distraction of generating dialogue) and more realistic messages (the generator can focus entirely on authentic conversation without self-monitoring overhead). The belief snapshots are stored in PostgreSQL with timestamps, delta vectors, and reasoning traces, enabling post-hoc trajectory visualization and causal analysis of <em data-astro-cid="s">which messages moved which beliefs</em>.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="conversation-phases">
+      <h2 data-astro-cid="s">Conversation Phase System</h2>
+      <p data-astro-cid="s">
+        Not all messages in a conversation carry equal weight, and treating a 80-message thread as a flat sequence misses the structural rhythm of authentic discourse. NicheSim models conversations in four phases. The <strong data-astro-cid="s">opening phase</strong> (messages 1&#8211;15) establishes context: personas introduce themselves (or are already known to each other, depending on the community simulation), the product idea is presented, and initial hot-take reactions surface. Messages are short (1&#8211;3 sentences), emotionally charged, and heavy on surface-level evaluation. The <strong data-astro-cid="s">engagement phase</strong> (messages 16&#8211;45) is where the conversation thickens: positions develop nuance, alliances form, disagreements emerge, and personas begin citing evidence and experience. Message length increases to 3&#8211;6 sentences. The <strong data-astro-cid="s">deep dive phase</strong> (messages 46&#8211;65) is the analytical core: personas engage in structured debate, dissect specific aspects of the product (pricing, UX, market positioning), and belief trajectories show the largest deltas. Messages are long (4&#8211;8 sentences) and dense with reasoning. The <strong data-astro-cid="s">wind-down phase</strong> (messages 66&#8211;80) brings closure: positions are summarized, recommendations are offered, and the conversation energy dissipates.
+      </p>
+      <p data-astro-cid="s">
+        A key innovation in the phase system is the <strong data-astro-cid="s">filler message</strong> mechanism. Real communities do not operate at maximum information density; they include low-content, high-social-signal messages (&#8220;this ^&#8221;, &#8220;lmao&#8221;, &#8220;facts&#8221;, &#8220;honestly same&#8221;) that regulate conversational rhythm and signal alignment without advancing the analytical thread. NicheSim models this with a phase-dependent filler rate: 5% in opening, 8% in engagement, 3% in deep dive (where every message should carry analytical weight), and 25% in wind-down (where social cohesion and conversational closure dominate). Filler messages are generated via a lightweight template system with persona-specific stylistic variations &#8212; the Gen-Z-coded persona uses different filler vocabulary than the academic-coded persona &#8212; ensuring that even low-content messages reinforce persona coherence.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="verdict-system">
+      <h2 data-astro-cid="s">Grounded Verdict System</h2>
+      <p data-astro-cid="s">
+        The verdict system follows a <strong data-astro-cid="s">measure-then-interpret</strong> pipeline. Rather than asking the LLM to produce a verdict from raw conversation text &#8212; which would invite hallucination, recency bias, and lossy summarization &#8212; the system first computes quantitative metrics directly from the database: belief trajectory deltas (which personas shifted, by how much, and in which direction), engagement signals (reply-chain depth, mention frequency, quote rate), consensus measures (agreement clustering across personas, calculated via pairwise sentiment alignment on key topics), and expert splits (whether domain experts and laypeople diverged on specific claims). These metrics are computed deterministically; the LLM never touches raw numbers.
+      </p>
+      <p data-astro-cid="s">
+        The metrics are then provided to the LLM as <em data-astro-cid="s">grounded context</em> for interpretation. The prompt includes: the computed metrics, representative quotes extracted from the conversation, the research context used to initialize the simulation, and the product details. The LLM synthesizes this into a structured verdict: an overall confidence score, a narrative summary of community sentiment, a breakdown by persona archetype, and key themes. The confidence formula is deliberately conservative: <code data-astro-cid="s">confidence = min(95, 40 + message_volume_bonus + persona_count_bonus + consensus_bonus)</code>, where <code data-astro-cid="s">message_volume_bonus</code> contributes up to 25 points (scaled from 0 for &#8804;20 messages to 25 for &#8805;80), <code data-astro-cid="s">persona_count_bonus</code> contributes up to 15 points (scaled from 0 for &#8804;3 personas to 15 for &#8805;8), and <code data-astro-cid="s">consensus_bonus</code> contributes up to 25 points (inverse of pairwise agreement variance). The cap at 95% is intentional: it signals that even ideal simulation conditions cannot produce certainty, and users should treat synthetic community feedback as a directional signal, not ground truth. The verdict system also produces an <strong data-astro-cid="s">objection ledger</strong> &#8212; a structured table of every distinct pushback raised during the conversation, with severity score, frequency count, representative quotes, and suggested responses &#8212; giving product teams an actionable, prioritized list of concerns to address.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="cross-sim-learning">
+      <h2 data-astro-cid="s">Cross-Simulation Learning</h2>
+      <p data-astro-cid="s">
+        Every completed simulation feeds into a growing <strong data-astro-cid="s">learning corpus</strong> structured across five knowledge categories. <strong data-astro-cid="s">Niche categorization</strong> maps products to taxonomy nodes (industry, target user, price tier, stage) so that future simulations in the same niche can bootstrap from accumulated context. <strong data-astro-cid="s">Knowledge retrieval</strong> extracts reusable factual claims, market data points, and competitive insights that persist across simulations. <strong data-astro-cid="s">Persona templates</strong> capture which archetypes produced the most internally coherent, conversationally realistic behavior and promote them for reuse. <strong data-astro-cid="s">Message exemplars</strong> store high-quality messages tagged by persona type, conversation phase, and scene directive, creating a reference library that improves few-shot prompting. <strong data-astro-cid="s">Objection patterns</strong> aggregate common pushbacks across simulations in the same niche, enabling the system to proactively seed conversations with known counter-arguments.
+      </p>
+      <p data-astro-cid="s">
+        The corpus operates with an explicit <strong data-astro-cid="s">exploration-exploitation</strong> policy. For each new simulation, 70&#8211;90% of persona attributes, scene directives, and conversation parameters draw from proven high-quality patterns in the corpus. The remaining 10&#8211;30% are novel mutations: untested persona combinations, rare scene directives, or experimental parameter variations. This creates a <strong data-astro-cid="s">flywheel effect</strong>: more simulations → richer pattern library → higher baseline quality for new simulations → lower cost-per-insight → more simulations. The corpus grows nonlinearly in value because the most useful learnings are combinatorial: a persona archetype that works well for SaaS products may also work well for marketplace products in a different configuration, and the system discovers these transfer patterns through controlled variation.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="performance">
+      <h2 data-astro-cid="s">Performance</h2>
+      <p data-astro-cid="s">
+        An 80-message simulation with 6 personas completes in 60&#8211;90 seconds of wall-clock time. This is achieved through approximately 25&#8211;30 LLM calls (versus the 80+ calls that a naive round-robin approach would require), representing a 60&#8211;75% reduction in API calls via burst generation. Each burst call generates 2&#8211;4 messages, with the number of messages per burst varying inversely with the information density of the conversation phase (more messages per burst in wind-down, fewer in deep dive). The batched analytical pass adds 3&#8211;5 additional LLM calls per simulation (one every 10 messages), and the verdict synthesis adds 1&#8211;2 calls. The streaming SSE architecture means users begin seeing messages within 3&#8211;5 seconds of simulation start, even as later messages continue generating, providing a responsive experience despite the total generation time.
+      </p>
+    </section>
+
+    <section class="study-section" data-astro-cid="s" id="evaluation">
+      <h2 data-astro-cid="s">Evaluation</h2>
+      <p data-astro-cid="s">
+        NicheSim&#8217;s quality is measured against five benchmarks drawn from a controlled evaluation study (full results in Chua, &#8220;Coherence, Not Accuracy: Evaluating LLM Personas at Scale,&#8221; 2026). <strong data-astro-cid="s">Belief-message alignment</strong>: 92% of belief vector shifts correspond to the sentiment direction of the message that triggered them, measured by comparing the belief delta direction (+/-) against independent message sentiment classification. <strong data-astro-cid="s">Intra-persona coherence</strong>: 0.91 Cohen&#8217;s kappa across repeated simulation runs, confirming that personas produce consistent behavior patterns within their cognitive models. <strong data-astro-cid="s">Thematic alignment with human feedback</strong>: 78% overlap between themes surfaced by NicheSim simulations and themes surfaced by traditional user interviews for the same product, as measured by blinded evaluator agreement on theme categorization. <strong data-astro-cid="s">User-perceived authenticity</strong>: 4.2/5 average rating from product teams asked to evaluate the realism of synthetic conversations against real community threads (n=47 evaluators). <strong data-astro-cid="s">Objection coverage</strong>: 85% of objections raised in real user interviews were also surfaced in at least one NicheSim conversation about the same product, confirming that synthetic discourse captures the critical dimensions of real community pushback.
+      </p>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">This work powers {study.backlinkLabel} in production.</p>
+      <a class="study-backlink-link" href={study.backlink} rel="noopener" data-astro-cid="s">Try it at {study.backlinkLabel} &rarr;</a>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { background: var(--surface); border: 1px solid var(--hairline); border-radius: 8px; padding: 18px 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; margin: 18px 0 22px; }
+  .study-section[data-astro-cid="s"] code[data-astro-cid="s"] { font-family: var(--mono); font-size: 0.88em; background: var(--chip-bg); border-radius: 4px; padding: 1px 5px; }
+  .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] code[data-astro-cid="s"] { background: none; padding: 0; border-radius: 0; font-size: 12.5px; color: var(--ink); }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  .study-backlink-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 13px; color: var(--green); white-space: nowrap; }
+  .study-backlink-link[data-astro-cid="s"]:hover { text-decoration: underline; text-underline-offset: 4px; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { padding: 14px 16px; font-size: 11.5px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>

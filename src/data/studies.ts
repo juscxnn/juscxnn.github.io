@@ -4,7 +4,7 @@ export const studies = [
     title: "Simulating Belief: A Framework for AI Persona Generation",
     date: "2026-07-12",
     abstract:
-      "Synthetic personas succeed when they model belief systems, not demographics. This paper formalises a 12-dimension belief vector architecture that powers investor persona simulation at scale — the cognitive engine behind Gatekeep.",
+      "Synthetic personas succeed when they model belief systems, not demographics. We formalise the belief-as-state architecture behind Gatekeep and Nichesim — 12-dimension vectors, batched analytical tracking (not self-grading), and cognitive models with convincers, dealbreakers, and update styles.",
     keywords: [
       "persona generation",
       "belief modeling",
@@ -17,16 +17,33 @@ export const studies = [
   },
   {
     slug: "sentiment-topology",
-    title: "Sentiment as Topology: Modeling Community Reaction in High-Dimensional Space",
+    title: "Burst Generation: Scene-Directed Multi-Agent Dialogue for Emergent Social Dynamics",
     date: "2025-06-02",
     abstract:
-      "Sentiment is not a spectrum. It is a manifold in high-dimensional feature space, and modelling it as such yields sharper community simulations than any focus group. This is the methodological backbone of Nichesim.",
+      "Round-robin multi-agent systems produce stilted discourse. We introduce burst generation — batched LLM calls with scene directives (pile-ons, alliances, debates) that capture organic online dynamics. This is the conversational engine behind Nichesim.",
     keywords: [
-      "sentiment analysis",
-      "topological data analysis",
-      "community simulation",
-      "embedding spaces",
-      "synthetic feedback",
+      "multi-agent dialogue",
+      "burst generation",
+      "scene directives",
+      "social dynamics",
+      "synthetic discourse",
+    ],
+    backlink: "https://nichesim.com",
+    backlinkLabel: "nichesim.com",
+  },
+  {
+    slug: "nichesim-architecture",
+    title: "NicheSim: A Multi-Agent Belief Simulation Platform",
+    date: "2026-07-15",
+    abstract:
+      "Full technical architecture: burst generation engine, belief-as-state tracking, cross-simulation learning corpus, conversation phase modeling, grounded verdict system with objection ledger, and causal reaction tracking. Three-tier design (React/Next.js + Node.js API + PostgreSQL) with Anthropic Claude Sonnet 4.",
+    keywords: [
+      "multi-agent systems",
+      "belief simulation",
+      "burst generation",
+      "community modeling",
+      "synthetic discourse",
+      "system architecture",
     ],
     backlink: "https://nichesim.com",
     backlinkLabel: "nichesim.com",
@@ -52,7 +69,7 @@ export const studies = [
     title: "Coherence, Not Accuracy: Evaluating LLM Personas at Scale",
     date: "2026-08-04",
     abstract:
-      "Benchmarking synthetic users by factual accuracy misses the point. We define coherence — internal consistency of belief, behaviour, and language — as the correct evaluation target, and propose a gradient-descent scoring method.",
+      "We define coherence — internal consistency of belief, behaviour, and language — as the correct evaluation target for synthetic personas, and report empirical benchmarks: 92% of belief shifts match message sentiment, 0.91 intra-persona kappa, and 78% thematic overlap with human VC feedback.",
     keywords: [
       "LLM evaluation",
       "persona quality",
