@@ -53,7 +53,7 @@ export const studies = [
     title: "The Economics of Simulated Attention",
     date: "2026-07-28",
     abstract:
-      "AI-generated personas match or exceed the statistical power of traditional focus groups at 2% of the cost. This paper quantifies the tradeoff across sample size, latency, and reliability — with reproducible benchmarks.",
+      "AI-generated personas match or exceed the statistical power of traditional focus groups at 5-10% of the cost. Exploring the tradeoffs across sample size, latency, and reliability — with reproducible benchmarks.",
     keywords: [
       "synthetic data",
       "market research",
@@ -69,7 +69,7 @@ export const studies = [
     title: "Coherence, Not Accuracy: Evaluating LLM Personas at Scale",
     date: "2026-08-04",
     abstract:
-      "We define coherence — internal consistency of belief, behaviour, and language — as the correct evaluation target for synthetic personas, and report empirical benchmarks: 92% of belief shifts match message sentiment, 0.91 intra-persona kappa, and 78% thematic overlap with human VC feedback.",
+      "We define coherence — internal consistency of belief, behaviour, and language — as the correct evaluation target for synthetic personas, and introduce a prompt-space optimisation method. Early benchmarks: 92% of belief shifts match message sentiment, 0.91 intra-persona kappa, and 78% thematic overlap with human VC feedback.",
     keywords: [
       "LLM evaluation",
       "persona quality",

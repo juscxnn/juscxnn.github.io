@@ -35,7 +35,7 @@ const jsonLd = JSON.stringify({
         The problem becomes acute when we need personas to <em data-astro-cid="s">simulate judgment</em> rather than merely represent a market segment. Investor personas, in particular, must produce coherent, specific evaluations of novel inputs &#8212; a pitch deck, a product demo, a go-to-market thesis &#8212; that hold up across repeated runs. Demographic vectors fail at this because they provide no structural constraint on the reasoning process. An LLM prompted with "you are a 45-year-old partner at a seed-stage fund" will generate plausible-sounding but internally inconsistent feedback. It may be risk-averse on one dimension and recklessly optimistic on another, or it may simply regress to the mean of its training distribution, producing the generic "founder-market fit" commentary that entrepreneurs have learned to ignore.
       </p>
       <p data-astro-cid="s">
-        What we need is a model of <em data-astro-cid="s">belief</em>, not identity. This paper presents a 12-dimension belief vector architecture designed to serve as the cognitive engine for AI persona generation. The framework encodes decision-making dispositions as continuous values in a bounded vector space, then maps these vectors onto coherent investor archetypes. We discuss the formal structure of the belief vector, its implementation in the Gatekeep platform, empirical validation against real venture capital feedback, and broader implications for synthetic user research.
+        We've been exploring a model of <em data-astro-cid="s">belief</em>, not identity, as the foundation for AI persona generation. The framework encodes decision-making dispositions as continuous values in a bounded vector space, then maps these vectors onto coherent investor archetypes — something we're exploring at Gatekeep. We cover the formal structure of the belief vector, early validation against real venture capital feedback, and broader implications for synthetic user research.
       </p>
     </section>
 
@@ -64,7 +64,7 @@ const jsonLd = JSON.stringify({
       </p>
       <p data-astro-cid="s">
         Beyond the static profile, the Nichesim architecture introduces a dynamic cognitive model that governs how a persona's beliefs evolve in response to new information. This layer comprises five parameters.
-        <strong data-astro-cid="s">prior_belief</strong> (0&#8211;100) sets the persona's starting position on a given topic before exposure to any evidence &#8212; a persona sceptical of cryptocurrency might begin at 25, while one enthusiastic about AI safety might start at 80.
+        <strong data-astro-cid="s">prior_belief</strong> (0&#8211;1) sets the persona's starting position on a given topic before exposure to any evidence &#8212; a persona sceptical of cryptocurrency might begin at 0.25, while one enthusiastic about AI safety might start at 0.80.
         <strong data-astro-cid="s">convincers</strong> are an ordered list of trigger conditions that increase belief: domain-specific predicates such as "sees a live demo," "reads a peer-reviewed study," or "hears a testimonial from a trusted source." When satisfied during simulation, the corresponding belief increments.
         <strong data-astro-cid="s">dealbreakers</strong> are the inverse &#8212; triggers that decrease belief: "product misses a stated deadline," "founder has a prior failed venture in the same space," "revenue projections lack cohort retention data."
         <strong data-astro-cid="s">evidence_preference</strong> selects the dominant evidence class for a given belief domain: <code data-astro-cid="s">"data"</code> (quantitative metrics, benchmarks, statistical significance), <code data-astro-cid="s">"story"</code> (narrative framing, case studies, founder journey), or <code data-astro-cid="s">"authority"</code> (institutional signals, credentials, social proof).
@@ -95,7 +95,7 @@ type EvidenceType = "data" | "story" | "authority";
 type UpdateStyle = "jump" | "gradual" | "stubborn";
 
 interface CognitiveModel extends BeliefVector &#123;
-  priorBelief: number;              // 0&#8211;100 starting position
+  priorBelief: number;              // 0&#8211;1 starting position
   convincers: string[];             // triggers that increase belief
   dealbreakers: string[];           // triggers that decrease belief
   evidencePreference: EvidenceType; // dominant evidence class
@@ -112,7 +112,7 @@ function encodeArchetype(description: string): CognitiveModel &#123;
     <section class="study-section" data-astro-cid="s" id="gatekeep">
       <h2 data-astro-cid="s">The Gatekeep Implementation</h2>
       <p data-astro-cid="s">
-        Gatekeep is a platform that uses AI investor personas to stress-test startup pitches. Founders submit their pitch materials &#8212; deck, memo, financial model, demo link &#8212; and receive structured feedback across twelve dimensions from virtual investors calibrated to specific funds, stages, and thesis areas. Each persona is backed by a belief vector, and the quality of the output depends entirely on how faithfully that vector constrains the LLM's reasoning.
+        Gatekeep is an experiment in whether AI investor personas can stress-test startup pitches. Founders submit their pitch materials &#8212; deck, memo, financial model, demo link &#8212; and receive structured feedback across twelve dimensions from virtual investors calibrated to specific funds, stages, and thesis areas. Each persona is backed by a belief vector, and early data suggests the quality of the output depends on how faithfully that vector constrains the LLM's reasoning.
       </p>
       <p data-astro-cid="s">
         The scoring pipeline runs as follows. First, the pitch input is decomposed into structured claims: market sizing assertions, competitive positioning statements, unit economics projections, team competency signals, and narrative framing elements. Second, a <em data-astro-cid="s">belief vector extraction</em> step maps each persona's archetype specification onto the 12-dimension coordinate system described above. Third, a persona-matching algorithm selects the persona whose belief vector best corresponds to the stated investor profile. Finally, each dimension of the belief vector gates a specific evaluation lens &#8212; risk tolerance governs the persona's response to the financial projections, technical depth shapes its assessment of the technology moat, narrative susceptibility determines how much weight the persona gives to the storytelling versus the traction data, and so on.
