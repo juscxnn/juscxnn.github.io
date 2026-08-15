@@ -28,58 +28,69 @@ const jsonLd = JSON.stringify({
 
     <section class="study-section" id="the-pattern" data-astro-cid="s">
       <h2 data-astro-cid="s">Three Books, One Pattern</h2>
-      <p data-astro-cid="s">I read three books in sequence without planning to. That's unusual for me because my attention usually doesn't cooperate with sequential anything. But these three happened to land that way.</p>
-      <p data-astro-cid="s">The first was a book about stupidity, a collection of essays edited by Jean-François Marmion. The argument across most of the essays is that we do not reason our way to conclusions. We reach conclusions and then generate reasons. The reasoning is post-hoc. The essays show this from a lot of angles: experiments, case studies, historical examples. The pattern holds.</p>
-      <p data-astro-cid="s">The second was Algorithms to Live By. It maps everyday decisions onto formal problems in computer science. When to stop searching and commit. How to balance trying new things against sticking with what works. What to cache in memory. These are solved problems, more or less, and the book walks through the solutions. What struck me is that humans approximate these algorithms, badly, without knowing it.</p>
-      <p data-astro-cid="s">The third was Oliver Sacks. Neurological case studies. People with specific deficits: one cannot recognise faces, one has no sense of where his body is in space, one is stuck at age nineteen. What these cases show is that functions I assumed were "me" are actually discrete components. Remove one and everything else keeps running. The self is modular.</p>
-      <p data-astro-cid="s">Taken together: our reasons are generated after the fact, our decisions run on algorithms we don't inspect, and the mind is made of separable parts. The mind is a machine. I want to be precise here because it matters: this is not a metaphor. A metaphor would be comfortable. This is a description of how the evidence behaves.</p>
+      <p data-astro-cid="s">I read three books recently. I didn't plan to read them together. They just came up in sequence.</p>
+      <p data-astro-cid="s">The first was The Psychology of Stupidity, a collection of essays edited by Jean-François Marmion. The essays argue, mostly, that reasoning comes after the decision, not before. We decide something and then generate reasons for it. The reasons feel like they caused the decision. They didn't. There's evidence for this. A lot of evidence.</p>
+      <p data-astro-cid="s">The second was Algorithms to Live By, by Brian Christian and Tom Griffiths. It takes decisions that feel ordinary, like when to stop searching for an apartment, and shows that computer science has formal solutions for them. Optimal stopping. Explore versus exploit. Caching. The book demonstrates that people approximate these algorithms without knowing they're doing it, and the approximations are often wrong in predictable ways.</p>
+      <p data-astro-cid="s">The third was The Man Who Mistook His Wife for a Hat, by Oliver Sacks. Neurological case histories. A man who can see but can't recognise faces. A woman who lost the sense of where her body is in space. A man permanently stuck at age nineteen. The cases show something that took me a while to articulate: the things I think of as "me" are actually components. Each one can break independently. When one breaks, the rest keep running. That means the mind has parts, and the parts do specific jobs.</p>
+      <p data-astro-cid="s">Put the three books together and you get a picture:</p>
+      <ol data-astro-cid="s">
+        <li data-astro-cid="s">The reasons we give for our decisions are generated after the fact.</li>
+        <li data-astro-cid="s">Our decisions run on algorithms we can identify, and sometimes improve on.</li>
+        <li data-astro-cid="s">The mind is made of separable components.</li>
+      </ol>
+      <p data-astro-cid="s">If all three are true, the mind is a machine. I mean that literally. Not as a metaphor. If it were a metaphor I could ignore it. It reads as a description.</p>
     </section>
 
     <section class="study-section" id="the-question" data-astro-cid="s">
-      <h2 data-astro-cid="s">The Question That Follows</h2>
-      <p data-astro-cid="s">If the mind is a machine, can you build another one? That question is old. Turing asked it in 1950. Searle objected with the Chinese Room in 1980. Dennett spent decades dismantling the framing. Hofstadter wrote a whole book about loops. I'm aware of the history and I don't think it's the interesting question anymore, or at least not the one I can act on.</p>
-      <p data-astro-cid="s">The version that won't leave me alone is narrower. Not "can a machine be conscious". Not "can it understand". Those are questions about the inside of the simulation, and the inside is unobservable. The version that matters to me: can a machine predict what a specific kind of person will do, better than I can guess?</p>
-      <p data-astro-cid="s">That's the whole thing. A prediction, not a soul. Predictions can be evaluated. You run them against reality and count the misses. I can work with that.</p>
+      <h2 data-astro-cid="s">The Question</h2>
+      <p data-astro-cid="s">If the mind is a machine, can you build another one?</p>
+      <p data-astro-cid="s">That question has a history. Turing asked it in 1950, framed as a game. Searle answered no with a room. Dennett said the question itself is confused, that what we call consciousness is a bundle of separate capacities, which matches the Sacks cases exactly. Hofstadter wrote about loops. I've read parts of this history. But the version of the question I keep coming back to is narrower, and I think it's the version I can actually do something with.</p>
+      <p data-astro-cid="s">Not: can a machine be conscious.</p>
+      <p data-astro-cid="s">Not: can a machine understand.</p>
+      <p data-astro-cid="s">Those questions are about the inside of the thing. The inside is unobservable. I can't verify an answer to either one, and a question you can't verify is a question you can only argue about. I'm not interested in arguing.</p>
+      <p data-astro-cid="s">The version I want: can a machine predict what a specific kind of person will do, better than I can guess?</p>
+      <p data-astro-cid="s">That's it. A prediction problem. Predictions can be checked. You make one, wait, see what happened, count the misses. That's a loop I can run.</p>
     </section>
 
-    <section class="study-section" id="focus-groups" data-astro-cid="s">
-      <h2 data-astro-cid="s">We Already Do This, Badly</h2>
-      <p data-astro-cid="s">I keep getting distracted by the obviousness of this, so I'll write it once and leave it here: focus groups are simulations. Eight people in a room, an hour of prompts, someone takes notes, and the notes get treated as data about a population. That is a simulation. It is a bad simulation. Small sample, staged setting, one loud person distorts everything, and nobody would accept those conditions in any other context. But companies run them because the alternative, launching blind, is worse.</p>
-      <p data-astro-cid="s">So the question was never whether to simulate people. We already do. The question is whether we can do it better. More samples. More dimensions. Controlled variation. The objection "a simulation can't capture a real person" is true and irrelevant, because the current methods don't capture real people either. The bar isn't perfection. The bar is: better than a focus group, better than a survey, better than my own intuition, which I now know from the stupidity book is mostly post-hoc narrative.</p>
-      <p data-astro-cid="s">An important detail from the books: realism includes the bugs. A simulation of a person that's too rational is less accurate, not more. People confabulate. People follow group dynamics. People overfit to recent evidence. If the model doesn't do those things, it's not modelling a person, it's modelling an ideal, and ideals don't buy products or reject pitches.</p>
+    <section class="study-section" id="already-simulate" data-astro-cid="s">
+      <h2 data-astro-cid="s">We Already Simulate People</h2>
+      <p data-astro-cid="s">Also, we already do this. This is the part I keep coming back to, and it's so obvious that I want to write it down once so I can stop thinking about it.</p>
+      <p data-astro-cid="s">Focus groups are simulations. A company wants to know how people will react to a product, so it puts eight people in a room for an hour, asks them questions, writes up a summary, and treats the summary as data about millions of people. That is a simulation. It's a bad one. Small sample. Staged environment. One loud participant distorts the whole thing. But companies run them because the alternative, launching blind, is worse.</p>
+      <p data-astro-cid="s">So "should we simulate people" is not the question. We already do. The question is whether we can do it better. More samples. More control. More dimensions. And if the objection is that a simulation can't capture a real person: fine, but neither does a focus group, neither does a survey, neither does my intuition, and I now have three books of reasons not to trust my intuition.</p>
+      <p data-astro-cid="s">One detail from the books matters here and I keep almost skipping it. A realistic simulation has to include the bugs. If I build a model of a person and the model is too rational, it's not a better model, it's a worse one. Real people confabulate. Real people follow the group. Real people anchor. A model that doesn't do those things isn't modelling a person. It's modelling an ideal, and ideals don't buy products or reject pitches.</p>
     </section>
 
     <section class="study-section" id="the-sketch" data-astro-cid="s">
-      <h2 data-astro-cid="s">A First Sketch, For Reference</h2>
-      <p data-astro-cid="s">I wrote down what a minimal version looks like. Not a person. A component of a person, modelled for one purpose. It goes like this:</p>
-      <pre data-astro-cid="s"><code data-astro-cid="s">belief: a number between 0 and 1
-update: given evidence, belief moves
+      <h2 data-astro-cid="s">The Sketch</h2>
+      <p data-astro-cid="s">So I wrote down the smallest version I could think of. Not a person. One component of a person, for one purpose.</p>
+      <pre data-astro-cid="s"><code data-astro-cid="s">belief: a number from 0 to 1
+update: evidence comes in, the number moves
 
-convincer:  an input that moves the number up
-dealbreaker: an input that moves the number down
+convincer:    input that moves the number up
+dealbreaker:  input that moves the number down
 update style: how the number moves
-  jump:     immediate, large shift
-  gradual:  slow drift
-  stubborn: barely moves at all</code></pre>
-      <p data-astro-cid="s">That's it. That's the entire idea so far. It does not capture a person. It captures one axis of a person's behaviour, and only the axis relevant to one question. That's what a model means. You don't model everything. You model the part that answers the question, and you're honest about the boundary.</p>
-      <p data-astro-cid="s">The Chinese Room objection doesn't bother me anymore. I don't care whether the room understands. I care whether its output predicts better than my guess. Those are different questions. I'm answering the second one. The first one can stay with the philosophers.</p>
-      <p data-astro-cid="s">I keep coming back to the Sacks cases when I think about scope. The patient who can't recognise faces still has most of a person intact. The model of him that matters for a product decision doesn't need to include his face recognition at all. The machinery is separable. That's permission to build small pieces and test them.</p>
-      <p data-astro-cid="s">I don't know if this goes anywhere. I have a tendency to pick up threads and not finish them, and this could be another one. But the question has a shape now, and shapes are easier to come back to.</p>
+  jump:     moves all at once
+  gradual:  drifts
+  stubborn: barely moves</code></pre>
+      <p data-astro-cid="s">That's the whole idea so far. It doesn't capture a person. It captures one axis of one kind of behaviour, the axis that matters for one question. Which is what a model is. You don't model everything. You model the part that answers the question, and you stay honest about the boundary.</p>
+      <p data-astro-cid="s">The Chinese Room doesn't bother me. I don't care whether the room understands. I care whether its output predicts better than my guess. Those are different questions and I'm answering the second one. The first one can stay with the people who enjoy it.</p>
+      <p data-astro-cid="s">The Sacks cases keep coming back when I think about scope. The man who can't recognise faces still has most of a person intact. A model of him that matters for a buying decision doesn't need face recognition in it. The machinery is separable. That means I can build small pieces and test them individually. I don't have to solve the whole problem at once, which is good, because I don't think I could.</p>
+      <p data-astro-cid="s">I don't know if this goes anywhere. I start a lot of things. This one has a shape now though, and shapes are easier to come back to.</p>
     </section>
 
-    <section class="study-section" id="open-questions" data-astro-cid="s">
+    <section class="study-section" id="unanswered" data-astro-cid="s">
       <h2 data-astro-cid="s">Unanswered</h2>
       <ul data-astro-cid="s">
-        <li data-astro-cid="s">Where is the line between a model of a person and a claim about personhood? If the model gets better, does the line move, or was the line always in the wrong place?</li>
+        <li data-astro-cid="s">Where exactly is the line between a model of a person and a claim about personhood? If the model keeps getting better, does the line move, or was it always somewhere else?</li>
         <li data-astro-cid="s">If realism means including the bugs, what's the right ratio of correct behaviour to broken behaviour?</li>
         <li data-astro-cid="s">If I simulate a thousand people, am I simulating a thousand selves or one machine with a thousand parameter sets? Is there a difference that matters?</li>
         <li data-astro-cid="s">Does spending a lot of time thinking about people as functions change how I treat actual people? In which direction?</li>
-        <li data-astro-cid="s">The books said the self is narrative, assembled from parts. If that's true, what exactly am I modelling when I model "a person"? The narrative? The parts? The assembly process?</li>
+        <li data-astro-cid="s">If the self is narrative, assembled from parts, what exactly am I modelling when I model "a person"? The narrative? The parts? The assembly process?</li>
       </ul>
     </section>
 
     <aside class="study-backlink" data-astro-cid="s">
-      <p class="study-backlink-label" data-astro-cid="s">Written before any of the work this question led to. Noting the starting position while it's still the starting position.</p>
+      <p class="study-backlink-label" data-astro-cid="s">Written down before any of the work. Starting position, noted.</p>
     </aside>
   </article>
 
@@ -114,7 +125,7 @@ update style: how the number moves
   .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
   .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
   .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
-  .study-section[data-astro-cid="s"] ul[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; padding-left: 1.4rem; }
+  .study-section[data-astro-cid="s"] ul[data-astro-cid="s"], .study-section[data-astro-cid="s"] ol[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; padding-left: 1.4rem; }
   .study-section[data-astro-cid="s"] li[data-astro-cid="s"] { margin-bottom: 10px; }
   .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] { background: var(--surface); border: 1px solid var(--hairline); border-radius: 8px; padding: 18px 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; margin: 18px 0 22px; }
   .study-section[data-astro-cid="s"] pre[data-astro-cid="s"] code[data-astro-cid="s"] { background: none; padding: 0; border-radius: 0; font-size: 12.5px; color: var(--ink); }
