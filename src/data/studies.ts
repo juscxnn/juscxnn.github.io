@@ -48,6 +48,22 @@ export const studies = [
     backlinkLabel: "reading",
   },
   {
+    slug: "what-is-a-person",
+    title: "What Is a Person? The Question Before the Simulations",
+    date: "2025-04-08",
+    abstract:
+      "Three books started overlapping. Stupidity looked like bugs in the machinery. Algorithms looked like the machinery's heuristics. Broken brains looked like the machinery exposed. Then came the question that changed everything: if a mind is machinery, can you simulate one?",
+    keywords: [
+      "philosophy of mind",
+      "simulation",
+      "identity",
+      "synthetic agents",
+      "turing test",
+    ],
+    backlink: "",
+    backlinkLabel: "musings",
+  },
+  {
     slug: "simulating-belief",
     title: "Simulating Belief: A Framework for AI Persona Generation",
     date: "2026-07-12",

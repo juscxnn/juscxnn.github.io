@@ -1,0 +1,120 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "what-is-a-person";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "BlogPosting",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": new Date(study.date).toISOString(),
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" id="the-overlap" data-astro-cid="s">
+      <h2 data-astro-cid="s">The Books Started Overlapping</h2>
+      <p data-astro-cid="s">I didn't set out to read three books about the same thing. The Psychology of Stupidity was curiosity. Algorithms to Live By was practical. The Man Who Mistook His Wife for a Hat was a gift from someone who knew I'd been thinking too much. But somewhere in the middle of the Sacks book, the three started to rhyme, and the rhyme became a question I couldn't stop hearing.</p>
+      <p data-astro-cid="s">Marmion's book made the case that we are not the transparently rational agents we experience ourselves to be. We confabulate reasons after the fact. We build cathedrals of justification around decisions we never actually deliberated. Our confidence is a story told by machinery we can't inspect. Algorithms to Live By pointed at the same machinery from the other side: the heuristics we use turn out to have formal equivalents in computer science, and the formal equivalents are sometimes better than we are. Optimal stopping, caching, explore versus exploit. The mind is running algorithms, and they are not always the ones we would have chosen. Then Sacks showed what happens when parts of that machinery break, and in doing so revealed that the machinery exists at all. The patient who can't recognise his wife's face isn't missing something ineffable. He's missing a function, the same way a program missing a subroutine produces bizarre but explainable behaviour.</p>
+      <p data-astro-cid="s">The conclusion, once assembled, felt obvious and destabilising at the same time: the mind is machinery. That's not a metaphor. If it were a metaphor, it would be safe. It's a description. And if the mind is machinery, then the question follows naturally, unavoidably, almost rudely: can you build another one?</p>
+    </section>
+
+    <section class="study-section" id="old-question" data-astro-cid="s">
+      <h2 data-astro-cid="s">The Old Question, Asked Badly</h2>
+      <p data-astro-cid="s">This is not a new question, obviously. Turing asked it in 1950 and couched it as an imitation game: if a machine can converse well enough that you can't tell it from a person, what grounds remain for calling it not a person? Searle answered with the Chinese Room: a system can manipulate symbols perfectly without understanding any of them, so behaviour alone can't be consciousness. Dennett spent decades arguing the whole framing was confused, that what we call consciousness is not one thing but a bundle of capacities, each of which can be implemented or missing independently, exactly the way Sacks' patients demonstrated. Hofstadter circled the strange loop: a self is a story that refers to itself, and anything that builds such a story starts to look alive.</p>
+      <p data-astro-cid="s">I knew some of this history, mostly from popular accounts. But the books changed how I heard the question. The academic version asks: can a machine be conscious? Can it understand? Can it have a self? These are questions about the simulation's internal life. The version that the three books left me with was much less grand and much more urgent: can a machine be <em data-astro-cid="s">predictively useful as a model of a specific kind of person</em>? Not consciousness. Not understanding. Just: if I want to know how a sceptical engineer will react to my product, can I build something that answers that question better than my own biased guess?</p>
+      <p data-astro-cid="s">That reframing felt like cheating at first. It dodges the hard philosophical problem entirely. But the more I sat with it, the more it felt like the honest question, the one hiding underneath the grander ones. When I ask "what would a person do?", I am not asking for a soul. I am asking for a prediction, and predictions can be evaluated. That single move, from metaphysics to prediction, is what made the whole thing feel buildable.</p>
+    </section>
+
+    <section class="study-section" id="focus-groups" data-astro-cid="s">
+      <h2 data-astro-cid="s">We Already Run Simulations. We Just Do It Badly</h2>
+      <p data-astro-cid="s">The second realisation came from noticing something embarrassing about how decisions actually get made. When a company wants to know how people will react to a product, it runs a focus group. Eight strangers in a room, an hour of prompts, a moderator trying to keep the loudest person from dominating, and at the end someone types up a summary that gets treated as data. Focus groups are simulations. They are deliberately small, artificially staged, statistically noisy simulations of how a population will respond. We've been simulating people for decades. We're just bad at it.</p>
+      <p data-astro-cid="s">Once you see it that way, the whole debate about whether simulated personas are "real" or "valid" looks strange. The question was never whether to simulate. It's whether to simulate badly, with eight people and a two-way mirror, or whether we can simulate better, with more dimensions, more samples, more controlled variation. The sceptics ask "can a simulation capture a real person?" and the answer is: yes, imperfectly, the same way a focus group does, the same way a survey does, the same way my own intuition does. The interesting question is never "is it perfect?" It's "is it better than the alternatives?" That's an engineering question, and engineering questions have answers you can measure.</p>
+      <p data-astro-cid="s">This is where the books really earned their keep. Marmion taught me that the people I'd be simulating are themselves running on unreliable machinery, full of confabulation and groupthink, so "realism" is a lower bar than it looks. A simulation doesn't need to capture some ideal rational actor. It needs to capture the bugs. Algorithms to Live By gave me a language for what the bugs are: heuristics, tradeoffs, satisficing under constraint. And Sacks gave me the architecture: separable functions, each of which can be modelled, some of which can be missing, and the whole thing held together by narrative. A persona is not a person. A persona is a model of the machinery that produces a person's observable behaviour, and that's enough to be useful, maybe enough to be powerful.</p>
+    </section>
+
+    <section class="study-section" id="the-leap" data-astro-cid="s">
+      <h2 data-astro-cid="s">The Leap</h2>
+      <p data-astro-cid="s">The leap came in a single evening, the way these things always seem to. I had been sketching, idly, what a "belief" might look like as a variable. Not as a statement, not as an identity, but as a number that updates. A sceptic who reads evidence is a function: prior belief in, evidence in, updated belief out. A convincer is an input that reliably moves the number up. A dealbreaker moves it down. An update style is how the number moves, gradually or in jumps or not at all. None of this captures a whole person. But it captures the part of a person that matters for a specific question, which is what a model means.</p>
+      <p data-astro-cid="s">The full insight was that you don't need to solve consciousness to build something useful. You need to be careful about scope. A model that predicts what an engineer will say about pricing doesn't need to dream, or grieve, or have an inner life. It needs the machinery that generates opinions about pricing, and if you've read Sacks, you know that machinery is real, it's separable, and it can be modelled piece by piece. The Chinese Room objection, which had always felt like a wall, started to feel like a red herring. I don't care whether the room understands Chinese. I care whether the room's output helps me make better decisions. Those are different questions, and I'm allowed to answer only the second one.</p>
+      <p data-astro-cid="s">I wrote the first sketch of what would eventually become the belief model that same night, mostly as a way to stop thinking. It was crude. It is still crude. But crude models can be tested, and tested models can be improved, and improvement is a path. That path, from three books to a variable that updates, is the honest origin story. No grand vision of artificial minds. Just curiosity about machinery, a suspicion that we already simulate people badly, and an evening spent wondering whether we could do it a little better.</p>
+    </section>
+
+    <section class="study-section" id="open-questions" data-astro-cid="s">
+      <h2 data-astro-cid="s">Questions I'm Still Carrying</h2>
+      <ul data-astro-cid="s">
+        <li data-astro-cid="s">Where exactly is the line between a useful model of a person and a claim about personhood? If the model keeps getting better, does the line move, or was it never where we thought?</li>
+        <li data-astro-cid="s">Focus groups are simulations we accept without question. What else in daily life is a simulation wearing different clothes? Surveys, market sizing, hiring interviews, even the mental model I have of my own future self.</li>
+        <li data-astro-cid="s">If realism means capturing the bugs (confabulation, bias, groupthink), is a simulated persona that's too rational actually less useful, not more? What's the right ratio of correctness to mess?</li>
+        <li data-astro-cid="s">The books suggested the self is narrative, assembled from fragments. If I simulate a thousand people, am I simulating a thousand selves, or one machinery with a thousand parameter sets?</li>
+        <li data-astro-cid="s">What does it do to a person to spend a lot of time thinking about people as functions? Does building models of minds change how you treat real ones, and in which direction?</li>
+      </ul>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">This is the question that everything since has grown out of. The practical work came later; this was the hinge.</p>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] ul[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; padding-left: 1.4rem; }
+  .study-section[data-astro-cid="s"] li[data-astro-cid="s"] { margin-bottom: 10px; }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>
