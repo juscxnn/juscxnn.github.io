@@ -1,5 +1,53 @@
 export const studies = [
   {
+    slug: "psychology-of-stupidity",
+    title: "What Stupidity Actually Is: Notes on Our Blind Spots",
+    date: "2023-10-15",
+    abstract:
+      "A book of essays on human stupidity turned out to be less about stupid people and more about the machinery that makes all of us occasionally wrong with total confidence. Personal notes on intelligence, self-delusion, and why being smart doesn't protect you.",
+    keywords: [
+      "cognitive biases",
+      "self-awareness",
+      "decision making",
+      "psychology",
+      "groupthink",
+    ],
+    backlink: "",
+    backlinkLabel: "reading",
+  },
+  {
+    slug: "algorithms-to-live-by",
+    title: "Optimal Stopping, Caching, and Other Human Decisions",
+    date: "2024-05-20",
+    abstract:
+      "Computer science has surprisingly good answers to ordinary human problems. When to stop searching, when to settle, what to keep in your head versus look up. Notes from Algorithms to Live By, applied loosely to real life.",
+    keywords: [
+      "optimal stopping",
+      "explore exploit",
+      "decision theory",
+      "heuristics",
+      "computer science",
+    ],
+    backlink: "",
+    backlinkLabel: "reading",
+  },
+  {
+    slug: "man-who-mistook",
+    title: "The Brain Builds Reality: Notes From Oliver Sacks",
+    date: "2025-02-12",
+    abstract:
+      "What happens when the machinery of perception breaks reveals how much of what we call reality is construction. Neurological case studies, identity, and what broken brains teach us about ordinary ones.",
+    keywords: [
+      "neuroscience",
+      "perception",
+      "identity",
+      "cognitive science",
+      "oliver sacks",
+    ],
+    backlink: "",
+    backlinkLabel: "reading",
+  },
+  {
     slug: "simulating-belief",
     title: "Simulating Belief: A Framework for AI Persona Generation",
     date: "2026-07-12",

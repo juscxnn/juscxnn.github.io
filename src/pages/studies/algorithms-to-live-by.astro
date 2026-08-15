@@ -1,0 +1,117 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "algorithms-to-live-by";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "BlogPosting",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": new Date(study.date).toISOString(),
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" id="the-premise" data-astro-cid="s">
+      <h2 data-astro-cid="s">The Premise</h2>
+      <p data-astro-cid="s">Algorithms to Live By, by Brian Christian and Tom Griffiths, starts from an observation so obvious it's easy to miss: computer scientists have spent seventy years solving problems that are actually just life. When to stop searching and commit. How much of the unknown to explore versus how much to exploit what you already know works. What to keep in memory and what to look up. How to schedule tasks when everything is urgent and nothing can be done all at once. The book takes the formal solutions to these problems and asks, gently, what would happen if you lived by them.</p>
+      <p data-astro-cid="s">I read it in 2024, in a year when I was making a lot of decisions that felt heavy. The book didn't make them lighter. It made them legible. It turned a vague sense of "this feels hard" into named problems with known tradeoffs, and there's something calming about knowing your dilemma has a name that people have been working on for decades.</p>
+    </section>
+
+    <section class="study-section" id="optimal-stopping" data-astro-cid="s">
+      <h2 data-astro-cid="s">The 37% Rule and the Cost of Looking</h2>
+      <p data-astro-cid="s">The most famous idea in the book is the secretary problem, also known as optimal stopping. You're interviewing candidates one by one. You can't go back to someone you passed on. When should you stop and hire? The mathematically optimal answer: look at 37% of the pool, then hire the first person better than everyone you've seen so far. It's not a perfect rule, it's a rule that maximises your probability of getting the best candidate given a hard constraint, which is the kind of honesty I like in advice.</p>
+      <p data-astro-cid="s">What stuck with me isn't the 37% itself. It's the shape of the answer: a defined period of pure exploration, followed by a period where you commit to the first thing that clears your bar. Most people do the opposite. They commit too early from fear of missing out, or they look forever, unable to accept that at some point you have to stop searching and act. The rule reframes looking as something with a cost. Every additional option you consider is another chance to find something better, yes. But it's also time spent not committing, not building, not learning what the thing you chose is actually like.</p>
+      <p data-astro-cid="s">I applied this to apartments once, during a move. I looked at 37% of the places on my shortlist, noted the best one, then took the first one after that which beat it. It worked, and it also felt completely arbitrary while I was doing it, which is a strange and useful feeling: making a decision based on a rule rather than a feeling. The feeling says "keep looking, what if the next one is better." The rule says "the next one is probably not better, and looking has a cost."</p>
+    </section>
+
+    <section class="study-section" id="explore-exploit" data-astro-cid="s">
+      <h2 data-astro-cid="s">Explore Versus Exploit, Everywhere</h2>
+      <p data-astro-cid="s">The other idea I think about weekly is the explore-exploit tradeoff. At any moment you can try something new (explore) or do what you know works (exploit). The tension shows up in restaurants, careers, friendships, hobbies, and how you spend a free evening. The book points out that the correct balance depends on how much time you have left. Young people with long horizons should explore more. As the horizon shrinks, exploitation becomes increasingly rational. This reframed a lot of advice I'd heard. "Take risks while you're young" isn't motivational sloganeering, it's the mathematically correct strategy for a long time horizon.</p>
+      <p data-astro-cid="s">The subtle version is even better: explore when you're in a new environment, exploit as you learn it. The book calls this the "explore-exploit dilemma as life's most fundamental tradeoff," and once you see it you can't unsee it. Every subscription, every repeat order, every "let's just go to the usual place" is an exploit decision. Every new thing tried is an explore decision. Neither is wrong. The error is never updating the balance as your horizon changes.</p>
+    </section>
+
+    <section class="study-section" id="caching-sorting" data-astro-cid="s">
+      <h2 data-astro-cid="s">Caching, Sorting, and Other Daily Algorithms</h2>
+      <p data-astro-cid="s">The chapter on caching asks a question I'd never thought to ask: what should you keep in your head, and what should you look up when you need it? Computers face this constantly, which is why your browser caches frequently used pages and fetches the rest fresh. The human version: knowing how to find an answer is often more valuable than knowing the answer, because head space is limited and the right thing to remember changes. But some things are worth caching: the things you use constantly, the things that are expensive to look up, and the things that compound.</p>
+      <p data-astro-cid="s">Sorting got me too, unexpectedly. The book notes that sorting is expensive, which is why it can be rational to leave things slightly unsorted. The person with a messy desk who can still find everything has optimised differently: they've accepted the cost of a linear search to avoid the cost of constant sorting. I felt very seen. There's a whole genre of productivity advice that assumes order is free. It isn't, and some of the most effective people I know are running surprisingly unsorted lives.</p>
+    </section>
+
+    <section class="study-section" id="open-questions" data-astro-cid="s">
+      <h2 data-astro-cid="s">Questions I'm Still Carrying</h2>
+      <ul data-astro-cid="s">
+        <li data-astro-cid="s">The 37% rule assumes you can't go back. But real life has second chances, callbacks, and "actually, I changed my mind." How much does the optimal strategy change when you can revisit old options?</li>
+        <li data-astro-cid="s">How do you know your time horizon? The book treats it as a known quantity, but careers, relationships, and even lives have horizons you can't see clearly. Is the horizon itself something you should explore?</li>
+        <li data-astro-cid="s">What's the human equivalent of cache invalidation? When the thing you've memorised becomes wrong, how do you notice, given that you've stopped looking it up?</li>
+        <li data-astro-cid="s">Some of the best decisions I've made were neither exploration nor exploitation, they were mistakes that accidentally opened doors. Is there a formal model for serendipity, or is that just exploration with bad marketing?</li>
+        <li data-astro-cid="s">If sorting is expensive and unsorted lives can be rational, what's the optimal level of order for a given life? Does it change with age, with work, with who you live with?</li>
+      </ul>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">Reading that sparked this: Algorithms to Live By, by Brian Christian and Tom Griffiths.</p>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] ul[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; padding-left: 1.4rem; }
+  .study-section[data-astro-cid="s"] li[data-astro-cid="s"] { margin-bottom: 10px; }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>

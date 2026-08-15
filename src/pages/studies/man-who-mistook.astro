@@ -1,0 +1,111 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "man-who-mistook";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "BlogPosting",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": new Date(study.date).toISOString(),
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" id="the-cases" data-astro-cid="s">
+      <h2 data-astro-cid="s">The Cases</h2>
+      <p data-astro-cid="s">The Man Who Mistook His Wife for a Hat is a collection of clinical tales by the neurologist Oliver Sacks, and the title is literal: one of his patients had visual agnosia, a condition where the brain can see shapes and colours but cannot assemble them into recognition. The man could describe the features of a glove but not recognise it as a glove. He looked at his wife's head and, asked to describe what he saw, reached for it as if it were a hat he might put on. He wasn't crazy. Every individual component of his perception worked. The binding was broken.</p>
+      <p data-astro-cid="s">The book is full of cases like this, and each one is a window into a piece of machinery you didn't know you had. A woman who lost proprioception, the sense of where your body is in space, and had to relearn movement by watching her own limbs. A man with severe amnesia who believed he was still nineteen years old, trapped in a single moment that kept replaying. Patients with phantom limbs, feeling pain in arms that no longer existed, because the brain's map of the body hadn't updated. None of these are exotic illnesses. They're the ordinary machinery of the mind, made visible by its failure.</p>
+    </section>
+
+    <section class="study-section" id="reality-is-constructed" data-astro-cid="s">
+      <h2 data-astro-cid="s">Reality Is Constructed, Not Received</h2>
+      <p data-astro-cid="s">The thing that rearranged my thinking is how much of what I experience as "reality" is construction. I had assumed, without ever stating it, that perception works like a camera: light comes in, the brain records it, done. Sacks shows that it works more like an editor: fragments arrive, and the brain assembles them into a coherent story so smoothly that the assembly is invisible. You only notice it when it breaks. The man who mistook his wife for a hat had working eyes. What he'd lost was the assembler.</p>
+      <p data-astro-cid="s">The same applies to identity. The amnesic patient stuck at nineteen had a self, in some sense. He had personality, preferences, a sense of humour. What he lacked was narrative continuity, the ability to add new chapters. And yet his mind improvised: he filled gaps with confabulation, inventing plausible explanations for why things were the way they were, because a brain that can't explain itself is unbearable. The stories we tell about ourselves are not optional decoration. They're load-bearing.</p>
+      <p data-astro-cid="s">I think about this constantly in the context of building things for people. Every user of anything is a person whose experience of the product is being constructed by the same editing machinery. What they remember isn't what happened, it's the story their brain assembled from fragments. Complaints, praise, feedback, it all arrives pre-edited. The job of a builder, in some deep sense, is to give the editor good material.</p>
+    </section>
+
+    <section class="study-section" id="sacks-as-writer" data-astro-cid="s">
+      <h2 data-astro-cid="s">Sacks as a Writer, Not Just a Doctor</h2>
+      <p data-astro-cid="s">A third of what I took from this book has nothing to do with neurology. Sacks writes about his patients with a warmth that clinical literature usually filters out. He's interested in their lives, their music, their gardening, their inner worlds. The conditions are never the point; the people are. That's rare in any technical writing, and it's a craft lesson I've tried to absorb: you can be rigorous and human at the same time. The rigour lives in the observations, the humanity in how you treat the subject. Neither is a substitute for the other.</p>
+      <p data-astro-cid="s">There's a humility to it too. Sacks regularly admits what he doesn't understand, what the cases suggest without resolving, where medicine stops and mystery continues. In a field that rewards certainty, he made uncertainty sound like intellectual honesty rather than weakness. For someone who builds things and constantly pretends to know more than I do, that was a useful mirror.</p>
+    </section>
+
+    <section class="study-section" id="open-questions" data-astro-cid="s">
+      <h2 data-astro-cid="s">Questions I'm Still Carrying</h2>
+      <ul data-astro-cid="s">
+        <li data-astro-cid="s">If perception is an editor assembling fragments, what fragments are the people I disagree with working from? How much of any disagreement is just two different edits of the same underlying material?</li>
+        <li data-astro-cid="s">Confabulation is the brain inventing explanations to fill gaps. How do I distinguish my genuine reasoning from my confabulation, given that both feel identical from the inside?</li>
+        <li data-astro-cid="s">The amnesic patient had a self without a past. How much of what I call "me" is just accumulated narrative, and what remains if you strip the story away?</li>
+        <li data-astro-cid="s">Sacks treated cases as windows into normal function. What are the equivalent broken cases for understanding how users experience software? What breaks in usability that reveals how normal usage actually works?</li>
+        <li data-astro-cid="s">If memory is reconstruction rather than playback, what am I actually optimising when I try to remember something accurately? Is the goal fidelity, or is the goal a story that serves the present?</li>
+      </ul>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">Reading that sparked this: The Man Who Mistook His Wife for a Hat, by Oliver Sacks.</p>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] ul[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; padding-left: 1.4rem; }
+  .study-section[data-astro-cid="s"] li[data-astro-cid="s"] { margin-bottom: 10px; }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>

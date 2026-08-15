@@ -1,0 +1,113 @@
+---
+import { studies } from "../../data/studies";
+import StudyLayout from "../../layouts/StudyLayout.astro";
+const slug = "psychology-of-stupidity";
+const study = studies.find(s => s.slug === slug);
+const related = studies.filter(s => s.slug !== slug).slice(0, 3);
+const dateStr = new Date(study.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org", "@type": "BlogPosting",
+  "@id": `${Astro.site}/studies/${slug}`,
+  "headline": study.title, "datePublished": new Date(study.date).toISOString(),
+  "abstract": study.abstract, "keywords": study.keywords.join(", "),
+  "author": { "@type": "Person", "name": "Justin Chua", "url": "https://juscxnn.github.io",
+    "sameAs": ["https://linkedin.com/in/justincxa", "https://github.com/juscxnn"] }
+});
+---
+
+<StudyLayout title={study.title} description={study.abstract} jsonLd={jsonLd}>
+  <article class="study-article" data-astro-cid="s">
+    <header class="study-header" data-astro-cid="s">
+      <p class="study-date" data-astro-cid="s">{dateStr}</p>
+      <h1 class="study-title" data-astro-cid="s">{study.title}</h1>
+      <p class="study-abstract" data-astro-cid="s">{study.abstract}</p>
+      <div class="study-keywords" data-astro-cid="s">
+        {study.keywords.map(kw => <span class="study-kw" data-astro-cid="s">{kw}</span>)}
+      </div>
+    </header>
+
+    <section class="study-section" id="why-i-read-it" data-astro-cid="s">
+      <h2 data-astro-cid="s">Why I Read a Book Called The Psychology of Stupidity</h2>
+      <p data-astro-cid="s">I picked it up for the title, honestly. Something about seeing the word "stupidity" in a psychology section felt refreshing. Most books about the mind are books about how smart we are. This one, edited by Jean-François Marmion, is a collection of essays by psychologists about how often we are not. I expected a book about other people. What I got was a book about the machinery of self-deception, and by the second chapter I realised I was reading about myself.</p>
+      <p data-astro-cid="s">The core thesis is uncomfortable: intelligence does not protect you from stupidity. In fact intelligence sometimes makes it worse, because a smart person has better tools for rationalising a bad decision. A dumb person makes a bad decision and moves on. A smart person builds a cathedral of justifications around it, complete with supporting evidence, cherry-picked data, and a TED-talk quality narrative about why it was actually the right call. I recognised that pattern immediately because I have been that person. I have defended decisions for weeks that I knew, somewhere below the surface, were wrong. The essays gave me language for something I had only ever felt vaguely.</p>
+    </section>
+
+    <section class="study-section" id="what-the-book-says" data-astro-cid="s">
+      <h2 data-astro-cid="s">The Bits That Stuck</h2>
+      <p data-astro-cid="s">A few ideas from the book that I keep returning to, three years on.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Stupidity is often a social phenomenon.</strong> One of the essays argues that individual stupidity is almost rare compared to collective stupidity. Groups make worse decisions than their smartest members, not because people get dumber in groups, but because groups optimise for consensus, for status, for not being the one who objected. I think about this constantly now. How many bad meetings have I sat through where everyone in the room privately knew the plan was flawed, and nobody said anything? How many times have I been the one who stayed quiet?</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Confidence is a terrible proxy for correctness.</strong> The most confident people in any room are often the most wrong, not because confidence and competence are inversely correlated, but because confidence and doubt are. The people who have thought the most about a problem tend to know the most reasons their answer might be wrong, and that doubt reads as weakness. Meanwhile the person who read one article this morning speaks with total certainty. The book made me suspicious of my own confidence, which is a gift. When I feel absolutely certain about something now, I treat it as a signal to slow down, not speed up.</p>
+      <p data-astro-cid="s"><strong data-astro-cid="s">Stupidity compounds.</strong> One bad decision creates the conditions for the next one. A small lie requires a bigger lie to cover it. A sunk cost demands more investment to justify the investment. The essays describe stupidity not as isolated events but as trajectories, and the early warning signs are almost always the same: defensiveness, overconfidence, and the gradual disappearance of people willing to tell you the truth. When I look back at my worst professional decisions, they follow exactly that arc.</p>
+    </section>
+
+    <section class="study-section" id="what-i-do-differently" data-astro-cid="s">
+      <h2 data-astro-cid="s">What I Changed</h2>
+      <p data-astro-cid="s">The book doesn't offer a cure, which I respect. But it changed three small things in how I operate. First, I keep a list of my decisions and their stated reasons, written at the time I made them. Reading it months later is humiliating, which is the point. The gap between what I told myself and what was actually true is always larger than I remember. Second, I now treat people who disagree with me as a resource rather than a problem. The person who thinks my idea is bad is providing information, often more than the person who loves it. Third, when I catch myself saying "obviously," I stop. In my experience, "obviously" is where rationalisation lives.</p>
+      <p data-astro-cid="s">None of this has made me less capable of stupidity. I think the honest reading of the book is that you can't become immune, only better at noticing. That's probably the best any of us can do.</p>
+    </section>
+
+    <section class="study-section" id="open-questions" data-astro-cid="s">
+      <h2 data-astro-cid="s">Questions I'm Still Carrying</h2>
+      <p data-astro-cid="s">The book left me with more questions than answers, which is probably why it's still on my desk.</p>
+      <ul data-astro-cid="s">
+        <li data-astro-cid="s">If groups systematically make worse decisions than their members, why do we organise everything into groups? What would a structure built around doubt look like?</li>
+        <li data-astro-cid="s">Is there a way to give feedback that lands before the cathedral of justifications gets built? Once someone has publicly defended a position, how much evidence can change their mind?</li>
+        <li data-astro-cid="s">How much of what we call intelligence is actually just the speed of rationalisation? Are the smartest people simply the fastest builders of post-hoc stories?</li>
+        <li data-astro-cid="s">Can you institutionalise humility? Teams adopt processes for everything else. What would a process for catching collective stupidity look like, and would it survive contact with office politics?</li>
+        <li data-astro-cid="s">What's the relationship between stupidity and speed? Every startup mistake I've made happened fast. Is slowness itself a form of intelligence?</li>
+      </ul>
+    </section>
+
+    <aside class="study-backlink" data-astro-cid="s">
+      <p class="study-backlink-label" data-astro-cid="s">Reading that sparked this: The Psychology of Stupidity, edited by Jean-François Marmion.</p>
+    </aside>
+  </article>
+
+  <section id="related" data-astro-cid="s">
+    <h2 data-astro-cid="s">Related Studies</h2>
+    <div class="study-related-grid" data-astro-cid="s">
+      {related.map(r => {
+        const rd = new Date(r.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        return (
+          <a class="study-related-card" href={`/studies/${r.slug}`} data-astro-cid="s">
+            <p class="study-related-date" data-astro-cid="s">{rd}</p>
+            <h3 class="study-related-title" data-astro-cid="s">{r.title}</h3>
+            <p class="study-related-abstract" data-astro-cid="s">{r.abstract}</p>
+            <span class="study-related-link" data-astro-cid="s">Read &rarr;</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</StudyLayout>
+
+<style>
+  .study-article[data-astro-cid="s"] { max-width: 680px; margin: 0 auto; padding-block: 32px 48px; }
+  .study-header[data-astro-cid="s"] { margin-bottom: 40px; }
+  .study-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 12px; }
+  .study-title[data-astro-cid="s"] { font-family: var(--sans); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
+  .study-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 58ch; margin: 0 0 14px; }
+  .study-keywords[data-astro-cid="s"] { display: flex; flex-wrap: wrap; gap: 6px; }
+  .study-kw[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--green); background: var(--chip-bg); border: 1px solid var(--hairline-soft); border-radius: 5px; padding: 2px 8px; }
+  .study-section[data-astro-cid="s"] { margin-top: 36px; }
+  .study-section[data-astro-cid="s"] h2[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 14px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
+  .study-section[data-astro-cid="s"] p[data-astro-cid="s"] strong[data-astro-cid="s"] { font-weight: 500; }
+  .study-section[data-astro-cid="s"] em[data-astro-cid="s"] { font-style: italic; }
+  .study-section[data-astro-cid="s"] ul[data-astro-cid="s"] { font-family: var(--sans); font-size: 15px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; padding-left: 1.4rem; }
+  .study-section[data-astro-cid="s"] li[data-astro-cid="s"] { margin-bottom: 10px; }
+  .study-backlink[data-astro-cid="s"] { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; margin-top: 40px; }
+  .study-backlink-label[data-astro-cid="s"] { font-family: var(--sans); font-size: 14px; color: var(--ink); margin: 0; }
+  #related[data-astro-cid="s"] { margin-top: 44px; }
+  .study-related-grid[data-astro-cid="s"] { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  .study-related-card[data-astro-cid="s"] { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 18px; transition: border-color 0.15s, transform 0.15s; }
+  .study-related-card[data-astro-cid="s"]:hover { border-color: var(--green); transform: translateY(-1px); }
+  .study-related-date[data-astro-cid="s"] { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+  .study-related-title[data-astro-cid="s"] { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--ink); margin: 0 0 8px; }
+  .study-related-abstract[data-astro-cid="s"] { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--muted); margin: 0 0 12px; }
+  .study-related-link[data-astro-cid="s"] { font-family: var(--mono); font-size: 11.5px; color: var(--green); margin-top: auto; }
+  @media (max-width: 639px) {
+    .study-article[data-astro-cid="s"] { padding-block: 24px 36px; padding-inline: 8px; }
+    .study-backlink[data-astro-cid="s"] { flex-direction: column; }
+  }
+</style>
