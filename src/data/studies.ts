@@ -49,10 +49,10 @@ export const studies = [
   },
   {
     slug: "what-is-a-person",
-    title: "What Is a Person? The Question Before the Simulations",
+    title: "The Mind Is a Machine",
     date: "2025-04-08",
     abstract:
-      "Three books started overlapping. Stupidity looked like bugs in the machinery. Algorithms looked like the machinery's heuristics. Broken brains looked like the machinery exposed. Then came the question that changed everything: if a mind is machinery, can you simulate one?",
+      "Three books landed in sequence: one on why our reasoning is post-hoc, one on the algorithms behind ordinary decisions, one on what breaks when the brain's parts fail. Put together, they describe a machine. This is me working through the question that follows: can you build another one, and what would that even mean?",
     keywords: [
       "philosophy of mind",
       "simulation",
