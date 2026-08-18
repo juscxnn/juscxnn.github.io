@@ -135,6 +135,24 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
       var b=document.querySelector(".theme-btn");
       if(b)b.textContent=t==="dark"?"light":"dark";
     });
+    window.copyGatekeepCode=function(btn){
+      var code="JCXA";
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(code).then(function(){
+          var a=btn.querySelector(".gk-code-action");
+          if(a){a.textContent="copied";setTimeout(function(){a.textContent="copy"},1800)}
+        }).catch(function(){fallbackCopy(btn,code)});
+      } else { fallbackCopy(btn,code); }
+    };
+    function fallbackCopy(btn,code){
+      var ta=document.createElement("textarea");
+      ta.value=code;ta.style.position="fixed";ta.style.opacity="0";
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand("copy")}catch(e){}
+      document.body.removeChild(ta);
+      var a=btn.querySelector(".gk-code-action");
+      if(a){a.textContent="copied";setTimeout(function(){a.textContent="copy"},1800)}
+    }
     window.toggleTheme=function(){
       var c=document.documentElement.getAttribute("data-theme");
       var n=c==="dark"?"light":"dark";
@@ -222,6 +240,23 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
             </a>
           </div>
         </div>
+
+        <section class="cell s12 gatekeep-hero" aria-label="Gatekeep">
+          <div class="gk-inner">
+            <div class="gk-text">
+              <p class="cell-eyebrow" data-i18n="gk.eyebrow">gatekeep · pitch AI investors, meet real ones</p>
+              <p class="gk-title">Stress-test your pitch against AI investor personas before it touches a real VC.</p>
+              <p class="gk-sub" data-i18n="gk.sub">2 months free with code <strong>JCXA</strong></p>
+            </div>
+            <div class="gk-actions">
+              <button class="gk-code" onclick="copyGatekeepCode(this)" data-i18n-attr="aria-label" aria-label="Copy code JCXA">
+                <span class="gk-code-text">JCXA</span>
+                <span class="gk-code-action">copy</span>
+              </button>
+              <a class="gk-cta" href="https://gatekeep.vc/?code=JCXA" rel="noopener" data-i18n="gk.cta">get 2 months free →</a>
+            </div>
+          </div>
+        </section>
 
         
         <p class="label s12" data-i18n="label.track-record">track record</p>
@@ -357,21 +392,8 @@ const stack = ["TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Pytho
         <p class="label s12" data-i18n="label.private-markets">private markets</p>
 
         <section class="cell s12 pm" id="private-markets" aria-label="Private markets">
-          <div class="pm-text">
-            <p class="statement" data-i18n="pm.statement">Pre-IPO secondaries and structured private deals, buy-side and sell-side.</p>
-
-            <p class="coverage" data-i18n="pm.coverage">
-              coverage: AI pre-IPO names you'd recognize · share tokenization · listco collateral
-              lending
-            </p>
-          </div>
-          <div class="pm-cta">
-            <a class="pill" href={`mailto:${EMAIL_GATEKEEP}?subject=Deal%20sheet`}
-              >request the deal sheet →</a
-            >
-            <a class="text-cta" href={LINKS.LINKEDIN} rel="noopener">or LinkedIn →</a>
-            <p class="disclaimer" data-i18n="pm.disclaimer">accredited + professional investors · IOI only</p>
-          </div>
+          <p class="statement" data-i18n="pm.statement">Pre-IPO secondaries and structured private deals, buy-side and sell-side.</p>
+          <p class="coverage" data-i18n="pm.coverage">accredited + professional investors · indications of interest only</p>
         </section>
       </div>
     </main>
