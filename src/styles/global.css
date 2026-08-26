@@ -602,6 +602,7 @@ h1 {
 }
 
 .proj--featured {
+  grid-column: span 2;
   background: var(--accent);
   color: #14120E;
 }

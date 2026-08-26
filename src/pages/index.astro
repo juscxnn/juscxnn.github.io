@@ -13,7 +13,6 @@ const LINKS = {
   GATEKEEP: "https://gatekeep.vc",
   GATEKEEP_CODE: "https://gatekeep.vc/?code=JCXA",
   ATTITEUD: "https://attiteud.com",
-  NICHESIM: "https://nichesim.com",
   CLIQUE: "https://clique.tech",
   ZAOBAO: "https://www.zaobao.com.sg/news/singapore/story20240102-1459510",
   LINKEDIN: "https://linkedin.com/in/justincxa",
@@ -43,7 +42,7 @@ const jsonLd = JSON.stringify({
   worksFor: { "@type": "Organization", name: "Gatekeep", url: "https://gatekeep.vc" },
   address: { "@type": "PostalAddress", addressLocality: "Taipei" },
   knowsLanguage: ["en", "zh", "fr"],
-  sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD, LINKS.NICHESIM],
+  sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD],
 });
 
 const stats = [
@@ -88,14 +87,6 @@ const projects = [
     href: LINKS.ATTITEUD,
     domain: "attiteud.com",
     logo: "/logos/attiteud.png",
-  },
-  {
-    name: "Nichesim",
-    blurb:
-      "Thousands of AI personas simulate how a community reacts to your product before you go public.",
-    href: LINKS.NICHESIM,
-    domain: "nichesim.com",
-    logo: "/logos/nichesim.svg",
   },
 ];
 
@@ -172,9 +163,13 @@ const marqueeItems = [
             <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · HK · SG</p>
             <h1 data-i18n="hero.headline">Software, distribution, deals.</h1>
             <p class="lede" data-i18n="hero.lede">
-              Justin Chua, Taipei. Two exits and a decade across maritime software, AI SaaS and
-              crypto. US$10bn+ in token value distributed through Clique. Now building Gatekeep,
-              Attiteud, and Nichesim.
+              Justin Chua, Taipei. I'm the kind of person who takes things apart to see how they
+              work. A decade of that has taken me through maritime software, AI tools, and the
+              plumbing of crypto markets. Two exits along the way, and more than US$10bn in token
+              value moved through Clique. Right now I'm building Gatekeep, which helps founders
+              meet the investors who fund them, and Attiteud, a studio that launches companies.
+              Off the clock I'm usually reading, scribbling notes, and chasing questions about how
+              people think, decide, and talk themselves into things.
             </p>
             <div class="hero-ctas">
               <a class="btn-accent" href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="hero.cta-gatekeep">
@@ -446,7 +441,6 @@ const marqueeItems = [
           { label: "Save vCard", kw: ["save", "vcard", "contact", "download"], act: function () { var a = document.createElement("a"); a.href = "/contact.vcf"; a.download = "Justin_Chua.vcf"; a.click(); } },
           { label: "Toggle dark mode", kw: ["dark", "light", "theme", "mode"], act: function () { if (window.toggleTheme) window.toggleTheme(); } },
           { label: "Attiteud", kw: ["attiteud", "studio", "build"], act: function () { open("https://attiteud.com", "_blank"); } },
-          { label: "Nichesim", kw: ["nichesim", "simulation", "community"], act: function () { open("https://nichesim.com", "_blank"); } },
           { label: "Writings", kw: ["writings", "studies", "blog", "read"], act: function () { location.href = "/studies"; } },
           { label: "View source", kw: ["source", "github", "code", "repo"], act: function () { open("https://github.com/juscxnn/juscxnn.github.io", "_blank"); } },
         ];
@@ -569,7 +563,7 @@ const marqueeItems = [
           zh: {
             "hero.eyebrow": "台北 · 香港 · 新加坡",
             "hero.headline": "软件 · 分发 · 交易",
-            "hero.lede": "蔡献安，台北。两次退出，十年横跨海事软件、AI SaaS 和加密。经 Clique 分发 100 亿美元+ 代币。现在打造 Gatekeep、Attiteud 和 Nichesim。",
+            "hero.lede": "蔡献安，台北。我是那种喜欢拆开东西看它们怎么工作的人。十年里走过海事软件、AI 工具和加密市场的底层架构。两次退出，经 Clique 流动了 100 亿美元+ 代币。现在我在做 Gatekeep，帮创业者见到真正投资的人；还有 Attiteud，一个帮刚开始的公司启动的工作室。不工作时我通常在读书、写笔记，追问人们怎么思考、怎么决定、怎么说服自己的问题。",
             "hero.tag": "你好，我是创造者",
             "hero.cta-gatekeep": "试用 gatekeep · 免费2月 →",
             "hero.cta-writings": "阅读文章 →",
