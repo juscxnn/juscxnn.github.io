@@ -1133,41 +1133,49 @@ h1 {
 
   .hero-media {
     order: -1;
-    width: min(46vw, 220px);
+    width: min(40vw, 180px);
     margin-inline: auto;
-  }
-}
-
-@media (max-width: 720px) {
-  .hero-media {
-    order: -1;
-    width: 96px;
-    margin-inline: 0;
-    margin-bottom: 20px;
   }
 
   .portrait {
     aspect-ratio: 1 / 1;
     object-position: 50% 18%;
     transform: none;
-    border-radius: 14px;
   }
 
   .portrait-frame {
-    width: 96px;
-  }
-
-  .portrait-tag {
-    left: 8px;
-    bottom: 8px;
-    transform: none;
-    font-size: 9px;
-    padding: 4px 8px;
+    width: 100%;
   }
 
   .portrait-fallback {
     aspect-ratio: 1 / 1;
     transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-media {
+    order: 2;
+    width: 64px;
+    margin-inline: 0;
+    margin-bottom: 0;
+  }
+
+  .portrait {
+    border-radius: 999px;
+    border-width: 2px;
+  }
+
+  .portrait-tag {
+    display: none;
+  }
+
+  .portrait-frame {
+    width: 64px;
+  }
+
+  .portrait-fallback {
+    border-radius: 999px;
   }
 
   .nav-inner {
