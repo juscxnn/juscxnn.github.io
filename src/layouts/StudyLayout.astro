@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+
 export interface Props {
   title: string;
   description: string;
@@ -52,7 +54,7 @@ const ogImage = Astro.props.ogImage ?? new URL("/og.png", Astro.site);
         };
       })();
     </script>
-    <link rel="stylesheet" href="/_astro/index.css" />
+    
   </head>
   <body>
     <header class="nav">

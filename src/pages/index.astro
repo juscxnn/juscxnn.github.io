@@ -1,12 +1,5 @@
 ---
-import "@fontsource/geist-sans/400.css";
-import "@fontsource/geist-sans/500.css";
-import "@fontsource/geist-mono/400.css";
-import "@fontsource/geist-mono/500.css";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/700.css";
 import "../styles/global.css";
-import fs from "node:fs";
 import { studies } from "../data/studies";
 
 const LINKS = {
@@ -21,9 +14,7 @@ const LINKS = {
 };
 const EMAIL = "jcxa@proton.me";
 
-const hasPortrait = fs.existsSync("./public/portrait.jpg");
-
-const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><style>@media (prefers-color-scheme: dark) { g { fill: #C6F500; } }</style><g fill="#14120E">${[0, 60, 120, 180, 240, 300]
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#000">${[0, 60, 120, 180, 240, 300]
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
@@ -77,8 +68,6 @@ const projects = [
       "AI investor personas screen your pitch across 12 dimensions. Pass, and your deck lands with real VCs who fund founders like you.",
     href: LINKS.GATEKEEP,
     domain: "gatekeep.vc",
-    logo: "/logos/gatekeep.svg",
-    featured: true,
   },
   {
     name: "Attiteud",
@@ -86,18 +75,7 @@ const projects = [
       "Build studio + Humbl Design. Launch your startup in 2-4 weeks. One team, one price. $10K/mo.",
     href: LINKS.ATTITEUD,
     domain: "attiteud.com",
-    logo: "/logos/attiteud.png",
   },
-];
-
-const marqueeItems = [
-  "2014 police SOC",
-  "2017 robotics sales",
-  "2020 maritime",
-  "2022 CopyScouts exit 14x",
-  "2024 Podletter exit 7x",
-  "2025 Clique",
-  "2026 Attiteud + Gatekeep",
 ];
 ---
 
@@ -110,8 +88,8 @@ const marqueeItems = [
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.site} />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F1E9" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#17161A" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111111" />
     <meta property="og:title" content="Justin Chua" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -148,8 +126,7 @@ const marqueeItems = [
       <div class="wrap nav-inner">
         <a class="wordmark" href="/">Justin Chua</a>
         <div class="nav-right">
-          <a class="nav-btn nav-writings" href="/studies">writings</a>
-          <a class="nav-btn nav-contact" href="#contact">contact</a>
+          <a class="nav-btn" href="/studies">writings</a>
           <button class="nav-btn theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
           <button class="nav-btn lang" onclick="toggleLang()" title="切换中文">繁中</button>
         </div>
@@ -158,210 +135,126 @@ const marqueeItems = [
 
     <main id="top" class="wrap">
       <section class="hero" aria-label="Introduction">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · HK · SG</p>
-            <h1 data-i18n="hero.headline">Software, distribution, deals.</h1>
-            <p class="lede" data-i18n="hero.lede">
-              Justin Chua, Taipei. I'm the kind of person who takes things apart to see how they
-              work. A decade of that has taken me through maritime software, AI tools, and the
-              plumbing of crypto markets. Two exits along the way, and more than US$10bn in token
-              value moved through Clique. Right now I'm building Gatekeep, which helps founders
-              meet the investors who fund them, and Attiteud, a studio that launches companies.
-              Off the clock I'm usually reading, scribbling notes, and chasing questions about how
-              people think, decide, and talk themselves into things.
-            </p>
-            <div class="hero-ctas">
-              <a class="btn-accent" href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="hero.cta-gatekeep">
-                try gatekeep · 2mo free →
-              </a>
-              <a class="btn-ghost" href="/studies" data-i18n="hero.cta-writings">read writings →</a>
-            </div>
-          </div>
+        <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · HK · SG</p>
+        <h1 data-i18n="hero.headline">Justin Chua</h1>
+        <p class="lede" data-i18n="hero.lede">
+          I'm the kind of person who takes things apart to see how they work. A decade of that has
+          taken me through maritime software, AI tools, and the plumbing of crypto markets. Two
+          exits along the way, and more than US$10bn in token value moved through Clique. Right now
+          I'm building Gatekeep, which helps founders meet the investors who fund them, and
+          Attiteud, a studio that launches companies. Off the clock I'm usually reading, scribbling
+          notes, and chasing questions about how people think, decide, and talk themselves into
+          things.
+        </p>
+        <p class="timeline" data-i18n="hero.timeline">
+          2014 police SOC · 2017 robotics sales · 2020 maritime · 2022 CopyScouts exit 14x · 2024
+          Podletter exit 7x · 2025 Clique · 2026 Attiteud + Gatekeep
+        </p>
+        <div class="hero-ctas">
+          <a href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="hero.cta-gatekeep">
+            try Gatekeep · 2 months free →
+          </a>
+          <a href="/studies" data-i18n="hero.cta-writings">writings →</a>
+          <a href="#contact">contact</a>
         </div>
       </section>
 
-      <div class="marquee" aria-label="Career timeline">
-        <div class="marquee-track">
-          {[0, 1].map(() =>
-            marqueeItems.map((item) => (
-              <span class="marquee-item">
-                {item === "2026 Attiteud + Gatekeep" ? <strong>{item}</strong> : item}
-              </span>
-            ))
-          )}
-        </div>
-      </div>
-
-      <section class="gatekeep-hero" aria-label="Gatekeep promo">
-        <div class="gk-card">
-          <span class="gk-badge" data-i18n="gk.badge">gatekeep · live · 2 months free</span>
-          <p class="gk-title" data-i18n="gk.title">
-            Pass the screen. <em>Meet the investors.</em> Get funded.
-          </p>
-          <p class="gk-sub" data-i18n="gk.sub">
-            AI investor personas stress-test your pitch across 12 dimensions. Pass the screen, and
-            your deck goes straight to real VCs. 2 months free with the code.
-          </p>
-          <div class="gk-row">
-            <button class="gk-code" onclick="copyGatekeepCode(this)" aria-label="Copy code JCXA">
-              <span class="gk-code-text">JCXA</span>
-              <span class="gk-code-action">copy</span>
-            </button>
-            <a class="gk-cta" href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="gk.cta">
-              start pitching →
-            </a>
-          </div>
+      <section class="section" id="gatekeep" aria-label="Gatekeep">
+        <h2 class="sec-title" data-i18n="gk.title">
+          Pass the screen. <em>Meet the investors.</em> Get funded.
+        </h2>
+        <p class="gk-sub" data-i18n="gk.sub">
+          AI investor personas stress-test your pitch across 12 dimensions. Pass the screen, and
+          your deck goes straight to real VCs. 2 months free with the code:
+        </p>
+        <div class="gk-row">
+          <button class="gk-code" onclick="copyGatekeepCode(this)" aria-label="Copy code JCXA">
+            <span>JCXA</span>
+            <span class="gk-code-action">copy</span>
+          </button>
+          <a href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="gk.cta">start pitching →</a>
         </div>
       </section>
 
       <section class="section" id="building" aria-label="Building now">
-        <div class="sec-head">
-          <span class="sec-num">01</span>
-          <h2 class="sec-title" data-i18n="label.building-now">building now</h2>
-        </div>
-        <div class="proj-grid">
-          {
-            projects.map((p, pi) => (
-              <a class={`proj${p.featured ? " proj--featured" : ""}`} href={p.href} rel="noopener">
-                {p.featured && <span class="proj-badge">★ 2 months free</span>}
-                <span class="proj-top">
-                  <img class="proj-logo" src={p.logo} alt="" width="30" height="30" loading="lazy" decoding="async" />
-                  <span class="proj-name">{p.name}</span>
-                </span>
-                <p class="proj-blurb" data-i18n={`proj.${pi}.blurb`}>{p.blurb}</p>
-                <span class="proj-link"><span>{p.domain}</span> →</span>
-              </a>
-            ))
-          }
-        </div>
+        <h2 class="sec-title" data-i18n="label.building-now">building now</h2>
+        {
+          projects.map((p) => (
+            <p class="proj-line">
+              <span class="proj-name">{p.name}</span> — <span class="proj-blurb">{p.blurb}</span>{" "}
+              <a class="proj-link" href={p.href} rel="noopener">{p.domain} →</a>
+            </p>
+          ))
+        }
       </section>
 
       <section class="section" id="track-record" aria-label="Track record">
-        <div class="sec-head">
-          <span class="sec-num">02</span>
-          <h2 class="sec-title" data-i18n="label.track-record">track record</h2>
-        </div>
-        <div class="stats-grid">
-          {
-            stats.map((s, i) => (
-              <article class="stat" aria-label={s.eyebrow}>
-                <p class="stat-eyebrow" data-i18n={`stat.${i}.eyebrow`}>{s.eyebrow}</p>
-                <p class="stat-number">{s.number}</p>
-                <p class="stat-line" data-i18n={`stat.${i}.line`}>{s.line}</p>
-                {s.sub && <p class="stat-sub" data-i18n={`stat.${i}.sub`}>{s.sub}</p>}
-                {s.href && (
-                  <a class="stat-link" href={s.href} rel="noopener" lang={s.lang}>
-                    {s.link}
-                  </a>
-                )}
-              </article>
-            ))
-          }
-        </div>
+        <h2 class="sec-title" data-i18n="label.track-record">track record</h2>
+        {
+          stats.map((s) => (
+            <p class="stat-line">
+              <span class="stat-number">{s.number}</span> — {s.line}
+              {s.sub && <span class="stat-sub"> · {s.sub}</span>}
+              {s.href && (
+                <>
+                  {" "}
+                  <a href={s.href} rel="noopener" lang={s.lang}>{s.link}</a>
+                </>
+              )}
+            </p>
+          ))
+        }
         <!-- PENDING internal clearance on figures. -->
       </section>
 
       <section class="section" id="writings" aria-label="Writings">
-        <div class="sec-head">
-          <span class="sec-num">03</span>
-          <h2 class="sec-title" data-i18n="label.writings">writings</h2>
-          <a class="sec-link" href="/studies">all →</a>
-        </div>
-        <ul class="writings-list">
-          {
-            [...studies]
-              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-              .slice(0, 9)
-              .map((s, i) => {
-                const d = new Date(s.date).toLocaleDateString("en-US", {
-                  month: "short",
-                  year: "numeric",
-                });
-                return (
-                  <li>
-                    <a class="writing-row" href={`/studies/${s.slug}`}>
-                      <span class="writing-num">{String(i + 1).padStart(2, "0")}</span>
-                      <span class="writing-date">{d}</span>
-                      <span class="writing-title">{s.title}</span>
-                      <span class="writing-tag">{s.backlinkLabel || "note"}</span>
-                    </a>
-                  </li>
-                );
-              })
-          }
-        </ul>
+        <h2 class="sec-title" data-i18n="label.writings">
+          writings <a class="sec-link" href="/studies">(all →)</a>
+        </h2>
+        {
+          [...studies]
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 9)
+            .map((s) => {
+              const d = new Date(s.date).toLocaleDateString("en-US", {
+                month: "short",
+                year: "numeric",
+              });
+              return (
+                <a class="writing-row" href={`/studies/${s.slug}`}>
+                  <span class="writing-date">{d}</span>
+                  {s.title}
+                  <span class="writing-tag">{s.backlinkLabel || "note"}</span>
+                </a>
+              );
+            })
+        }
       </section>
 
       <section class="section" id="certificates" aria-label="Certificates">
-        <div class="sec-head">
-          <span class="sec-num">04</span>
-          <h2 class="sec-title" data-i18n="label.certificates">certificates</h2>
-        </div>
-        <div class="certs-row">
-          <button class="cert" popovertarget="cert-ai4i" aria-label="View certificate: AI4I · AI Singapore">
-            <img src="/certs/thumbs/ai4i.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
-            <span class="cert-cap">AI4I · AI Singapore</span>
-          </button>
-          <button class="cert" popovertarget="cert-crewai" aria-label="View certificate: CrewAI · agents">
-            <img src="/certs/thumbs/crewai.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
-            <span class="cert-cap">CrewAI · agents</span>
-          </button>
-          <button class="cert" popovertarget="cert-ux" aria-label="View certificate: UX · Vertical Inst.">
-            <img src="/certs/thumbs/ux.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
-            <span class="cert-cap">UX · Vertical Inst.</span>
-          </button>
-          <button class="cert" popovertarget="cert-ibmi" aria-label="View certificate: Intl Business · IBMI">
-            <img src="/certs/thumbs/ibmi.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
-            <span class="cert-cap">Intl Business · IBMI</span>
-          </button>
-          <button class="cert" popovertarget="cert-cdms" aria-label="View certificate: CDMS">
-            <img src="/certs/thumbs/cdms.jpg" alt="" width="300" height="212" loading="lazy" decoding="async" />
-            <span class="cert-cap">CDMS</span>
-          </button>
-        </div>
-        <div id="cert-ai4i" popover="auto" class="cert-pop">
-          <div class="cert-pop-bar"><span>AI4I · AI Singapore</span><button class="cert-close" popovertarget="cert-ai4i" popovertargetaction="hide">close ✕</button></div>
-          <img src="/certs/ai4i.jpg" alt="Certificate: AI4I · AI Singapore" loading="lazy" decoding="async" />
-        </div>
-        <div id="cert-crewai" popover="auto" class="cert-pop">
-          <div class="cert-pop-bar"><span>CrewAI · agents</span><button class="cert-close" popovertarget="cert-crewai" popovertargetaction="hide">close ✕</button></div>
-          <img src="/certs/crewai.jpg" alt="Certificate: CrewAI · agents" loading="lazy" decoding="async" />
-        </div>
-        <div id="cert-ux" popover="auto" class="cert-pop">
-          <div class="cert-pop-bar"><span>UX · Vertical Inst.</span><button class="cert-close" popovertarget="cert-ux" popovertargetaction="hide">close ✕</button></div>
-          <img src="/certs/ux.jpg" alt="Certificate: UX · Vertical Inst." loading="lazy" decoding="async" />
-        </div>
-        <div id="cert-ibmi" popover="auto" class="cert-pop">
-          <div class="cert-pop-bar"><span>Intl Business · IBMI</span><button class="cert-close" popovertarget="cert-ibmi" popovertargetaction="hide">close ✕</button></div>
-          <img src="/certs/ibmi.jpg" alt="Certificate: Intl Business · IBMI" loading="lazy" decoding="async" />
-        </div>
-        <div id="cert-cdms" popover="auto" class="cert-pop">
-          <div class="cert-pop-bar"><span>CDMS</span><button class="cert-close" popovertarget="cert-cdms" popovertargetaction="hide">close ✕</button></div>
-          <img src="/certs/cdms.jpg" alt="Certificate: CDMS" loading="lazy" decoding="async" />
-        </div>
+        <h2 class="sec-title" data-i18n="label.certificates">certificates</h2>
+        <ul>
+          <li>AI4I Foundations in AI · AI Singapore</li>
+          <li>CrewAI · multi-agent systems</li>
+          <li>UX Design · Vertical Institute</li>
+          <li>Economics &amp; Int'l Business · IBMI</li>
+          <li>CDMS</li>
+        </ul>
       </section>
 
       <section class="section" id="contact" aria-label="Contact">
-        <div class="sec-head">
-          <span class="sec-num">05</span>
-          <h2 class="sec-title" data-i18n="label.contact">contact</h2>
-        </div>
+        <h2 class="sec-title" data-i18n="label.contact">contact</h2>
         <div class="contact-strip">
           <a class="contact-item" href="https://wa.me/6588175879" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h6"/></svg>
             <span data-i18n="contact.whatsapp">WhatsApp</span>
           </a>
           <a class="contact-item" href={LINKS.LINKEDIN} rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             <span data-i18n="contact.linkedin">LinkedIn</span>
           </a>
           <a class="contact-item" href={`mailto:${EMAIL}`}>
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             <span data-i18n="contact.email">Email</span>
           </a>
           <a class="contact-item" href="/contact.vcf" download="Justin_Chua.vcf">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             <span data-i18n="contact.save">Save vCard</span>
           </a>
         </div>
@@ -372,143 +265,13 @@ const marqueeItems = [
       <div class="wrap foot-inner">
         <p class="foot-copy" data-i18n="footer.copy">© Justin Chua · Taipei</p>
         <p class="colophon">
-          <span data-i18n="colophon">static · zero frameworks · self-hosted type ·</span>
+          <span data-i18n="colophon">plain html · no frameworks · system fonts ·</span>
           <a href={LINKS.SOURCE} rel="noopener">view source →</a>
         </p>
       </div>
     </footer>
 
-    <button class="kbtn" aria-label="Open command palette">&#8984;</button>
-
     <script>
-      /* ── text scramble ── */
-      (function () {
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        const h1 = document.querySelector("h1");
-        if (!h1) return;
-        const text = h1.textContent.replace(/\s+/g, " ").trim();
-        if (text.length < 4) return;
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*_+=?";
-        const dur = 320;
-        const stagger = 22;
-        const start = performance.now();
-        function tick(now) {
-          let o = "";
-          const e = now - start;
-          for (let i = 0; i < text.length; i++) {
-            const d = i * stagger;
-            if (e < d) { o += text[i]; continue; }
-            if (e > d + dur) { o += text[i]; continue; }
-            if (text[i] === " " || text[i] === "." || text[i] === ",") { o += text[i]; continue; }
-            o += chars[Math.floor(Math.random() * chars.length)];
-          }
-          h1.textContent = o;
-          if (e < text.length * stagger + dur) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-      })();
-
-      /* ── command palette ── */
-      (function () {
-        const cmds = [
-          { label: "Email me", kw: ["email", "contact", "mailto"], act: function () { location.href = "mailto:jcxa@proton.me"; } },
-          { label: "WhatsApp", kw: ["whatsapp", "message", "wa", "phone"], act: function () { open("https://wa.me/6588175879", "_blank"); } },
-          { label: "LinkedIn", kw: ["linkedin", "social", "li"], act: function () { open("https://linkedin.com/in/justincxa", "_blank"); } },
-          { label: "Gatekeep · 2 months free", kw: ["gatekeep", "vc", "pitch", "jcxa", "code"], act: function () { open("https://gatekeep.vc/?code=JCXA", "_blank"); } },
-          { label: "Save vCard", kw: ["save", "vcard", "contact", "download"], act: function () { var a = document.createElement("a"); a.href = "/contact.vcf"; a.download = "Justin_Chua.vcf"; a.click(); } },
-          { label: "Toggle dark mode", kw: ["dark", "light", "theme", "mode"], act: function () { if (window.toggleTheme) window.toggleTheme(); } },
-          { label: "Attiteud", kw: ["attiteud", "studio", "build"], act: function () { open("https://attiteud.com", "_blank"); } },
-          { label: "Writings", kw: ["writings", "studies", "blog", "read"], act: function () { location.href = "/studies"; } },
-          { label: "View source", kw: ["source", "github", "code", "repo"], act: function () { open("https://github.com/juscxnn/juscxnn.github.io", "_blank"); } },
-        ];
-        function fuzzy(q, label, kw) {
-          var t = q.toLowerCase();
-          var targets = [label.toLowerCase()];
-          if (kw) kw.forEach(function (k) { targets.push(k.toLowerCase()); });
-          for (var i = 0; i < targets.length; i++) {
-            var ti = 0;
-            for (var j = 0; j < targets[i].length && ti < t.length; j++) { if (targets[i][j] === t[ti]) ti++; }
-            if (ti === t.length) return true;
-          }
-          return false;
-        }
-        var scrim, input, results, sel = -1, filtered = [];
-        function build() {
-          scrim = document.createElement("div");
-          scrim.className = "cmd-scrim";
-          scrim.setAttribute("role", "dialog");
-          scrim.setAttribute("aria-label", "Command palette");
-          var palette = document.createElement("div");
-          palette.className = "cmd-palette";
-          input = document.createElement("input");
-          input.className = "cmd-input";
-          input.setAttribute("placeholder", "Type a command...");
-          input.setAttribute("spellcheck", "false");
-          input.setAttribute("autocomplete", "off");
-          results = document.createElement("div");
-          results.className = "cmd-results";
-          var hints = document.createElement("div");
-          hints.className = "cmd-hints";
-          hints.innerHTML = "<span>\u2191\u2193 navigate</span><span>\u21b5 select</span><span>esc close</span>";
-          palette.appendChild(input);
-          palette.appendChild(results);
-          palette.appendChild(hints);
-          scrim.appendChild(palette);
-          document.body.appendChild(scrim);
-        }
-        function render(q) {
-          results.innerHTML = "";
-          sel = -1;
-          filtered = [];
-          var all = q ? cmds.filter(function (c) { return fuzzy(q, c.label, c.kw); }) : cmds;
-          for (var i = 0; i < all.length; i++) {
-            var c = all[i];
-            filtered.push(c);
-            var el = document.createElement("div");
-            el.className = "cmd-item";
-            el.innerHTML = "<span>" + c.label + "</span><span class=\"cmd-item-arrow\">\u2192</span>";
-            el.addEventListener("click", (function (c) { return function () { c.act(); close(); }; })(c));
-            results.appendChild(el);
-          }
-          if (filtered.length) highlight(0);
-        }
-        function highlight(i) {
-          sel = i;
-          var items = results.querySelectorAll(".cmd-item");
-          items.forEach(function (el, j) {
-            el.classList.toggle("cmd-item--selected", j === i);
-            if (j === i) el.scrollIntoView({ block: "nearest" });
-          });
-        }
-        function open() {
-          if (!scrim) build();
-          scrim.classList.add("open");
-          input.value = "";
-          render("");
-          input.focus();
-          document.body.style.overflow = "hidden";
-        }
-        function close() {
-          scrim.classList.remove("open");
-          document.body.style.overflow = "";
-        }
-        build();
-        input.addEventListener("input", function () { render(input.value); });
-        input.addEventListener("keydown", function (e) {
-          if (e.key === "ArrowDown") { e.preventDefault(); highlight(Math.min(sel + 1, filtered.length - 1)); }
-          else if (e.key === "ArrowUp") { e.preventDefault(); highlight(Math.max(sel - 1, 0)); }
-          else if (e.key === "Enter") { e.preventDefault(); if (filtered[sel]) { filtered[sel].act(); close(); } }
-          else if (e.key === "Escape") { if (input.value) { input.value = ""; render(""); } else close(); }
-        });
-        scrim.addEventListener("click", function (e) { if (e.target === scrim) close(); });
-        document.addEventListener("keydown", function (e) {
-          if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); open(); return; }
-          if ((e.key === "?" || e.key === "/") && document.activeElement && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA" && document.activeElement.contentEditable !== "true") { e.preventDefault(); open(); }
-        });
-        var kbtn = document.querySelector(".kbtn");
-        if (kbtn) kbtn.addEventListener("click", open);
-      })();
-
       /* ── gatekeep code copy ── */
       window.copyGatekeepCode = function (btn) {
         var code = "JCXA";
@@ -539,37 +302,25 @@ const marqueeItems = [
         var M = {
           zh: {
             "hero.eyebrow": "台北 · 香港 · 新加坡",
-            "hero.headline": "软件 · 分发 · 交易",
-            "hero.lede": "蔡献安，台北。我是那种喜欢拆开东西看它们怎么工作的人。十年里走过海事软件、AI 工具和加密市场的底层架构。两次退出，经 Clique 流动了 100 亿美元+ 代币。现在我在做 Gatekeep，帮创业者见到真正投资的人；还有 Attiteud，一个帮刚开始的公司启动的工作室。不工作时我通常在读书、写笔记，追问人们怎么思考、怎么决定、怎么说服自己的问题。",
-            "hero.tag": "你好，我是创造者",
-            "hero.cta-gatekeep": "试用 gatekeep · 免费2月 →",
-            "hero.cta-writings": "阅读文章 →",
-            "gk.badge": "gatekeep · 已上线 · 免费 2 个月",
+            "hero.headline": "蔡献安",
+            "hero.lede": "我是那种喜欢拆开东西看它们怎么工作的人。十年里走过海事软件、AI 工具和加密市场的底层架构。两次退出，经 Clique 流动了 100 亿美元+ 代币。现在我在做 Gatekeep，帮创始人见到真正投资的人；还有 Attiteud，一个帮刚开始的公司的启动的工作室。不工作时我通常在读书、写笔记，追问人们怎么思考、怎么决定、怎么说服自己的问题。",
+            "hero.timeline": "2014 警察特勤 · 2017 机器人销售 · 2020 海事 · 2022 CopyScouts 14x 退出 · 2024 Podletter 7x 退出 · 2025 Clique · 2026 Attiteud + Gatekeep",
+            "hero.cta-gatekeep": "试用 Gatekeep · 免费 2 个月 →",
+            "hero.cta-writings": "文章 →",
             "gk.title": "通过 AI 筛选。见到真实投资人。拿到融资。",
-            "gk.sub": "AI 投资人角色对你的路演进行 12 维度压力测试。通过筛选后，你的 deck 直达真实 VC。使用代码免费 2 个月。",
+            "gk.sub": "AI 投资人角色对你的路演进行 12 维度压力测试。通过筛选后，你的 deck 直达真实 VC。使用代码免费 2 个月：",
             "gk.cta": "开始路演 →",
-            "label.track-record": "业绩记录",
             "label.building-now": "正在打造",
-            "label.certificates": "证书",
+            "label.track-record": "业绩记录",
             "label.writings": "文章",
+            "label.certificates": "证书",
             "label.contact": "联系",
-            "stat.0.eyebrow": "海事 · 2020–24",
-            "stat.0.line": "新加坡港务市场 75% 数字化 · elxa",
-            "stat.1.eyebrow": "AI SaaS · 2022–24",
-            "stat.1.line": "CopyScouts 14x · Podletter 7x · AI Starter #2 PH",
-            "stat.1.sub": "AI 内容 SaaS · 通讯工具 · AI 启动平台",
-            "stat.2.eyebrow": "Clique · 2025– · 销售主管 + 产品",
-            "stat.2.line": "2 年内分发 100亿+ 美元 · 空投 · 定制分发工具",
-            "stat.2.sub": "75% 的外包开发前 1000 币种",
-            "proj.0.blurb": "AI 投资人角色对你的路演进行 12 维度筛选。通过后，你的 deck 落入真实 VC 之手，拿到融资。",
-            "proj.1.blurb": "构建工作室 + Humbl Design。2-4 周内启动你的创业项目。一个团队，统一价格。$10K/月。",
-            "proj.2.blurb": "数千个 AI 角色模拟社区对你产品的反应，在你推向市场之前。",
             "contact.whatsapp": "WhatsApp",
             "contact.linkedin": "LinkedIn",
             "contact.email": "邮件",
             "contact.save": "保存名片",
             "footer.copy": "© 蔡献安 · 台北",
-            "colophon": "静态 · 零框架 · 自托管字体 ·",
+            "colophon": "纯 HTML · 无框架 · 系统字体 ·",
           },
         };
         var cur = "en";
