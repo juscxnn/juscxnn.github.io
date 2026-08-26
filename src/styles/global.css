@@ -1156,13 +1156,13 @@ h1 {
 @media (max-width: 720px) {
   .hero-media {
     order: 2;
-    width: 64px;
+    width: 72px;
     margin-inline: 0;
     margin-bottom: 0;
   }
 
   .portrait {
-    border-radius: 999px;
+    border-radius: 10px;
     border-width: 2px;
   }
 
@@ -1171,11 +1171,11 @@ h1 {
   }
 
   .portrait-frame {
-    width: 64px;
+    width: 72px;
   }
 
   .portrait-fallback {
-    border-radius: 999px;
+    border-radius: 10px;
   }
 
   .nav-inner {
