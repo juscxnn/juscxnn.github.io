@@ -1139,6 +1139,37 @@ h1 {
 }
 
 @media (max-width: 720px) {
+  .hero-media {
+    order: -1;
+    width: 96px;
+    margin-inline: 0;
+    margin-bottom: 20px;
+  }
+
+  .portrait {
+    aspect-ratio: 1 / 1;
+    object-position: 50% 18%;
+    transform: none;
+    border-radius: 14px;
+  }
+
+  .portrait-frame {
+    width: 96px;
+  }
+
+  .portrait-tag {
+    left: 8px;
+    bottom: 8px;
+    transform: none;
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .portrait-fallback {
+    aspect-ratio: 1 / 1;
+    transform: none;
+  }
+
   .nav-inner {
     flex-wrap: wrap;
     gap: 10px;
