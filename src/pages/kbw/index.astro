@@ -155,6 +155,7 @@ const tg = `https://t.me/${kbw.telegram}`;
           <p class="dim summary-note">
             Taken spots are listed but not charged. Want one anyway? Take it over at 2× — DM
             <a href={tg} rel="noopener">@{kbw.telegram}</a>. Bundle pricing for 6+ spots on request.
+            Status updates are manual, so a recent claim may not show yet.
           </p>
         </div>
       </section>
@@ -233,8 +234,8 @@ const tg = `https://t.me/${kbw.telegram}`;
             below builds the message for you.
           </li>
           <li>
-            <strong>We confirm</strong> and your spot flips to taken, with your logo shown on this
-            page and printed on the dress.
+            <strong>We confirm your payment by hand</strong> — your spot flips to taken and your
+            logo goes live, usually within a few hours.
           </li>
         </ol>
         <div class="wallet">
@@ -281,6 +282,11 @@ const tg = `https://t.me/${kbw.telegram}`;
             Send USDC on Solana, then send your brand, logo, website, sending wallet, and tx hash to{" "}
             <a href={tg} rel="noopener">@{kbw.telegram}</a>. The claim form builds the message for
             you.
+          </dd>
+          <dt>How long until my spot shows as taken?</dt>
+          <dd>
+            We confirm payments manually, usually within a few hours. Your logo goes up at the same
+            time. If it's been longer, DM <a href={tg} rel="noopener">@{kbw.telegram}</a>.
           </dd>
           <dt>How does a takeover work?</dt>
           <dd>
@@ -350,6 +356,9 @@ const tg = `https://t.me/${kbw.telegram}`;
             <a class="copy-btn" href={tg} rel="noopener">open Telegram</a>
             <a class="copy-btn" id="m-mail" href="#">email instead</a>
           </div>
+          <p class="m-note">
+            Confirmed by hand. Your spot and logo usually go live within a few hours.
+          </p>
         </div>
 
         <div class="m-preview">
@@ -797,6 +806,7 @@ const tg = `https://t.me/${kbw.telegram}`;
       .m-fields .file-label { grid-column: span 2; }
       .m-fields input[type="file"] { padding: 6px; font-size: 12px; }
       .m-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .m-note { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
       .m-lots { list-style: none; margin: 0 0 0.6rem; padding: 0; }
       .m-lots li {
         display: flex;
