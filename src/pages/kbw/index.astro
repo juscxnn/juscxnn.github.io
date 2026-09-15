@@ -8,11 +8,19 @@ const claimed = lots.filter((l) => l.status !== "available").length;
 const totalPotential = lots.reduce((s, l) => s + l.price, 0);
 const pct = Math.min(100, Math.round((committed / kbw.proceedBar) * 100));
 
+// first sold lot with a logo per girl+side, for the on-dress preview
+const slotSponsor: Record<string, (typeof lots)[number]> = {};
+for (const l of lots) {
+  const k = `${l.girl}-${l.side}`;
+  if (l.status !== "available" && l.logo && !slotSponsor[k]) slotSponsor[k] = l;
+}
+
 const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#000">${[0, 60, 120, 180, 240, 300]
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${kbw.location}. Front $7,500 · back $5,000. All-or-nothing.`;
+const tg = `https://t.me/${kbw.telegram}`;
 ---
 
 <!doctype html>
@@ -50,21 +58,21 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
       <div class="wrap nav-inner">
         <a class="wordmark" href="/">Justin Chua</a>
         <div class="nav-right">
-          <a class="nav-btn" href="#lots">claim a lot</a>
+          <a class="nav-btn" href="#pick">pick a spot</a>
+          <a class="nav-btn" href="#how">how it works</a>
           <button class="nav-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">theme</button>
-          <a class="nav-btn" href="/">home</a>
         </div>
       </div>
     </header>
 
     <main class="wrap">
       <section class="hero" aria-label="Overview">
-        <p class="eyebrow">KBW SEOUL · WORN {kbw.worn.toUpperCase()}</p>
+        <p class="eyebrow">KBW SEOUL · WORN SEP 30 – OCT 2, 2026</p>
         <h1>Ad space on 4 dresses at Korea Blockchain Week.</h1>
         <p class="lede">
           A booth at KBW costs five figures. A logo on one of our dresses costs a fraction of that
-          and is seen by the same 13,000+ attendees — for three days, across the main conference,
-          the side events, and the dinners.
+          and is seen by the same 13,000+ attendees — three days across the main conference, side
+          events, and dinners.
         </p>
 
         <div class="bar-wrap">
@@ -77,168 +85,137 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
         </div>
 
         <p class="notice">
-          <strong>All or nothing.</strong> We only run the campaign if
+          <strong>All or nothing.</strong> The campaign runs only if
           ${kbw.proceedBar.toLocaleString("en-US")} is committed by the deadline. If it isn't, every
           payment is refunded in full minus network fees. If it is, the dresses fly to Seoul.
         </p>
 
         <div class="hero-ctas">
-          <a href="#lots">claim a lot →</a>
-          <a href="#how">how it works →</a>
-          <a href="#trip">where the money goes →</a>
+          <a class="big-cta" href="#pick">pick your spot →</a>
+          <a href="#dresses">see the dresses</a>
         </div>
       </section>
 
-      <section class="section" id="dresses" aria-label="The dresses">
-        <h2 class="sec-title">the dresses</h2>
-        <p class="sec-note">
-          Front and back placements, per girl, per day. Click a white area to claim that lot.
-          Positions are printed as shown.
-        </p>
-        <div class="dress-grid">
-          <figure class="dress">
-            <div class="dress-img">
-              <img src="/kbw/front.png" alt="Four dresses, front view, with ad placement areas" />
-              {
-                (["A", "B", "C", "D"] as const).map((g) => {
-                  const h = kbw.hotspots.front[g];
-                  return (
-                    <button
-                      class="hotspot"
-                      data-girl={g}
-                      data-side="front"
-                      style={`left:${h.x}%;top:${h.y}%;width:${h.w}%;height:${h.h}%`}
-                      aria-label={`Claim front placement on ${g}`}
-                    >
-                      <span class="hotspot-label">{g} · front</span>
-                    </button>
-                  );
-                })
-              }
-            </div>
-            <figcaption>front</figcaption>
-          </figure>
-          <figure class="dress">
-            <div class="dress-img">
-              <img src="/kbw/back.png" alt="Four dresses, back view, with ad placement areas" />
-              {
-                (["A", "B", "C", "D"] as const).map((g) => {
-                  const h = kbw.hotspots.back[g];
-                  return (
-                    <button
-                      class="hotspot"
-                      data-girl={g}
-                      data-side="back"
-                      style={`left:${h.x}%;top:${h.y}%;width:${h.w}%;height:${h.h}%`}
-                      aria-label={`Claim back placement on ${g}`}
-                    >
-                      <span class="hotspot-label">{g} · back</span>
-                    </button>
-                  );
-                })
-              }
-            </div>
-            <figcaption>back</figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section class="section" id="lots" aria-label="Lots">
-        <h2 class="sec-title">claim a lot</h2>
+      <section class="section" id="pick" aria-label="Pick a spot">
+        <h2 class="sec-title">pick a spot</h2>
         <p class="sec-note">
           Front ${kbw.prices.front.toLocaleString("en-US")} · back
-          ${kbw.prices.back.toLocaleString("en-US")} per girl, per day. Pay in USDC on Solana.
-          Claimed lots can be taken over at 2× the last price.
+          ${kbw.prices.back.toLocaleString("en-US")} per girl, per day. Pick a girl, pick a day,
+          claim. Pay in USDC on Solana.
         </p>
-        {
-          kbw.girls.map((g) => (
-            <div class="girl-block" id={`girl-${g.id}`}>
-              <h3 class="girl-name">
-                {g.name}
-                {g.handle && <span class="girl-handle"> · {g.handle}</span>}
-              </h3>
-              <table class="lot-table">
-                <thead>
-                  <tr>
-                    <th>day</th>
-                    <th>side</th>
-                    <th class="num">price</th>
-                    <th>status</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lots
-                    .filter((l) => l.girl === g.id)
-                    .map((l) => (
-                      <tr class={l.status === "sold" ? "row-sold" : l.status === "pending" ? "row-pending" : ""}>
-                        <td>
-                          {l.dayLabel} <span class="dim">{l.dayNote}</span>
-                        </td>
-                        <td>{l.side}</td>
-                        <td class="num">${l.price.toLocaleString("en-US")}</td>
-                        <td>
-                          {l.status === "sold"
-                            ? "taken"
-                            : l.status === "pending"
-                              ? "pending"
-                              : "open"}
-                        </td>
-                        <td class="cta">
-                          {l.status === "available" ? (
-                            <button
-                              class="claim-btn"
-                              data-lot={l.id}
-                              data-label={`${g.name} · ${l.dayLabel} · ${l.side}`}
-                              data-price={l.price}
-                            >
-                              claim
-                            </button>
-                          ) : (
-                            <button
-                              class="claim-btn takeover"
-                              data-lot={l.id}
-                              data-label={`${g.name} · ${l.dayLabel} · ${l.side}`}
-                              data-price={l.price * 2}
-                              data-takeover="1"
-                            >
-                              take over · ${(l.price * 2).toLocaleString("en-US")}
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+
+        <div class="tabs" role="tablist" aria-label="Choose a girl">
+          {kbw.girls.map((g) => (
+            <button class="tab" role="tab" data-tab={g.id} aria-selected={g.id === "A" ? "true" : "false"}>
+              {g.name}
+            </button>
+          ))}
+        </div>
+
+        <div class="card-grid">
+          {lots.map((l) => (
+            <div class="lot-card" data-girl={l.girl} hidden={l.girl !== "A"}>
+              <div class="lot-top">
+                <span class="lot-day">{l.dayLabel}</span>
+                <span class={`lot-badge ${l.side}`}>{l.side}</span>
+              </div>
+              <p class="lot-price">${l.price.toLocaleString("en-US")}</p>
+              <p class="lot-note">{l.dayNote}</p>
+              {l.status !== "available" && l.brand && (
+                <div class="lot-sponsor">
+                  {l.logo && <img src={l.logo} alt="" />}
+                  <span>{l.brand}</span>
+                </div>
+              )}
+              <div class="lot-action">
+                {l.status === "available" ? (
+                  <button
+                    class="claim-btn"
+                    data-lot={l.id}
+                    data-girl={l.girl}
+                    data-side={l.side}
+                    data-label={`${l.girlName} · ${l.dayLabel} · ${l.side}`}
+                    data-price={l.price}
+                  >
+                    claim · ${l.price.toLocaleString("en-US")}
+                  </button>
+                ) : (
+                  <button
+                    class="claim-btn takeover"
+                    data-lot={l.id}
+                    data-girl={l.girl}
+                    data-side={l.side}
+                    data-label={`${l.girlName} · ${l.dayLabel} · ${l.side}`}
+                    data-price={l.price * 2}
+                    data-takeover="1"
+                  >
+                    take over · ${(l.price * 2).toLocaleString("en-US")}
+                  </button>
+                )}
+              </div>
             </div>
-          ))
-        }
+          ))}
+        </div>
+      </section>
+
+      <section class="section breakout" id="dresses" aria-label="The dresses">
+        <h2 class="sec-title">the dresses</h2>
         <p class="sec-note">
-          Total potential: ${totalPotential.toLocaleString("en-US")} across {lots.length} lots.{" "}
-          <span class="dim">Last updated at build time — claims confirmed manually, so status can lag a few minutes.</span>
+          Click a white placement to jump to that girl's spots. Sold placements show the sponsor's
+          logo.
         </p>
+        <div class="dress-grid">
+          {(["front", "back"] as const).map((side) => (
+            <figure class="dress">
+              <div class="dress-img">
+                <img src={`/kbw/${side}.png`} alt={`Four dresses, ${side} view, with ad placements`} />
+                {(["A", "B", "C", "D"] as const).map((g) => {
+                  const h = kbw.hotspots[side][g];
+                  const sponsor = slotSponsor[`${g}-${side}`];
+                  return (
+                    <button
+                      class="hotspot"
+                      data-girl={g}
+                      data-side={side}
+                      style={`left:${h.x}%;top:${h.y}%;width:${h.w}%;height:${h.h}%`}
+                      aria-label={`${g} · ${side} — pick this spot`}
+                    >
+                      {sponsor?.logo && <img class="hotspot-logo" src={sponsor.logo} alt={sponsor.brand || ""} />}
+                      <span class="hotspot-label">
+                        {g} · {side} · ${kbw.prices[side].toLocaleString("en-US")}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              <figcaption>{side}</figcaption>
+            </figure>
+          ))}
+        </div>
       </section>
 
       <section class="section" id="how" aria-label="How it works">
         <h2 class="sec-title">how it works</h2>
         <ol class="steps">
-          <li><strong>Pick a lot</strong> — girl, day, front or back. Prices are fixed.</li>
+          <li><strong>Pick a spot</strong> — girl, day, front or back. Prices are fixed.</li>
           <li>
-            <strong>Send USDC on Solana</strong> to the address below, for the exact amount. Include
-            your brand name in the transaction memo if your wallet supports it.
+            <strong>Send USDC on Solana</strong> to the address below for the exact amount. Keep the
+            transaction hash.
           </li>
           <li>
-            <strong>Email the transaction signature</strong> to {kbw.email} with the lot name. We
-            confirm within a few hours and the lot is marked taken.
+            <strong>Send us your details on Telegram</strong> — <a href={tg} rel="noopener"
+              >@{kbw.telegram}</a
+            >: brand name, website, logo, the wallet you sent from, and the tx hash. The claim form
+            below builds the message for you.
           </li>
           <li>
-            <strong>Send your logo</strong> (SVG or PNG, 1,000px+ wide). It goes on the dress and on
-            this page.
+            <strong>We confirm</strong> and your spot flips to taken, with your logo shown on this
+            page and printed on the dress.
           </li>
         </ol>
         <div class="wallet">
-          <span class="wallet-label">USDC on Solana (SPL) · {kbw.chain}</span>
-          <code id="wallet-addr">{kbw.wallet}</code>
+          <span class="wallet-label">USDC on Solana (SPL)</span>
+          <code>{kbw.wallet}</code>
           <button class="copy-btn" onclick="copyWallet(this)">copy</button>
         </div>
         <p class="sec-note dim">
@@ -252,15 +229,14 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
           <li>Your logo printed on the dress and worn for three days — main conference, side events, and dinners.</li>
           <li>Your logo, link, and tagline listed on this page.</li>
           <li>Content package: event photos featuring the dresses, one short-form video, one post tagging your brand.</li>
-          <li>A thank-you post on the appreciation thread after the event.</li>
+          <li>A thank-you post after the event.</li>
         </ul>
       </section>
 
       <section class="section" id="trip" aria-label="Where the money goes">
         <h2 class="sec-title">where the money goes</h2>
         <p class="sec-note">
-          This is not a profit-first campaign. The floor exists because four people have to fly to
-          Seoul and stay there.
+          The floor exists because four people have to fly to Seoul and stay there.
         </p>
         <table class="cost-table">
           <tbody>
@@ -271,25 +247,19 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
             <tr class="total"><td>Total trip cost</td><td class="num">$6,000</td></tr>
           </tbody>
         </table>
-        <p class="sec-note">
-          Everything above the trip cost goes to the girls, content production, and running the
-          campaign.
-        </p>
       </section>
 
       <section class="section" id="girls" aria-label="The four">
         <h2 class="sec-title">the four</h2>
-        <p class="sec-note">Revealed once the campaign is confirmed. Placeholders for now.</p>
+        <p class="sec-note">Revealed once the campaign is confirmed.</p>
         <div class="girl-grid">
-          {
-            kbw.girls.map((g) => (
-              <div class="girl-card">
-                <div class="girl-ph">{"?"}</div>
-                <p class="girl-card-name">{g.name}</p>
-                <p class="dim">to be announced</p>
-              </div>
-            ))
-          }
+          {kbw.girls.map((g) => (
+            <div class="girl-card">
+              <div class="girl-ph">?</div>
+              <p class="girl-card-name">{g.name}</p>
+              <p class="dim">to be announced</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -297,35 +267,37 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
         <h2 class="sec-title">faq</h2>
         <dl class="faq">
           <dt>What if the bar isn't reached?</dt>
+          <dd>Everyone is refunded in full minus network fees within 7 days. No one pays for a campaign that doesn't run.</dd>
+          <dt>How do I claim?</dt>
           <dd>
-            Everyone is refunded in full, minus network fees, within 7 days of the deadline. No one
-            pays for a campaign that doesn't run.
+            Send USDC on Solana, then send your brand, logo, website, sending wallet, and tx hash to{" "}
+            <a href={tg} rel="noopener">@{kbw.telegram}</a>. The claim form builds the message for
+            you.
           </dd>
           <dt>How does a takeover work?</dt>
           <dd>
-            A taken lot can be claimed by someone else for 2× the last price. The previous sponsor
-            is refunded in full minus network fees within 7 days of the takeover.
+            A taken spot can be claimed by someone else for 2× the last price. DM{" "}
+            <a href={tg} rel="noopener">@{kbw.telegram}</a> and the previous sponsor is refunded in
+            full minus network fees within 7 days.
           </dd>
           <dt>What format should my logo be?</dt>
-          <dd>SVG preferred, otherwise PNG at 1,000px+ wide, on transparent background.</dd>
+          <dd>SVG or PNG at 1,000px+ wide, transparent background. Send the file on Telegram or link to it.</dd>
           <dt>Can I pay by card?</dt>
-          <dd>USDC on Solana only for now. Email {kbw.email} if you need an alternative.</dd>
+          <dd>USDC on Solana only for now. DM <a href={tg} rel="noopener">@{kbw.telegram}</a> if you need an alternative.</dd>
           <dt>What if the event is cancelled?</dt>
-          <dd>
-            Full refund minus network fees, or equivalent alternative content — your choice.
-          </dd>
+          <dd>Full refund minus network fees, or equivalent alternative content — your choice.</dd>
           <dt>What can't be on the dress?</dt>
-          <dd>
-            Anything illegal, hateful, sexually explicit, scam-related, or infringing. See the
-            content policy.
-          </dd>
+          <dd>Anything illegal, hateful, sexually explicit, scam-related, or infringing. See the content policy.</dd>
         </dl>
       </section>
     </main>
 
     <footer class="foot">
       <div class="wrap foot-inner">
-        <p class="foot-copy">© Justin Chua · Taipei · <a href="/kbw/legal">terms, refunds &amp; policies</a></p>
+        <p class="foot-copy">
+          © Justin Chua · Taipei · <a href={tg} rel="noopener">@{kbw.telegram}</a> ·
+          <a href="/kbw/legal">terms &amp; policies</a>
+        </p>
         <p class="colophon"><a href="/">justinxa.com</a></p>
       </div>
     </footer>
@@ -337,22 +309,54 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
         <p class="eyebrow" id="m-kind">CLAIM</p>
         <h3 id="m-title">—</h3>
         <p id="m-price" class="modal-price">—</p>
-        <p class="modal-step">
-          Send <strong id="m-amount">—</strong> in USDC (Solana) to:
-        </p>
-        <div class="wallet">
-          <code>{kbw.wallet}</code>
-          <button class="copy-btn" onclick="copyWallet(this)">copy</button>
+
+        <div class="m-step">
+          <p class="m-step-head"><span class="m-num">1</span> Send <strong id="m-amount">—</strong> in USDC (Solana)</p>
+          <div class="wallet">
+            <code>{kbw.wallet}</code>
+            <button class="copy-btn" onclick="copyWallet(this)">copy</button>
+          </div>
         </div>
-        <p class="modal-step">
-          Then email the transaction signature to <strong>{kbw.email}</strong> and we confirm the
-          lot.
-        </p>
-        <a id="m-mail" class="modal-mail" href="#">open email draft →</a>
+
+        <div class="m-step">
+          <p class="m-step-head"><span class="m-num">2</span> Your details</p>
+          <div class="m-fields">
+            <label>Brand name<input id="f-brand" placeholder="Acme" /></label>
+            <label>Website<input id="f-url" placeholder="https://acme.com" /></label>
+            <label>Logo URL<input id="f-logo" placeholder="https://acme.com/logo.png — or send the file on Telegram" /></label>
+            <label>Telegram or email<input id="f-contact" placeholder="@handle" /></label>
+            <label>Sending wallet<input id="f-wallet" placeholder="the address you send from" /></label>
+            <label>Tx hash<input id="f-tx" placeholder="paste after sending" /></label>
+          </div>
+        </div>
+
+        <div class="m-step">
+          <p class="m-step-head"><span class="m-num">3</span> Send it to <a href={tg} rel="noopener">@{kbw.telegram}</a></p>
+          <div class="m-actions">
+            <button class="copy-btn solid" onclick="copyClaim(this)">copy details</button>
+            <a class="copy-btn" href={tg} rel="noopener">open Telegram</a>
+            <a class="copy-btn" id="m-mail" href="#">email instead</a>
+          </div>
+        </div>
+
+        <div class="m-preview">
+          <p class="m-preview-label">on the dress</p>
+          <div class="m-preview-frame" id="m-preview-frame">
+            <img id="m-preview-base" src="/kbw/front.png" alt="" />
+            <img id="m-preview-logo" alt="" hidden />
+          </div>
+        </div>
       </div>
     </div>
 
+    <script type="application/json" id="hotspot-data" set:html={JSON.stringify(kbw.hotspots)}></script>
+
     <script>
+      const TELEGRAM = "yoloking0";
+      const EMAIL = "jcxa@proton.me";
+      const HOTSPOTS = JSON.parse(document.getElementById("hotspot-data").textContent);
+
+      /* countdown */
       const DEADLINE = document.getElementById("countdown")?.dataset.deadline;
       function tick() {
         const el = document.getElementById("countdown");
@@ -368,6 +372,7 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
       tick();
       setInterval(tick, 1000);
 
+      /* wallet copy */
       window.copyWallet = function (btn) {
         const addr = "5zim3VG98LahnQTUef8kGbXQ3yTMZzoXK6q5gj1Lfuww";
         const done = () => {
@@ -384,42 +389,117 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
         }
       };
 
-      const modal = document.getElementById("modal");
-      const email = "jcxa@proton.me";
-      document.querySelectorAll(".hotspot").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const target = document.getElementById(`girl-${btn.dataset.girl}`);
-          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      /* tabs */
+      const tabs = document.querySelectorAll(".tab");
+      const cards = document.querySelectorAll(".lot-card");
+      function selectGirl(g) {
+        tabs.forEach((t) => t.setAttribute("aria-selected", t.dataset.tab === g ? "true" : "false"));
+        cards.forEach((c) => (c.hidden = c.dataset.girl !== g));
+      }
+      tabs.forEach((t) => t.addEventListener("click", () => selectGirl(t.dataset.tab)));
+
+      /* hotspots jump to that girl's cards */
+      document.querySelectorAll(".hotspot").forEach((h) => {
+        h.addEventListener("click", () => {
+          selectGirl(h.dataset.girl);
+          document.getElementById("pick").scrollIntoView({ behavior: "smooth", block: "start" });
         });
       });
+
+      /* modal */
+      const modal = document.getElementById("modal");
+      let current = null;
+      const fields = ["f-brand", "f-url", "f-logo", "f-contact", "f-wallet", "f-tx"];
+
+      function updatePreview() {
+        const base = document.getElementById("m-preview-base");
+        const logo = document.getElementById("m-preview-logo");
+        if (!current) return;
+        base.src = `/kbw/${current.side}.png`;
+        const box = HOTSPOTS[current.side][current.girl];
+        const url = document.getElementById("f-logo").value.trim();
+        if (url && box) {
+          logo.hidden = false;
+          logo.src = url;
+          logo.style.left = box.x + "%";
+          logo.style.top = box.y + "%";
+          logo.style.width = box.w + "%";
+          logo.style.height = box.h + "%";
+        } else {
+          logo.hidden = true;
+        }
+      }
+      fields.forEach((id) => document.getElementById(id).addEventListener("input", updatePreview));
+
+      function claimText() {
+        if (!current) return "";
+        const v = (id) => document.getElementById(id).value.trim();
+        return [
+          `${current.takeover ? "KBW TAKEOVER" : "KBW CLAIM"} — ${current.label} — $${current.price.toLocaleString("en-US")}`,
+          `Brand: ${v("f-brand")}`,
+          `Website: ${v("f-url")}`,
+          `Logo: ${v("f-logo") || "(sending file on Telegram)"}`,
+          `Contact: ${v("f-contact")}`,
+          `Sending wallet: ${v("f-wallet")}`,
+          `Tx hash: ${v("f-tx")}`,
+        ].join("\n");
+      }
+
+      window.copyClaim = function (btn) {
+        const text = claimText();
+        const done = () => {
+          const old = btn.textContent;
+          btn.textContent = "copied — now paste in Telegram";
+          setTimeout(() => (btn.textContent = old), 2500);
+        };
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(() => {});
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand("copy"); ta.remove(); done();
+        }
+      };
+
       document.querySelectorAll(".claim-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const label = btn.dataset.label || "";
-          const price = btn.dataset.price;
-          if (!label) { location.hash = "#lots"; return; }
           const takeover = btn.dataset.takeover === "1";
+          current = {
+            label: btn.dataset.label,
+            price: Number(btn.dataset.price),
+            girl: btn.dataset.girl,
+            side: btn.dataset.side,
+            takeover,
+          };
           document.getElementById("m-kind").textContent = takeover ? "TAKEOVER" : "CLAIM";
-          document.getElementById("m-title").textContent = label;
-          const amount = price ? `$${Number(price).toLocaleString("en-US")}` : "see price list";
+          document.getElementById("m-title").textContent = current.label;
+          const amount = `$${current.price.toLocaleString("en-US")}`;
           document.getElementById("m-price").textContent = amount;
           document.getElementById("m-amount").textContent = amount;
-          const subject = encodeURIComponent(`${takeover ? "Takeover" : "Claim"}: ${label} — ${amount}`);
-          const body = encodeURIComponent(
-            `Lot: ${label}\nAmount: ${amount}\n\nUSDC tx signature: \n\nBrand name: \nWebsite: \nLogo attached: yes/no`
+          fields.forEach((id) => (document.getElementById(id).value = ""));
+          const subject = encodeURIComponent(
+            `${takeover ? "Takeover" : "Claim"}: ${current.label} — ${amount}`
           );
-          document.getElementById("m-mail").href = `mailto:${email}?subject=${subject}&body=${body}`;
+          const body = encodeURIComponent(claimText());
+          document.getElementById("m-mail").href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+          updatePreview();
           modal.hidden = false;
+          document.getElementById("f-brand").focus();
         });
       });
-      window.closeModal = () => (modal.hidden = true);
+
+      window.closeModal = () => {
+        modal.hidden = true;
+        current = null;
+      };
       modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
     </script>
 
     <style>
       .hero { padding-block: 2.5rem 1rem; }
-      h1 { font-size: 2rem; max-width: 24ch; }
-      .lede { color: var(--muted); max-width: 52ch; }
+      h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); max-width: 22ch; }
+      .lede { color: var(--muted); max-width: 54ch; }
 
       .bar-wrap { margin: 1.75rem 0 0.5rem; }
       .bar { height: 10px; background: var(--hairline-soft); border: 1px solid var(--hairline); }
@@ -427,74 +507,62 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
       .bar-label { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0.5rem 0 0; }
       .bar-label strong { color: var(--ink); }
 
-      .notice {
-        font-size: 14px;
-        border-left: 3px solid var(--ink);
-        padding-left: 0.9rem;
-        margin: 1.25rem 0;
-        max-width: 58ch;
-      }
+      .notice { font-size: 14px; border-left: 3px solid var(--ink); padding-left: 0.9rem; margin: 1.25rem 0; max-width: 58ch; }
 
-      .hero-ctas { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 1.25rem; }
+      .hero-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 1.25rem; }
+      .big-cta {
+        display: inline-block;
+        background: var(--ink);
+        color: var(--bg);
+        font-weight: 700;
+        padding: 12px 22px;
+        text-decoration: none;
+      }
+      .big-cta:hover { opacity: 0.85; }
 
       .sec-note { color: var(--muted); font-size: 14.5px; max-width: 62ch; margin: 0 0 1rem; }
       .dim { color: var(--muted); font-size: 13px; }
 
-      .dress-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-      .dress { margin: 0; }
-      .dress-img { position: relative; border: 1px solid var(--hairline); background: #fff; }
-      .dress-img img { width: 100%; display: block; }
-      figcaption { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 6px; }
-
-      .hotspot {
-        position: absolute;
-        background: rgba(0, 0, 0, 0.04);
-        border: 1.5px dashed rgba(0, 0, 0, 0.55);
-        cursor: pointer;
-        padding: 0;
-        transition: background 0.15s;
-      }
-      .hotspot:hover, .hotspot:focus-visible { background: rgba(0, 0, 0, 0.14); }
-      .hotspot-label {
-        position: absolute;
-        top: -9px; left: -1px;
+      /* tabs */
+      .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+      .tab {
         font-family: var(--mono);
-        font-size: 9px;
+        font-size: 13px;
+        background: none;
+        border: 1px solid var(--hairline);
+        color: var(--muted);
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      .tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+      .tab:hover { border-color: var(--ink); }
+
+      /* lot cards */
+      .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .lot-card {
+        border: 1px solid var(--hairline);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .lot-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .lot-day { font-weight: 700; font-size: 15px; }
+      .lot-badge {
+        font-family: var(--mono);
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        background: var(--ink);
-        color: var(--bg);
-        padding: 2px 6px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.15s;
-        pointer-events: none;
-      }
-      .hotspot:hover .hotspot-label, .hotspot:focus-visible .hotspot-label { opacity: 1; }
-
-      .girl-block { margin-bottom: 2rem; }
-      .girl-name { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
-      .girl-handle { color: var(--muted); font-weight: 400; }
-
-      .lot-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
-      .lot-table th {
-        text-align: left;
-        font-family: var(--mono);
-        font-size: 10.5px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        border: 1px solid var(--hairline);
+        padding: 2px 8px;
         color: var(--muted);
-        font-weight: 400;
-        padding: 6px 8px 6px 0;
-        border-bottom: 1px solid var(--hairline);
       }
-      .lot-table td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--hairline-soft); vertical-align: baseline; }
-      .lot-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-      .lot-table .cta { text-align: right; }
-      .lot-table .dim { display: block; font-size: 12px; }
-      .row-sold td { color: var(--muted); }
-      .row-pending td { color: var(--muted); }
-
+      .lot-badge.front { border-color: var(--ink); color: var(--ink); }
+      .lot-price { font-family: var(--mono); font-size: 1.35rem; margin: 0.35rem 0 0; }
+      .lot-note { font-size: 12.5px; color: var(--muted); margin: 0 0 0.5rem; }
+      .lot-sponsor { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 0.5rem; }
+      .lot-sponsor img { width: 22px; height: 22px; object-fit: contain; border: 1px solid var(--hairline); background: #fff; }
+      .lot-action { margin-top: auto; }
       .claim-btn {
         font: inherit;
         font-size: 13px;
@@ -502,26 +570,58 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
         background: var(--ink);
         color: var(--bg);
         border: 1px solid var(--ink);
-        padding: 5px 12px;
+        padding: 9px 12px;
         cursor: pointer;
-        white-space: nowrap;
+        width: 100%;
       }
-      .claim-btn:hover { opacity: 0.8; }
+      .claim-btn:hover { opacity: 0.85; }
       .claim-btn.takeover { background: none; color: var(--ink); }
 
+      /* dress map — breakout to full width */
+      .breakout {
+        width: min(1060px, calc(100vw - 28px));
+        margin-left: 50%;
+        transform: translateX(-50%);
+      }
+      .dress-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .dress { margin: 0; }
+      .dress-img { position: relative; border: 1px solid var(--hairline); background: #fff; }
+      .dress-img img { width: 100%; display: block; }
+      figcaption { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 6px; }
+
+      .hotspot {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1.5px dashed rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        padding: 0;
+        transition: background 0.15s;
+      }
+      .hotspot:hover, .hotspot:focus-visible { background: rgba(0, 0, 0, 0.12); }
+      .hotspot-logo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+      .hotspot-label {
+        position: absolute;
+        top: -10px; left: -1px;
+        font-family: var(--mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: var(--ink);
+        color: var(--bg);
+        padding: 3px 7px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.15s;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .hotspot:hover .hotspot-label, .hotspot:focus-visible .hotspot-label { opacity: 1; }
+
+      /* how it works */
       .steps { padding-left: 1.4rem; max-width: 62ch; }
       .steps li { margin-bottom: 0.6rem; }
 
-      .wallet {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 8px;
-        border: 1px solid var(--hairline);
-        padding: 10px 12px;
-        margin: 1rem 0 0.5rem;
-        background: var(--bg);
-      }
+      .wallet { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border: 1px solid var(--hairline); padding: 10px 12px; margin: 1rem 0 0.5rem; background: var(--bg); }
       .wallet code { font-family: var(--mono); font-size: 12.5px; word-break: break-all; flex: 1; min-width: 200px; }
       .wallet-label { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); width: 100%; }
       .copy-btn {
@@ -530,10 +630,13 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
         background: none;
         border: 1px solid var(--ink);
         color: var(--ink);
-        padding: 5px 12px;
+        padding: 6px 12px;
         cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
       }
       .copy-btn:hover { background: var(--ink); color: var(--bg); }
+      .copy-btn.solid { background: var(--ink); color: var(--bg); }
 
       .deliverables { max-width: 62ch; }
       .deliverables li { margin-bottom: 0.5rem; }
@@ -554,36 +657,63 @@ const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${k
       .faq dd { margin: 0.25rem 0 0; color: var(--muted); }
 
       /* modal */
-      .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: grid;
-        place-items: center;
-        z-index: 50;
-        padding: 16px;
-      }
+      .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: grid; place-items: center; z-index: 50; padding: 16px; }
       .modal[hidden] { display: none; }
       .modal-card {
         position: relative;
         background: var(--bg);
         border: 1px solid var(--hairline);
-        max-width: 460px;
+        max-width: 520px;
         width: 100%;
+        max-height: 92vh;
+        overflow-y: auto;
         padding: 22px;
       }
-      .modal-close { position: absolute; top: 10px; right: 10px; background: none; border: 0; font-size: 16px; cursor: pointer; color: var(--muted); }
-      .modal-card h3 { margin: 0 0 0.25rem; font-size: 1.15rem; }
-      .modal-price { font-family: var(--mono); font-size: 1.3rem; margin: 0 0 1rem; }
-      .modal-step { font-size: 14px; margin: 0.75rem 0; }
-      .modal-mail { display: inline-block; margin-top: 0.5rem; font-weight: 500; }
+      .modal-close { position: absolute; top: 10px; right: 12px; background: none; border: 0; font-size: 17px; cursor: pointer; color: var(--muted); }
+      .modal-card h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+      .modal-price { font-family: var(--mono); font-size: 1.3rem; margin: 0 0 0.75rem; }
 
-      @media (max-width: 720px) {
+      .m-step { border-top: 1px solid var(--hairline-soft); padding-top: 0.9rem; margin-top: 0.9rem; }
+      .m-step-head { font-size: 14px; margin: 0 0 0.6rem; }
+      .m-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px; height: 20px;
+        border: 1px solid var(--ink);
+        font-family: var(--mono);
+        font-size: 11px;
+        margin-right: 6px;
+      }
+      .m-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .m-fields label { display: flex; flex-direction: column; gap: 3px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+      .m-fields input {
+        font-family: var(--sans);
+        font-size: 13.5px;
+        padding: 7px 9px;
+        border: 1px solid var(--hairline);
+        background: var(--bg);
+        color: var(--ink);
+        width: 100%;
+      }
+      .m-fields label:nth-child(3) { grid-column: span 2; }
+      .m-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .m-preview { border-top: 1px solid var(--hairline-soft); margin-top: 0.9rem; padding-top: 0.9rem; }
+      .m-preview-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 6px; }
+      .m-preview-frame { position: relative; width: min(100%, 300px); border: 1px solid var(--hairline); background: #fff; }
+      .m-preview-frame img:first-child { width: 100%; display: block; }
+      #m-preview-logo { position: absolute; object-fit: contain; pointer-events: none; }
+
+      @media (max-width: 860px) {
+        .card-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 640px) {
         .dress-grid { grid-template-columns: 1fr; }
+        .card-grid { grid-template-columns: 1fr; }
         .girl-grid { grid-template-columns: repeat(2, 1fr); }
-        .lot-table { font-size: 13.5px; }
-        .lot-table .dim { display: none; }
-        h1 { font-size: 1.6rem; }
+        .m-fields { grid-template-columns: 1fr; }
+        .m-fields label:nth-child(3) { grid-column: span 1; }
+        h1 { font-size: 1.5rem; }
       }
     </style>
   </body>

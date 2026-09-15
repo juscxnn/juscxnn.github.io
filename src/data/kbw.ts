@@ -1,9 +1,9 @@
 // ── KBW 2026 dress ad campaign ─────────────────────────────
 //
 // THE SITE DOES NOT UPDATE ITSELF WHEN A LOT IS CLAIMED.
-// When a claim is confirmed (USDC received + tx signature emailed to you):
+// When a claim is confirmed (USDC received + details sent to @yoloking0):
 //   1. Add the lot key to the `status` object below
-//   2. Use "sold" (confirmed) or "pending" (payment sent, not yet verified)
+//   2. Include status + sponsor details so the logo shows on the dress
 //   3. Commit on github.com → the site redeploys automatically in ~1 minute
 //
 // Lot key format: {girl}-{day}-{side}
@@ -11,13 +11,30 @@
 //   day:  d1 (Sep 30) | d2 (Oct 1) | d3 (Oct 2)
 //   side: front | back
 //
-// Example — Girl B, Sep 30, front lot confirmed:
+// Example — Girl B, Sep 30, front confirmed, with sponsor info:
 //   status: {
-//     "B-d2-front": "sold",
+//     "B-d2-front": {
+//       status: "sold",
+//       brand: "Acme",
+//       url: "https://acme.com",
+//       logo: "/kbw/logos/acme.png",   // drop the file in public/kbw/logos/
+//     },
 //   },
 //
-// Sold lots automatically switch to "take over · 2× price" buttons on the page.
+// Simpler form also works: "B-d2-front": "sold"  (no logo shown on the dress)
+// Sold lots automatically switch to "take over · 2× price" buttons.
 // Remove a key to make a lot available again.
+
+export type LotStatus = "pending" | "sold";
+
+export type SponsorInfo = {
+  status: LotStatus;
+  brand?: string;
+  url?: string;
+  logo?: string;
+};
+
+export type LotEntry = LotStatus | SponsorInfo;
 
 export const kbw = {
   event: "Korea Blockchain Week 2026",
@@ -28,6 +45,7 @@ export const kbw = {
   proceedBar: 30000, // USD committed needed to run the campaign
   wallet: "5zim3VG98LahnQTUef8kGbXQ3yTMZzoXK6q5gj1Lfuww",
   chain: "Solana",
+  telegram: "yoloking0",
   email: "jcxa@proton.me",
 
   days: [
@@ -45,8 +63,8 @@ export const kbw = {
 
   prices: { front: 7500, back: 5000 },
 
-  // status per lot: key = "A-d1-front" → "pending" | "sold"
-  status: {} as Record<string, "pending" | "sold">,
+  // status per lot: key = "A-d1-front" → "pending" | "sold" | { status, brand, url, logo }
+  status: {} as Record<string, LotEntry>,
 
   // hotspot boxes (% of image): x, y, w, h — auto-detected from the mockups
   hotspots: {
@@ -75,6 +93,9 @@ export type Lot = {
   side: "front" | "back";
   price: number;
   status: "available" | "pending" | "sold";
+  brand?: string;
+  url?: string;
+  logo?: string;
 };
 
 export function buildLots(): Lot[] {
@@ -83,6 +104,9 @@ export function buildLots(): Lot[] {
     for (const d of kbw.days) {
       for (const side of ["front", "back"] as const) {
         const id = `${g.id}-${d.id}-${side}`;
+        const entry = kbw.status[id];
+        const info: SponsorInfo | null =
+          !entry ? null : typeof entry === "string" ? { status: entry } : entry;
         lots.push({
           id,
           girl: g.id,
@@ -92,7 +116,10 @@ export function buildLots(): Lot[] {
           dayNote: d.note,
           side,
           price: kbw.prices[side],
-          status: kbw.status[id] || "available",
+          status: info ? info.status : "available",
+          brand: info?.brand,
+          url: info?.url,
+          logo: info?.logo,
         });
       }
     }
