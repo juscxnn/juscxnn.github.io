@@ -125,9 +125,23 @@ const SITE_URL = "https://juscxnn.github.io";
       </div>
     </main>
 
+    <script type="application/json" id="writer-config" set:html={JSON.stringify({
+      hash: PASSWORD_HASH,
+      owner: REPO_OWNER,
+      repo: REPO_NAME,
+      branch: REPO_BRANCH,
+      site: SITE_URL,
+    })}></script>
+
     <script>
-      /* ── password gate ── */
-      var HASH = {PASSWORD_HASH};
+      /* ── config ── */
+      var CFG = JSON.parse(document.getElementById("writer-config").textContent);
+      var HASH = CFG.hash;
+      var REPO_OWNER = CFG.owner;
+      var REPO_NAME = CFG.repo;
+      var REPO_BRANCH = CFG.branch;
+      var SITE_URL = CFG.site;
+
       function sha256(str) {
         return crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)).then(function (b) {
           return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join("");

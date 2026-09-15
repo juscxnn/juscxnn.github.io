@@ -6,6 +6,7 @@ const lots = buildLots();
 const committed = lots.filter((l) => l.status !== "available").reduce((s, l) => s + l.price, 0);
 const claimed = lots.filter((l) => l.status !== "available").length;
 const totalPotential = lots.reduce((s, l) => s + l.price, 0);
+const sponsors = lots.filter((l) => l.status !== "available" && l.brand);
 const pct = Math.min(100, Math.round((committed / totalPotential) * 100));
 
 // first sold lot with a logo per girl+side, for the on-dress preview
@@ -185,6 +186,29 @@ const tg = `https://t.me/${kbw.telegram}`;
           ))}
         </div>
       </section>
+
+      {sponsors.length > 0 && (
+        <section class="section" id="sponsors" aria-label="Sponsors">
+          <h2 class="sec-title">sponsors</h2>
+          <p class="sec-note">Already on the dresses:</p>
+          <div class="sponsor-grid">
+            {sponsors.map((sp) => (
+              <a
+                class="sponsor"
+                href={sp.url || "#"}
+                rel="noopener"
+                {...(sp.url ? { target: "_blank" } : {})}
+              >
+                {sp.logo && <img src={sp.logo} alt={sp.brand || ""} />}
+                <span class="sponsor-brand">{sp.brand}</span>
+                <span class="sponsor-spot">
+                  {sp.girlName} · {sp.dayLabel} · {sp.side}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section class="section" id="how" aria-label="How it works">
         <h2 class="sec-title">how it works</h2>
@@ -398,7 +422,7 @@ const tg = `https://t.me/${kbw.telegram}`;
           .map((l) =>
             l.status === "available"
               ? `<li><span>${l.girlName} · ${l.dayLabel} · ${l.side}</span><span>${money(l.price)}</span></li>`
-              : `<li class="taken"><span>${l.girlName} · ${l.dayLabel} · ${l.side}</span><span>taken · <button type="button" class="takeover-mini" data-lot="${l.id}" data-girl="${l.girl}" data-side="${l.side}" data-label="${l.girlName} · ${l.dayLabel} · ${l.side}" data-price="${l.price * 2}">take over ${money(l.price * 2)}</button></span></li>`
+              : `<li class="taken"><span>${l.logo ? `<img class="mini-logo" src="${l.logo}" alt="">` : ""}${l.brand || "taken"} · ${l.dayLabel} · ${l.side}</span><span>taken · <button type="button" class="takeover-mini" data-lot="${l.id}" data-girl="${l.girl}" data-side="${l.side}" data-label="${l.girlName} · ${l.dayLabel} · ${l.side}" data-price="${l.price * 2}">take over ${money(l.price * 2)}</button></span></li>`
           )
           .join("");
         const btn = document.getElementById("pick-claim");
@@ -660,6 +684,25 @@ const tg = `https://t.me/${kbw.telegram}`;
         z-index: 2;
       }
       .hotspot:hover .hotspot-label, .hotspot:focus-visible .hotspot-label { opacity: 1; }
+
+      /* sponsors wall */
+      .sponsor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+      .sponsor {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--hairline);
+        padding: 16px 12px;
+        text-align: center;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .sponsor:hover { border-color: var(--ink); }
+      .sponsor img { height: 36px; width: auto; max-width: 100%; object-fit: contain; }
+      .sponsor-brand { font-weight: 700; font-size: 14px; }
+      .sponsor-spot { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+      .mini-logo { width: 18px; height: 18px; object-fit: contain; vertical-align: middle; margin-right: 6px; border: 1px solid var(--hairline); background: #fff; }
 
       /* how it works */
       .steps { padding-left: 1.4rem; max-width: 62ch; }

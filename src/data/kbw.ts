@@ -1,10 +1,9 @@
 // ── KBW 2026 dress ad campaign ─────────────────────────────
 //
 // THE SITE DOES NOT UPDATE ITSELF WHEN A LOT IS CLAIMED.
-// When a claim is confirmed (USDC received + details sent to @yoloking0):
-//   1. Add the lot key to the `status` object below
-//   2. Include status + sponsor details so the logo shows on the dress
-//   3. Commit on github.com → the site redeploys automatically in ~1 minute
+// Easiest: open /kbw-admin, tap the spot, enter brand + logo, save.
+// Manual alternative: edit src/data/kbw-status.json on github.com and commit —
+// the site redeploys automatically in ~1 minute.
 //
 // Lot key format: {girl}-{day}-{side}
 //   girl: A | B | C | D
@@ -24,6 +23,8 @@
 // Simpler form also works: "B-d2-front": "sold"  (no logo shown on the dress)
 // Sold lots automatically switch to "take over · 2× price" buttons.
 // Remove a key to make a lot available again.
+
+import statusData from "./kbw-status.json";
 
 export type LotStatus = "pending" | "sold";
 
@@ -63,8 +64,9 @@ export const kbw = {
 
   prices: { front: 7500, back: 5000 },
 
-  // status per lot: key = "A-d1-front" → "pending" | "sold" | { status, brand, url, logo }
-  status: {} as Record<string, LotEntry>,
+  // status per lot lives in kbw-status.json — edit it via /kbw-admin (or by hand)
+  // key = "A-d1-front" → { status, brand, url, logo }
+  status: statusData as Record<string, LotEntry>,
 
   // hotspot boxes (% of image): x, y, w, h — auto-detected from the mockups
   hotspots: {
