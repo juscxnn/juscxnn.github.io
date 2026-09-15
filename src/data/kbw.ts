@@ -42,7 +42,7 @@ export const kbw = {
   worn: "Sep 30 – Oct 2, 2026",
   location: "Walkerhill, Seoul",
   claimDeadline: "2026-09-23T23:59:59+08:00",
-  proceedBar: 30000, // USD committed needed to run the campaign
+  proceedBar: 30000, // internal only — the minimum to run the trip. NOT displayed on the page.
   wallet: "5zim3VG98LahnQTUef8kGbXQ3yTMZzoXK6q5gj1Lfuww",
   chain: "Solana",
   telegram: "yoloking0",

@@ -6,7 +6,7 @@ const lots = buildLots();
 const committed = lots.filter((l) => l.status !== "available").reduce((s, l) => s + l.price, 0);
 const claimed = lots.filter((l) => l.status !== "available").length;
 const totalPotential = lots.reduce((s, l) => s + l.price, 0);
-const pct = Math.min(100, Math.round((committed / kbw.proceedBar) * 100));
+const pct = Math.min(100, Math.round((committed / totalPotential) * 100));
 
 // first sold lot with a logo per girl+side, for the on-dress preview
 const slotSponsor: Record<string, (typeof lots)[number]> = {};
@@ -79,15 +79,15 @@ const tg = `https://t.me/${kbw.telegram}`;
           <div class="bar"><div class="bar-fill" style={`width: ${pct}%`}></div></div>
           <p class="bar-label">
             <strong>${committed.toLocaleString("en-US")}</strong> of
-            ${kbw.proceedBar.toLocaleString("en-US")} committed · ${claimed} of ${lots.length} lots
-            claimed · <span id="countdown" data-deadline={kbw.claimDeadline}>—</span>
+            ${totalPotential.toLocaleString("en-US")} claimed · {claimed} of {lots.length} lots ·{" "}
+            <span id="countdown" data-deadline={kbw.claimDeadline}>—</span>
           </p>
         </div>
 
         <p class="notice">
-          <strong>All or nothing.</strong> The campaign runs only if
-          ${kbw.proceedBar.toLocaleString("en-US")} is committed by the deadline. If it isn't, every
-          payment is refunded in full minus network fees. If it is, the dresses fly to Seoul.
+          <strong>All or nothing.</strong> The campaign runs only if it is confirmed by the
+          deadline. If it isn't, every payment is refunded in full minus network fees. If it is,
+          the dresses fly to Seoul.
         </p>
 
         <div class="hero-ctas">
@@ -220,25 +220,8 @@ const tg = `https://t.me/${kbw.telegram}`;
         <ul class="deliverables">
           <li>Your logo printed on the dress and worn for three days — main conference, side events, and dinners.</li>
           <li>Your logo, link, and tagline listed on this page.</li>
-          <li>Content package: event photos featuring the dresses, one short-form video, one post tagging your brand.</li>
           <li>A thank-you post after the event.</li>
         </ul>
-      </section>
-
-      <section class="section" id="trip" aria-label="Where the money goes">
-        <h2 class="sec-title">where the money goes</h2>
-        <p class="sec-note">
-          The floor exists because four people have to fly to Seoul and stay there.
-        </p>
-        <table class="cost-table">
-          <tbody>
-            <tr><td>4 return flights to Seoul</td><td class="num">$1,400</td></tr>
-            <tr><td>4 hotel nights, 2 rooms</td><td class="num">$2,000</td></tr>
-            <tr><td>4 printed dresses + backups</td><td class="num">$1,000</td></tr>
-            <tr><td>Ground transport, event passes, misc</td><td class="num">$1,600</td></tr>
-            <tr class="total"><td>Total trip cost</td><td class="num">$6,000</td></tr>
-          </tbody>
-        </table>
       </section>
 
       <section class="section" id="girls" aria-label="The four">
@@ -700,11 +683,6 @@ const tg = `https://t.me/${kbw.telegram}`;
 
       .deliverables { max-width: 62ch; }
       .deliverables li { margin-bottom: 0.5rem; }
-
-      .cost-table { width: min(100%, 420px); border-collapse: collapse; font-size: 14.5px; }
-      .cost-table td { padding: 7px 0; border-bottom: 1px solid var(--hairline-soft); }
-      .cost-table .num { text-align: right; font-variant-numeric: tabular-nums; }
-      .cost-table .total td { border-bottom: 1px solid var(--hairline); font-weight: 700; }
 
       .girl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 560px; }
       .girl-card { border: 1px solid var(--hairline); padding: 12px; text-align: center; }
