@@ -96,65 +96,57 @@ const tg = `https://t.me/${kbw.telegram}`;
         </div>
       </section>
 
-      <section class="section" id="pick" aria-label="Pick a spot">
-        <h2 class="sec-title">pick a spot</h2>
+      <section class="section" id="pick" aria-label="Pick your spots">
+        <h2 class="sec-title">pick your spots</h2>
         <p class="sec-note">
           Front ${kbw.prices.front.toLocaleString("en-US")} · back
-          ${kbw.prices.back.toLocaleString("en-US")} per girl, per day. Pick a girl, pick a day,
-          claim. Pay in USDC on Solana.
+          ${kbw.prices.back.toLocaleString("en-US")} per girl, per day. Choose one spot, both
+          sides, all three days, or the whole set.
         </p>
 
-        <div class="tabs" role="tablist" aria-label="Choose a girl">
-          {kbw.girls.map((g) => (
-            <button class="tab" role="tab" data-tab={g.id} aria-selected={g.id === "A" ? "true" : "false"}>
-              {g.name}
-            </button>
-          ))}
+        <div class="picker">
+          <div class="pick-row">
+            <span class="pick-label">girl</span>
+            <div class="pick-opts" data-group="girl">
+              <button class="opt" data-val="A">Girl A</button>
+              <button class="opt" data-val="B">Girl B</button>
+              <button class="opt" data-val="C">Girl C</button>
+              <button class="opt" data-val="D">Girl D</button>
+              <button class="opt" data-val="all">All 4</button>
+            </div>
+          </div>
+          <div class="pick-row">
+            <span class="pick-label">day</span>
+            <div class="pick-opts" data-group="day">
+              <button class="opt" data-val="d1">Sep 30</button>
+              <button class="opt" data-val="d2">Oct 1</button>
+              <button class="opt" data-val="d3">Oct 2</button>
+              <button class="opt" data-val="all">All 3 days</button>
+            </div>
+          </div>
+          <div class="pick-row">
+            <span class="pick-label">side</span>
+            <div class="pick-opts" data-group="side">
+              <button class="opt" data-val="front">Front · ${kbw.prices.front.toLocaleString("en-US")}</button>
+              <button class="opt" data-val="back">Back · ${kbw.prices.back.toLocaleString("en-US")}</button>
+              <button class="opt" data-val="both">Both sides</button>
+            </div>
+          </div>
         </div>
 
-        <div class="card-grid">
-          {lots.map((l) => (
-            <div class="lot-card" data-girl={l.girl} hidden={l.girl !== "A"}>
-              <div class="lot-top">
-                <span class="lot-day">{l.dayLabel}</span>
-                <span class={`lot-badge ${l.side}`}>{l.side}</span>
-              </div>
-              <p class="lot-price">${l.price.toLocaleString("en-US")}</p>
-              <p class="lot-note">{l.dayNote}</p>
-              {l.status !== "available" && l.brand && (
-                <div class="lot-sponsor">
-                  {l.logo && <img src={l.logo} alt="" />}
-                  <span>{l.brand}</span>
-                </div>
-              )}
-              <div class="lot-action">
-                {l.status === "available" ? (
-                  <button
-                    class="claim-btn"
-                    data-lot={l.id}
-                    data-girl={l.girl}
-                    data-side={l.side}
-                    data-label={`${l.girlName} · ${l.dayLabel} · ${l.side}`}
-                    data-price={l.price}
-                  >
-                    claim · ${l.price.toLocaleString("en-US")}
-                  </button>
-                ) : (
-                  <button
-                    class="claim-btn takeover"
-                    data-lot={l.id}
-                    data-girl={l.girl}
-                    data-side={l.side}
-                    data-label={`${l.girlName} · ${l.dayLabel} · ${l.side}`}
-                    data-price={l.price * 2}
-                    data-takeover="1"
-                  >
-                    take over · ${(l.price * 2).toLocaleString("en-US")}
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
+        <div class="summary">
+          <div class="summary-head">
+            <p class="summary-count">
+              <strong id="sum-count">—</strong> <span id="sum-word">spots</span> selected
+            </p>
+            <p class="summary-total" id="sum-price">—</p>
+          </div>
+          <ul class="summary-list" id="sum-list"></ul>
+          <button class="big-cta" id="pick-claim" type="button">claim →</button>
+          <p class="dim summary-note">
+            Taken spots are listed but not charged. Want one anyway? Take it over at 2× — DM
+            <a href={tg} rel="noopener">@{kbw.telegram}</a>. Bundle pricing for 6+ spots on request.
+          </p>
         </div>
       </section>
 
@@ -308,6 +300,7 @@ const tg = `https://t.me/${kbw.telegram}`;
         <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
         <p class="eyebrow" id="m-kind">CLAIM</p>
         <h3 id="m-title">—</h3>
+        <ul class="m-lots" id="m-lots"></ul>
         <p id="m-price" class="modal-price">—</p>
 
         <div class="m-step">
@@ -350,6 +343,7 @@ const tg = `https://t.me/${kbw.telegram}`;
     </div>
 
     <script type="application/json" id="hotspot-data" set:html={JSON.stringify(kbw.hotspots)}></script>
+    <script type="application/json" id="lots-data" set:html={JSON.stringify(lots)}></script>
 
     <script>
       const TELEGRAM = "yoloking0";
@@ -389,22 +383,85 @@ const tg = `https://t.me/${kbw.telegram}`;
         }
       };
 
-      /* tabs */
-      const tabs = document.querySelectorAll(".tab");
-      const cards = document.querySelectorAll(".lot-card");
-      function selectGirl(g) {
-        tabs.forEach((t) => t.setAttribute("aria-selected", t.dataset.tab === g ? "true" : "false"));
-        cards.forEach((c) => (c.hidden = c.dataset.girl !== g));
-      }
-      tabs.forEach((t) => t.addEventListener("click", () => selectGirl(t.dataset.tab)));
+      /* picker */
+      const LOTS = JSON.parse(document.getElementById("lots-data").textContent);
+      const state = { girl: "A", day: "d1", side: "front" };
+      const money = (n) => "$" + n.toLocaleString("en-US");
 
-      /* hotspots jump to that girl's cards */
+      function selection() {
+        return LOTS.filter(
+          (l) =>
+            (state.girl === "all" || l.girl === state.girl) &&
+            (state.day === "all" || l.day === state.day) &&
+            (state.side === "both" || l.side === state.side)
+        );
+      }
+
+      function renderPicker() {
+        document.querySelectorAll(".pick-opts").forEach((group) => {
+          const key = group.dataset.group;
+          group.querySelectorAll(".opt").forEach((btn) => {
+            btn.classList.toggle("on", btn.dataset.val === state[key]);
+          });
+        });
+        const sel = selection();
+        const avail = sel.filter((l) => l.status === "available");
+        const total = avail.reduce((s, l) => s + l.price, 0);
+        document.getElementById("sum-count").textContent = avail.length;
+        document.getElementById("sum-word").textContent = avail.length === 1 ? "spot" : "spots";
+        document.getElementById("sum-price").textContent = total ? money(total) : "$0";
+        document.getElementById("sum-list").innerHTML = sel
+          .map((l) =>
+            l.status === "available"
+              ? `<li><span>${l.girlName} · ${l.dayLabel} · ${l.side}</span><span>${money(l.price)}</span></li>`
+              : `<li class="taken"><span>${l.girlName} · ${l.dayLabel} · ${l.side}</span><span>taken · <button type="button" class="takeover-mini" data-lot="${l.id}" data-girl="${l.girl}" data-side="${l.side}" data-label="${l.girlName} · ${l.dayLabel} · ${l.side}" data-price="${l.price * 2}">take over ${money(l.price * 2)}</button></span></li>`
+          )
+          .join("");
+        const btn = document.getElementById("pick-claim");
+        btn.disabled = avail.length === 0;
+        btn.textContent = avail.length
+          ? `claim ${avail.length} ${avail.length === 1 ? "spot" : "spots"} · ${money(total)} →`
+          : "all selected spots are taken";
+      }
+
+      document.querySelectorAll(".pick-opts").forEach((group) => {
+        group.querySelectorAll(".opt").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            state[group.dataset.group] = btn.dataset.val;
+            renderPicker();
+          });
+        });
+      });
+
+      /* hotspots set the picker to that girl + side */
       document.querySelectorAll(".hotspot").forEach((h) => {
         h.addEventListener("click", () => {
-          selectGirl(h.dataset.girl);
+          state.girl = h.dataset.girl;
+          state.side = h.dataset.side;
+          renderPicker();
           document.getElementById("pick").scrollIntoView({ behavior: "smooth", block: "start" });
         });
       });
+
+      /* takeover links inside the summary list */
+      document.getElementById("sum-list").addEventListener("click", (e) => {
+        const b = e.target.closest(".takeover-mini");
+        if (!b) return;
+        openModal(
+          [{ label: b.dataset.label, girl: b.dataset.girl, side: b.dataset.side, price: Number(b.dataset.price) }],
+          true
+        );
+      });
+
+      /* claim button opens the modal with the available selection */
+      document.getElementById("pick-claim").addEventListener("click", () => {
+        const avail = selection()
+          .filter((l) => l.status === "available")
+          .map((l) => ({ label: `${l.girlName} · ${l.dayLabel} · ${l.side}`, girl: l.girl, side: l.side, price: l.price }));
+        if (avail.length) openModal(avail, false);
+      });
+
+      renderPicker();
 
       /* modal */
       const modal = document.getElementById("modal");
@@ -414,9 +471,10 @@ const tg = `https://t.me/${kbw.telegram}`;
       function updatePreview() {
         const base = document.getElementById("m-preview-base");
         const logo = document.getElementById("m-preview-logo");
-        if (!current) return;
-        base.src = `/kbw/${current.side}.png`;
-        const box = HOTSPOTS[current.side][current.girl];
+        if (!current || !current.items.length) return;
+        const first = current.items[0];
+        base.src = `/kbw/${first.side}.png`;
+        const box = HOTSPOTS[first.side][first.girl];
         const url = document.getElementById("f-logo").value.trim();
         if (url && box) {
           logo.hidden = false;
@@ -434,8 +492,11 @@ const tg = `https://t.me/${kbw.telegram}`;
       function claimText() {
         if (!current) return "";
         const v = (id) => document.getElementById(id).value.trim();
+        const total = current.items.reduce((s, i) => s + i.price, 0);
         return [
-          `${current.takeover ? "KBW TAKEOVER" : "KBW CLAIM"} — ${current.label} — $${current.price.toLocaleString("en-US")}`,
+          `${current.takeover ? "KBW TAKEOVER" : "KBW CLAIM"} — ${money(total)}`,
+          `Spots:`,
+          ...current.items.map((i) => `  - ${i.label} — ${money(i.price)}`),
           `Brand: ${v("f-brand")}`,
           `Website: ${v("f-url")}`,
           `Logo: ${v("f-logo") || "(sending file on Telegram)"}`,
@@ -461,32 +522,28 @@ const tg = `https://t.me/${kbw.telegram}`;
         }
       };
 
-      document.querySelectorAll(".claim-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const takeover = btn.dataset.takeover === "1";
-          current = {
-            label: btn.dataset.label,
-            price: Number(btn.dataset.price),
-            girl: btn.dataset.girl,
-            side: btn.dataset.side,
-            takeover,
-          };
-          document.getElementById("m-kind").textContent = takeover ? "TAKEOVER" : "CLAIM";
-          document.getElementById("m-title").textContent = current.label;
-          const amount = `$${current.price.toLocaleString("en-US")}`;
-          document.getElementById("m-price").textContent = amount;
-          document.getElementById("m-amount").textContent = amount;
-          fields.forEach((id) => (document.getElementById(id).value = ""));
-          const subject = encodeURIComponent(
-            `${takeover ? "Takeover" : "Claim"}: ${current.label} — ${amount}`
-          );
-          const body = encodeURIComponent(claimText());
-          document.getElementById("m-mail").href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
-          updatePreview();
-          modal.hidden = false;
-          document.getElementById("f-brand").focus();
-        });
-      });
+      function openModal(items, takeover) {
+        current = { items, takeover };
+        document.getElementById("m-kind").textContent = takeover ? "TAKEOVER" : "CLAIM";
+        document.getElementById("m-title").textContent =
+          items.length === 1 ? items[0].label : `${items.length} spots`;
+        document.getElementById("m-lots").innerHTML = items
+          .map((i) => `<li><span>${i.label}</span><span>${money(i.price)}</span></li>`)
+          .join("");
+        const total = items.reduce((s, i) => s + i.price, 0);
+        const amount = money(total);
+        document.getElementById("m-price").textContent = amount;
+        document.getElementById("m-amount").textContent = amount;
+        fields.forEach((id) => (document.getElementById(id).value = ""));
+        const subject = encodeURIComponent(
+          `${takeover ? "Takeover" : "Claim"}: ${items.map((i) => i.label).join(" + ")} — ${amount}`
+        );
+        const body = encodeURIComponent(claimText());
+        document.getElementById("m-mail").href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+        updatePreview();
+        modal.hidden = false;
+        document.getElementById("f-brand").focus();
+      }
 
       window.closeModal = () => {
         modal.hidden = true;
@@ -523,59 +580,62 @@ const tg = `https://t.me/${kbw.telegram}`;
       .sec-note { color: var(--muted); font-size: 14.5px; max-width: 62ch; margin: 0 0 1rem; }
       .dim { color: var(--muted); font-size: 13px; }
 
-      /* tabs */
-      .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
-      .tab {
+      /* picker */
+      .picker { border: 1px solid var(--hairline); padding: 16px; margin-bottom: 14px; }
+      .pick-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; padding: 8px 0; }
+      .pick-row + .pick-row { border-top: 1px solid var(--hairline-soft); }
+      .pick-label {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        width: 44px;
+        flex-shrink: 0;
+      }
+      .pick-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+      .opt {
         font-family: var(--mono);
         font-size: 13px;
         background: none;
         border: 1px solid var(--hairline);
-        color: var(--muted);
-        padding: 8px 16px;
+        color: var(--ink);
+        padding: 8px 14px;
         cursor: pointer;
       }
-      .tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-      .tab:hover { border-color: var(--ink); }
+      .opt:hover { border-color: var(--ink); }
+      .opt.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 
-      /* lot cards */
-      .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-      .lot-card {
-        border: 1px solid var(--hairline);
-        padding: 14px;
+      /* summary */
+      .summary { border: 1px solid var(--ink); padding: 16px; }
+      .summary-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; margin-bottom: 10px; }
+      .summary-count { margin: 0; font-size: 15px; }
+      .summary-total { margin: 0; font-family: var(--mono); font-size: 1.5rem; font-weight: 700; }
+      .summary-list { list-style: none; margin: 0 0 14px; padding: 0; }
+      .summary-list li {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-      .lot-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-      .lot-day { font-weight: 700; font-size: 15px; }
-      .lot-badge {
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px 12px;
         font-family: var(--mono);
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+        font-size: 12.5px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--hairline-soft);
+      }
+      .summary-list li.taken { color: var(--muted); }
+      .takeover-mini {
+        font-family: var(--mono);
+        font-size: 11px;
+        background: none;
         border: 1px solid var(--hairline);
-        padding: 2px 8px;
-        color: var(--muted);
-      }
-      .lot-badge.front { border-color: var(--ink); color: var(--ink); }
-      .lot-price { font-family: var(--mono); font-size: 1.35rem; margin: 0.35rem 0 0; }
-      .lot-note { font-size: 12.5px; color: var(--muted); margin: 0 0 0.5rem; }
-      .lot-sponsor { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 0.5rem; }
-      .lot-sponsor img { width: 22px; height: 22px; object-fit: contain; border: 1px solid var(--hairline); background: #fff; }
-      .lot-action { margin-top: auto; }
-      .claim-btn {
-        font: inherit;
-        font-size: 13px;
-        font-family: var(--mono);
-        background: var(--ink);
-        color: var(--bg);
-        border: 1px solid var(--ink);
-        padding: 9px 12px;
+        color: var(--ink);
+        padding: 3px 8px;
         cursor: pointer;
-        width: 100%;
       }
-      .claim-btn:hover { opacity: 0.85; }
-      .claim-btn.takeover { background: none; color: var(--ink); }
+      .takeover-mini:hover { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+      .summary-note { margin: 10px 0 0; }
+      .big-cta:disabled { opacity: 0.4; cursor: not-allowed; }
 
       /* dress map — breakout to full width */
       .breakout {
@@ -698,18 +758,24 @@ const tg = `https://t.me/${kbw.telegram}`;
       }
       .m-fields label:nth-child(3) { grid-column: span 2; }
       .m-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .m-lots { list-style: none; margin: 0 0 0.6rem; padding: 0; }
+      .m-lots li {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 4px 0;
+        border-bottom: 1px solid var(--hairline-soft);
+      }
       .m-preview { border-top: 1px solid var(--hairline-soft); margin-top: 0.9rem; padding-top: 0.9rem; }
       .m-preview-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 6px; }
       .m-preview-frame { position: relative; width: min(100%, 300px); border: 1px solid var(--hairline); background: #fff; }
       .m-preview-frame img:first-child { width: 100%; display: block; }
       #m-preview-logo { position: absolute; object-fit: contain; pointer-events: none; }
 
-      @media (max-width: 860px) {
-        .card-grid { grid-template-columns: repeat(2, 1fr); }
-      }
       @media (max-width: 640px) {
         .dress-grid { grid-template-columns: 1fr; }
-        .card-grid { grid-template-columns: 1fr; }
         .girl-grid { grid-template-columns: repeat(2, 1fr); }
         .m-fields { grid-template-columns: 1fr; }
         .m-fields label:nth-child(3) { grid-column: span 1; }
