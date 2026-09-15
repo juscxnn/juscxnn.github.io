@@ -42,7 +42,8 @@ export const kbw = {
   eventDates: "Sep 29 – Oct 1, 2026",
   worn: "Sep 30 – Oct 2, 2026",
   location: "Walkerhill, Seoul",
-  claimDeadline: "2026-09-23T23:59:59+08:00",
+  claimDeadline: "2026-09-21T23:59:59+08:00",
+  deadlineLabel: "Sep 21, 23:59 SGT",
   proceedBar: 30000, // internal only — the minimum to run the trip. NOT displayed on the page.
   wallet: "5zim3VG98LahnQTUef8kGbXQ3yTMZzoXK6q5gj1Lfuww",
   chain: "Solana",
