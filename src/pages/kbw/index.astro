@@ -22,6 +22,7 @@ const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${kbw.location}. Front $7,500 · back $5,000. All-or-nothing.`;
 const tg = `https://t.me/${kbw.telegram}`;
+const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
 ---
 
 <!doctype html>
@@ -170,7 +171,7 @@ const tg = `https://t.me/${kbw.telegram}`;
           {(["front", "back"] as const).map((side) => (
             <figure class="dress">
               <div class="dress-img">
-                <img src={`/kbw/${side}.png`} alt={`Four dresses, ${side} view, with ad placements`} />
+                <img src={dressImg[side]} alt={`Four dresses, ${side} view, with ad placements`} />
                 {(["A", "B", "C", "D"] as const).map((g) => {
                   const h = kbw.hotspots[side][g];
                   const sponsor = slotSponsor[`${g}-${side}`];
@@ -364,7 +365,7 @@ const tg = `https://t.me/${kbw.telegram}`;
         <div class="m-preview">
           <p class="m-preview-label">on the dress</p>
           <div class="m-preview-frame" id="m-preview-frame">
-            <img id="m-preview-base" src="/kbw/front.png" alt="" />
+            <img id="m-preview-base" src="/kbw/front2.jpg" alt="" />
             <img id="m-preview-logo" alt="" hidden />
           </div>
         </div>
@@ -372,12 +373,14 @@ const tg = `https://t.me/${kbw.telegram}`;
     </div>
 
     <script type="application/json" id="hotspot-data" set:html={JSON.stringify(kbw.hotspots)}></script>
+    <script type="application/json" id="dress-img" set:html={JSON.stringify(dressImg)}></script>
     <script type="application/json" id="lots-data" set:html={JSON.stringify(lots)}></script>
 
     <script>
       const TELEGRAM = "yoloking0";
       const EMAIL = "jcxa@proton.me";
       const HOTSPOTS = JSON.parse(document.getElementById("hotspot-data").textContent);
+      const DRESS_IMG = JSON.parse(document.getElementById("dress-img").textContent);
 
       /* countdown */
       const DEADLINE = document.getElementById("countdown")?.dataset.deadline;
@@ -502,7 +505,7 @@ const tg = `https://t.me/${kbw.telegram}`;
         const logo = document.getElementById("m-preview-logo");
         if (!current || !current.items.length) return;
         const first = current.items[0];
-        base.src = `/kbw/${first.side}.png`;
+        base.src = DRESS_IMG[first.side];
         const box = HOTSPOTS[first.side][first.girl];
         const fileInput = document.getElementById("f-logo-file");
         const picked = fileInput && fileInput.files[0];
