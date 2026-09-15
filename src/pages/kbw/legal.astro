@@ -1,0 +1,217 @@
+---
+import "../../styles/global.css";
+import { kbw } from "../../data/kbw";
+
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#000">${[0, 60, 120, 180, 240, 300]
+  .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
+  .join("")}</g></svg>`;
+const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
+const updated = "September 15, 2026";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terms, Refunds &amp; Policies — KBW dress campaign</title>
+    <meta name="description" content="Terms of service, refund policy, privacy policy, and content policy for the KBW Seoul dress ad campaign." />
+    <meta name="robots" content="index, follow" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <script>
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+        window.toggleTheme = function () {
+          var c = document.documentElement.getAttribute("data-theme");
+          var n = c === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", n);
+          localStorage.setItem("theme", n);
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="wordmark" href="/">Justin Chua</a>
+        <div class="nav-right">
+          <a class="nav-btn" href="/kbw">← campaign</a>
+          <button class="nav-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">theme</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap legal">
+      <h1>Terms, Refunds &amp; Policies</h1>
+      <p class="updated">Last updated: {updated}</p>
+
+      <nav class="toc">
+        <a href="#terms">Terms of Service</a> · <a href="#refund">Refund Policy</a> ·
+        <a href="#privacy">Privacy Policy</a> · <a href="#content">Content Policy</a>
+      </nav>
+
+      <section id="terms">
+        <h2>Terms of Service</h2>
+        <p>
+          These terms govern your purchase of a sponsorship placement ("Lot") on the "4 Dresses"
+          campaign (the "Campaign") operated by Justin Chua ("I", "me") for {kbw.event},{" "}
+          {kbw.eventDates}, at {kbw.location}.
+        </p>
+
+        <h3>What you're buying</h3>
+        <p>Each Lot corresponds to a printed placement on one dress, worn by one model on one day of the event. A Lot includes:</p>
+        <ul>
+          <li>Your logo printed at the purchased position on the dress, worn on the purchased day</li>
+          <li>Your logo, link, and tagline listed on the campaign page</li>
+          <li>Content package: event photos featuring the dresses, one short-form video, and one social post tagging your brand</li>
+          <li>Mention in the appreciation post after the event</li>
+        </ul>
+
+        <h3>Pricing</h3>
+        <p>
+          Front placements are ${kbw.prices.front.toLocaleString("en-US")} and back placements are
+          ${kbw.prices.back.toLocaleString("en-US")} per girl, per day. All prices are in USD.
+        </p>
+
+        <h3>Takeover mechanic</h3>
+        <p>
+          Once a Lot is claimed, another sponsor may take it over by paying 2× the most recent price
+          for that Lot. If your Lot is taken over, you are notified by email and refunded in full,
+          minus network fees, within 7 days of the takeover. Each subsequent takeover doubles the
+          price again from the last price.
+        </p>
+
+        <h3>Proceed bar</h3>
+        <p>
+          The Campaign runs only if at least ${kbw.proceedBar.toLocaleString("en-US")} in total
+          commitments is reached by {kbw.claimDeadline}. If the bar is not reached, the Campaign is
+          called off and every sponsor is refunded in full, minus network fees, within 7 days.
+        </p>
+
+        <h3>Payment</h3>
+        <p>
+          Payments are made in USDC on the Solana network to the address published on the campaign
+          page. Only USDC on Solana is accepted. Assets sent on other networks or in other tokens
+          cannot be recovered. Claims are confirmed manually after the transaction signature is
+          emailed to {kbw.email}.
+        </p>
+
+        <h3>Sponsor responsibilities</h3>
+        <p>
+          You are responsible for providing a logo and brand information you have the legal right to
+          use and display publicly. If your submission infringes another party's rights, you are
+          solely responsible for any resulting claim. I review every logo and will remove any logo
+          reported or discovered to infringe third-party rights.
+        </p>
+
+        <h3>Limitation of liability</h3>
+        <p>
+          I will make good-faith efforts to deliver all Campaign deliverables as described. I am an
+          individual, not a company, and cannot guarantee specific engagement, reach, or business
+          outcomes. My liability for any issue arising from this Campaign is limited to the amount
+          you paid for your Lot.
+        </p>
+
+        <h3>Changes</h3>
+        <p>
+          I may update these terms from time to time. The version in effect at the time of your
+          purchase governs that purchase. Questions: {kbw.email}.
+        </p>
+      </section>
+
+      <section id="refund">
+        <h2>Refund Policy</h2>
+        <p>All refunds are issued in full minus network fees (the Solana gas fees kept by the network, which cannot be recovered).</p>
+
+        <h3>Full-refund guarantee</h3>
+        <p>
+          If the proceed bar of ${kbw.proceedBar.toLocaleString("en-US")} is not reached by the
+          deadline, or I decide not to run the Campaign, every sponsor is refunded in full minus
+          network fees, no questions asked. Refunds are returned in USDC to the sending wallet
+          address within 7 business days of the Campaign being called off.
+        </p>
+
+        <h3>Takeover refunds</h3>
+        <p>
+          If your Lot is taken over by another sponsor at 2× the last price, you receive a full
+          refund minus network fees within 7 business days of the takeover.
+        </p>
+
+        <h3>No refunds outside these cases</h3>
+        <p>
+          Because placements are limited and production begins once the campaign is confirmed,
+          refunds are not available for changing your mind after a Lot is confirmed and not taken
+          over. Lots removed for violating the Content Policy are not eligible for a refund.
+        </p>
+
+        <h3>Event-day circumstances</h3>
+        <p>
+          If the event is cancelled or the models cannot attend for reasons genuinely outside my
+          control, sponsors are offered either a full refund (minus network fees) or equivalent
+          alternative content, at the sponsor's choice.
+        </p>
+      </section>
+
+      <section id="privacy">
+        <h2>Privacy Policy</h2>
+        <p>When you claim a Lot, I collect:</p>
+        <ul>
+          <li>Your brand/company name</li>
+          <li>Your email address (for confirmation, takeover notices, and refund notices)</li>
+          <li>Your logo file (for print production)</li>
+          <li>Your transaction signature (for payment confirmation)</li>
+        </ul>
+        <p>
+          I use this information only to fulfill your sponsorship: printing your logo, confirming
+          your Lot, delivering the agreed content, and contacting you about your Lot. I do not sell
+          your information to third parties and I do not use your email for marketing beyond
+          communication directly related to your purchase. Wallet addresses and transaction
+          signatures are public by nature of the Solana network.
+        </p>
+      </section>
+
+      <section id="content">
+        <h2>Content Policy</h2>
+        <p>To keep this campaign appropriate for a public conference, the following applies to any logo, brand name, or content submitted for a Lot.</p>
+        <h3>Not allowed</h3>
+        <p>I reserve the right to refuse, remove, or request changes to any submission that:</p>
+        <ul>
+          <li>Is illegal in South Korea, Singapore, or the sponsor's home jurisdiction</li>
+          <li>Promotes hate speech, discrimination, or violence</li>
+          <li>Contains sexually explicit or adult content</li>
+          <li>Promotes scams, known fraudulent projects, or content designed to mislead (including impersonating another brand)</li>
+          <li>Infringes someone else's trademark, copyright, or other intellectual property</li>
+          <li>Is unrelated to the sponsor's actual brand</li>
+        </ul>
+        <p>
+          Content that violates this policy is removed without refund. If a Lot goes live with
+          prohibited content, or a sponsor swaps in prohibited content after approval, it is removed
+          immediately and the payment is forfeit.
+        </p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-inner">
+        <p class="foot-copy">© Justin Chua · Taipei</p>
+        <p class="colophon"><a href="/kbw">← back to the campaign</a></p>
+      </div>
+    </footer>
+
+    <style>
+      .legal { max-width: 40em; padding-block: 2.5rem 1rem; }
+      .legal h1 { font-size: 1.8rem; }
+      .updated { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 1.5rem; }
+      .toc { font-family: var(--mono); font-size: 13px; margin-bottom: 2rem; }
+      .legal section { margin-bottom: 2.5rem; }
+      .legal h2 { font-size: 1.25rem; margin: 0 0 0.75rem; }
+      .legal h3 { font-size: 1rem; margin: 1.25rem 0 0.4rem; }
+      .legal p { margin: 0 0 0.9rem; }
+      .legal ul { margin: 0 0 1rem; padding-left: 1.4rem; }
+      .legal li { margin-bottom: 0.35rem; }
+    </style>
+  </body>
+</html>
