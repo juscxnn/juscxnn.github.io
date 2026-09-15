@@ -101,8 +101,12 @@ const days = kbw.days;
 
           <label class="field"><span class="lbl">brand name</span><input id="e-brand" class="inp" placeholder="Acme" /></label>
           <label class="field"><span class="lbl">website</span><input id="e-url" class="inp" placeholder="https://acme.com" /></label>
-          <label class="field"><span class="lbl">logo url (or upload below)</span><input id="e-logo" class="inp" placeholder="https://acme.com/logo.png" /></label>
+          <label class="field"><span class="lbl">logo url (or upload / paste below)</span><input id="e-logo" class="inp" placeholder="https://acme.com/logo.png" /></label>
           <label class="field"><span class="lbl">upload logo file</span><input id="e-file" class="inp" type="file" accept="image/*" /></label>
+          <div class="logo-preview-wrap">
+            <img id="e-preview" class="logo-preview" alt="" hidden />
+            <p class="paste-hint">Tip: copy the logo in Telegram (or any image) and paste it here with ⌘V / Ctrl+V.</p>
+          </div>
 
           <div class="editor-actions">
             <button class="btn" onclick="saveLot()" id="e-save">save</button>
@@ -142,6 +146,7 @@ const days = kbw.days;
       let statusSha = null;
       let editing = null;
       let editStatus = "open";
+      let pastedFile = null;
 
       /* ── gate ── */
       function sha256(str) {
@@ -256,19 +261,45 @@ const days = kbw.days;
       }
 
       /* ── editor ── */
+      function showPreview(src) {
+        const p = document.getElementById("e-preview");
+        if (src) { p.src = src; p.hidden = false; } else { p.hidden = true; p.removeAttribute("src"); }
+      }
       function openEditor(id) {
         editing = id;
         const l = LOTS.find((x) => x.id === id);
         const e = entryOf(id) || { status: "open" };
         editStatus = e.status || "open";
+        pastedFile = null;
         document.getElementById("e-title").textContent = `${l.girlName} · ${l.dayLabel} · ${l.side}`;
         document.getElementById("e-brand").value = e.brand || "";
         document.getElementById("e-url").value = e.url || "";
         document.getElementById("e-logo").value = e.logo || "";
         document.getElementById("e-file").value = "";
+        showPreview(e.logo || "");
         setStatus(editStatus);
         document.getElementById("editor").hidden = false;
       }
+
+      // paste an image straight from the clipboard (e.g. copied from Telegram)
+      document.getElementById("editor").addEventListener("paste", (e) => {
+        const items = (e.clipboardData && e.clipboardData.items) || [];
+        for (const item of items) {
+          if (item.type && item.type.indexOf("image/") === 0) {
+            const f = item.getAsFile();
+            if (!f) continue;
+            pastedFile = f;
+            showPreview(URL.createObjectURL(f));
+            e.preventDefault();
+            return;
+          }
+        }
+      });
+
+      document.getElementById("e-file").addEventListener("change", (e) => {
+        const f = e.target.files[0];
+        if (f) { pastedFile = null; showPreview(URL.createObjectURL(f)); }
+      });
       function setStatus(v) {
         editStatus = v;
         document.querySelectorAll("#e-status .seg-btn").forEach((b) =>
@@ -293,7 +324,7 @@ const days = kbw.days;
         msg("saving…");
         try {
           let logo = document.getElementById("e-logo").value.trim();
-          const file = document.getElementById("e-file").files[0];
+          const file = pastedFile || document.getElementById("e-file").files[0];
 
           // upload logo file if selected
           if (file) {
@@ -399,6 +430,9 @@ const days = kbw.days;
       .seg-btn { font-family: var(--mono); font-size: 12px; background: none; border: 1px solid var(--hairline); color: var(--ink); padding: 8px 14px; cursor: pointer; }
       .seg-btn.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
       .editor-actions { display: flex; gap: 8px; margin-top: 6px; }
+      .logo-preview-wrap { display: flex; align-items: center; gap: 12px; }
+      .logo-preview { width: 56px; height: 56px; object-fit: contain; border: 1px solid var(--hairline); background: #fff; }
+      .paste-hint { font-size: 12px; color: var(--muted); margin: 0; }
 
       @media (max-width: 640px) {
         .tile-grid { grid-template-columns: repeat(2, 1fr); }
