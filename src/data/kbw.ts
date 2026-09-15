@@ -59,7 +59,6 @@ export const kbw = {
     { id: "A", name: "Girl A", handle: "" },
     { id: "B", name: "Girl B", handle: "" },
     { id: "C", name: "Girl C", handle: "" },
-    { id: "D", name: "Girl D", handle: "" },
   ],
 
   prices: { front: 7500, back: 5000 },
@@ -71,16 +70,14 @@ export const kbw = {
   // hotspot boxes (% of image): x, y, w, h — auto-detected from the mockups
   hotspots: {
     front: {
-      A: { x: 19.9, y: 28.8, w: 6.2, h: 9.6 },
-      B: { x: 37.1, y: 26.9, w: 7.6, h: 9.6 },
-      C: { x: 62.0, y: 30.3, w: 7.2, h: 9.6 },
-      D: { x: 84.3, y: 30.0, w: 6.5, h: 10.1 },
+      A: { x: 22.9, y: 28.5, w: 9.1, h: 12.9 },
+      B: { x: 47.1, y: 28.7, w: 10.0, h: 12.8 },
+      C: { x: 72.8, y: 29.6, w: 10.5, h: 12.7 },
     },
     back: {
-      A: { x: 15.3, y: 28.3, w: 5.8, h: 7.9 },
-      B: { x: 37.2, y: 29.0, w: 7.5, h: 8.0 },
-      C: { x: 60.2, y: 31.2, w: 5.8, h: 7.0 },
-      D: { x: 82.1, y: 30.0, w: 7.2, h: 8.4 },
+      A: { x: 17.6, y: 41.1, w: 12.6, h: 10.0 },
+      B: { x: 43.0, y: 40.8, w: 14.7, h: 10.0 },
+      C: { x: 69.6, y: 41.3, w: 12.6, h: 10.1 },
     },
   },
 };

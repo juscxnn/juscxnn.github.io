@@ -20,9 +20,9 @@ const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
-const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${kbw.location}. Front $7,500 · back $5,000. All-or-nothing.`;
+const description = `Ad space on 3 dresses worn ${kbw.worn} at ${kbw.event}, ${kbw.location}. Front $7,500 · back $5,000. All-or-nothing.`;
 const tg = `https://t.me/${kbw.telegram}`;
-const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
+const dressImg = { front: "/kbw/front3.jpg", back: "/kbw/back3.jpg" };
 ---
 
 <!doctype html>
@@ -30,22 +30,22 @@ const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>KBW Seoul — ad space on 4 dresses</title>
+    <title>KBW Seoul — ad space on 3 dresses</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL("/kbw/", Astro.site)} />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111111" />
-    <meta property="og:title" content="KBW Seoul — ad space on 4 dresses" />
+    <meta property="og:title" content="KBW Seoul — ad space on 3 dresses" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={new URL("/kbw/", Astro.site)} />
     <meta property="og:image" content={new URL("/kbw/og.png", Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Ad space on 4 dresses at Korea Blockchain Week" />
+    <meta property="og:image:alt" content="Ad space on 3 dresses at Korea Blockchain Week" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="KBW Seoul — ad space on 4 dresses" />
+    <meta name="twitter:title" content="KBW Seoul — ad space on 3 dresses" />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL("/kbw/og.png", Astro.site)} />
     <link rel="icon" type="image/svg+xml" href={favicon} />
@@ -78,7 +78,7 @@ const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
     <main class="wrap">
       <section class="hero" aria-label="Overview">
         <p class="eyebrow">KBW SEOUL · WORN SEP 30 – OCT 2, 2026</p>
-        <h1>Ad space on 4 dresses at Korea Blockchain Week.</h1>
+        <h1>Ad space on 3 dresses at Korea Blockchain Week.</h1>
         <p class="lede">
           A booth at KBW costs five figures. A logo on one of our dresses costs a fraction of that
           and is seen by the same 13,000+ attendees — three days across the main conference, side
@@ -121,8 +121,7 @@ const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
               <button class="opt" data-val="A">Girl A</button>
               <button class="opt" data-val="B">Girl B</button>
               <button class="opt" data-val="C">Girl C</button>
-              <button class="opt" data-val="D">Girl D</button>
-              <button class="opt" data-val="all">All 4</button>
+              <button class="opt" data-val="all">All 3</button>
             </div>
           </div>
           <div class="pick-row">
@@ -172,7 +171,7 @@ const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
             <figure class="dress">
               <div class="dress-img">
                 <img src={dressImg[side]} alt={`Four dresses, ${side} view, with ad placements`} />
-                {(["A", "B", "C", "D"] as const).map((g) => {
+                {(["A", "B", "C"] as const).map((g) => {
                   const h = kbw.hotspots[side][g];
                   const sponsor = slotSponsor[`${g}-${side}`];
                   return (
@@ -259,8 +258,8 @@ const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
         </ul>
       </section>
 
-      <section class="section" id="girls" aria-label="The four">
-        <h2 class="sec-title">the four</h2>
+      <section class="section" id="girls" aria-label="The three">
+        <h2 class="sec-title">the three</h2>
         <p class="sec-note">Revealed once the campaign is confirmed.</p>
         <div class="girl-grid">
           {kbw.girls.map((g) => (
@@ -365,7 +364,7 @@ const dressImg = { front: "/kbw/front2.jpg", back: "/kbw/back2.jpg" };
         <div class="m-preview">
           <p class="m-preview-label">on the dress</p>
           <div class="m-preview-frame" id="m-preview-frame">
-            <img id="m-preview-base" src="/kbw/front2.jpg" alt="" />
+            <img id="m-preview-base" src="/kbw/front3.jpg" alt="" />
             <img id="m-preview-logo" alt="" hidden />
           </div>
         </div>
