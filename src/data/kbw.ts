@@ -8,7 +8,7 @@
 //
 // Lot key format: {girl}-{day}-{side}
 //   girl: A | B | C | D
-//   day:  d1 (Sep 29) | d2 (Sep 30) | d3 (Oct 1)
+//   day:  d1 (Sep 30) | d2 (Oct 1) | d3 (Oct 2)
 //   side: front | back
 //
 // Example — Girl B, Sep 30, front lot confirmed:
@@ -22,6 +22,7 @@
 export const kbw = {
   event: "Korea Blockchain Week 2026",
   eventDates: "Sep 29 – Oct 1, 2026",
+  worn: "Sep 30 – Oct 2, 2026",
   location: "Walkerhill, Seoul",
   claimDeadline: "2026-09-23T23:59:59+08:00",
   proceedBar: 30000, // USD committed needed to run the campaign
@@ -30,9 +31,9 @@ export const kbw = {
   email: "jcxa@proton.me",
 
   days: [
-    { id: "d1", label: "Sep 29", note: "Upbit Institutional Summit + side events" },
-    { id: "d2", label: "Sep 30", note: "Main conference, day 1" },
-    { id: "d3", label: "Oct 1", note: "Main conference, day 2" },
+    { id: "d1", label: "Sep 30", note: "Main conference day 1 + side events" },
+    { id: "d2", label: "Oct 1", note: "Main conference day 2 + side events" },
+    { id: "d3", label: "Oct 2", note: "Side events + dinners" },
   ],
 
   girls: [

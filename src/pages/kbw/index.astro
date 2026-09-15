@@ -12,7 +12,7 @@ const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
-const description = `Ad space on 4 dresses at ${kbw.event}, ${kbw.eventDates}, ${kbw.location}. Front $7,500 · back $5,000. All-or-nothing.`;
+const description = `Ad space on 4 dresses worn ${kbw.worn} at ${kbw.event}, ${kbw.location}. Front $7,500 · back $5,000. All-or-nothing.`;
 ---
 
 <!doctype html>
@@ -59,12 +59,12 @@ const description = `Ad space on 4 dresses at ${kbw.event}, ${kbw.eventDates}, $
 
     <main class="wrap">
       <section class="hero" aria-label="Overview">
-        <p class="eyebrow">KBW SEOUL · SEP 29 – OCT 1 2026</p>
+        <p class="eyebrow">KBW SEOUL · WORN {kbw.worn.toUpperCase()}</p>
         <h1>Ad space on 4 dresses at Korea Blockchain Week.</h1>
         <p class="lede">
           A booth at KBW costs five figures. A logo on one of our dresses costs a fraction of that
-          and is seen by the same 13,000+ attendees — for three days, across the main conference
-          and the side events.
+          and is seen by the same 13,000+ attendees — for three days, across the main conference,
+          the side events, and the dinners.
         </p>
 
         <div class="bar-wrap">
@@ -249,7 +249,7 @@ const description = `Ad space on 4 dresses at ${kbw.event}, ${kbw.eventDates}, $
       <section class="section" id="deliverables" aria-label="What you get">
         <h2 class="sec-title">what you get</h2>
         <ul class="deliverables">
-          <li>Your logo printed on the dress and worn for all three days of KBW — main conference and side events.</li>
+          <li>Your logo printed on the dress and worn for three days — main conference, side events, and dinners.</li>
           <li>Your logo, link, and tagline listed on this page.</li>
           <li>Content package: event photos featuring the dresses, one short-form video, one post tagging your brand.</li>
           <li>A thank-you post on the appreciation thread after the event.</li>
