@@ -1,7 +1,23 @@
 // ── KBW 2026 dress ad campaign ─────────────────────────────
-// Edit this file to update availability. Statuses: "available" (default),
-// "pending" (payment sent, confirming), "sold" (paid + confirmed).
-// Claimed lots can be taken over at 2× the last price until the deadline.
+//
+// THE SITE DOES NOT UPDATE ITSELF WHEN A LOT IS CLAIMED.
+// When a claim is confirmed (USDC received + tx signature emailed to you):
+//   1. Add the lot key to the `status` object below
+//   2. Use "sold" (confirmed) or "pending" (payment sent, not yet verified)
+//   3. Commit on github.com → the site redeploys automatically in ~1 minute
+//
+// Lot key format: {girl}-{day}-{side}
+//   girl: A | B | C | D
+//   day:  d1 (Sep 29) | d2 (Sep 30) | d3 (Oct 1)
+//   side: front | back
+//
+// Example — Girl B, Sep 30, front lot confirmed:
+//   status: {
+//     "B-d2-front": "sold",
+//   },
+//
+// Sold lots automatically switch to "take over · 2× price" buttons on the page.
+// Remove a key to make a lot available again.
 
 export const kbw = {
   event: "Korea Blockchain Week 2026",

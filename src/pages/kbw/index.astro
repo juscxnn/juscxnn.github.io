@@ -152,7 +152,7 @@ const description = `Ad space on 4 dresses at ${kbw.event}, ${kbw.eventDates}, $
         </p>
         {
           kbw.girls.map((g) => (
-            <div class="girl-block">
+            <div class="girl-block" id={`girl-${g.id}`}>
               <h3 class="girl-name">
                 {g.name}
                 {g.handle && <span class="girl-handle"> · {g.handle}</span>}
@@ -386,10 +386,15 @@ const description = `Ad space on 4 dresses at ${kbw.event}, ${kbw.eventDates}, $
 
       const modal = document.getElementById("modal");
       const email = "jcxa@proton.me";
-      document.querySelectorAll(".claim-btn, .hotspot").forEach((btn) => {
+      document.querySelectorAll(".hotspot").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const lot = btn.dataset.lot;
-          const label = btn.dataset.label || (btn.dataset.girl ? `Girl ${btn.dataset.girl} · ${btn.dataset.side}` : "");
+          const target = document.getElementById(`girl-${btn.dataset.girl}`);
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+      document.querySelectorAll(".claim-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const label = btn.dataset.label || "";
           const price = btn.dataset.price;
           if (!label) { location.hash = "#lots"; return; }
           const takeover = btn.dataset.takeover === "1";
@@ -558,6 +563,7 @@ const description = `Ad space on 4 dresses at ${kbw.event}, ${kbw.eventDates}, $
         z-index: 50;
         padding: 16px;
       }
+      .modal[hidden] { display: none; }
       .modal-card {
         position: relative;
         background: var(--bg);
