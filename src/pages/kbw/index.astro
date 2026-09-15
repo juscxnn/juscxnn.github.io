@@ -258,20 +258,6 @@ const dressImg = { front: "/kbw/front3.jpg", back: "/kbw/back3.jpg" };
         </ul>
       </section>
 
-      <section class="section" id="girls" aria-label="The three">
-        <h2 class="sec-title">the three</h2>
-        <p class="sec-note">Revealed once the campaign is confirmed.</p>
-        <div class="girl-grid">
-          {kbw.girls.map((g) => (
-            <div class="girl-card">
-              <div class="girl-ph">?</div>
-              <p class="girl-card-name">{g.name}</p>
-              <p class="dim">to be announced</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section class="section" id="faq" aria-label="FAQ">
         <h2 class="sec-title">faq</h2>
         <dl class="faq">
@@ -754,11 +740,6 @@ const dressImg = { front: "/kbw/front3.jpg", back: "/kbw/back3.jpg" };
       .deliverables { max-width: 62ch; }
       .deliverables li { margin-bottom: 0.5rem; }
 
-      .girl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 560px; }
-      .girl-card { border: 1px solid var(--hairline); padding: 12px; text-align: center; }
-      .girl-ph { font-size: 2rem; color: var(--muted); border: 1px dashed var(--hairline); padding: 18px 0; margin-bottom: 8px; }
-      .girl-card-name { margin: 0; font-weight: 700; font-size: 14px; }
-      .girl-card .dim { margin: 2px 0 0; }
 
       .faq { max-width: 62ch; }
       .faq dt { font-weight: 700; margin-top: 1rem; }
@@ -827,7 +808,6 @@ const dressImg = { front: "/kbw/front3.jpg", back: "/kbw/back3.jpg" };
 
       @media (max-width: 640px) {
         .dress-grid { grid-template-columns: 1fr; }
-        .girl-grid { grid-template-columns: repeat(2, 1fr); }
         .m-fields { grid-template-columns: 1fr; }
         .m-fields label:nth-child(3) { grid-column: span 1; }
         h1 { font-size: 1.5rem; }
