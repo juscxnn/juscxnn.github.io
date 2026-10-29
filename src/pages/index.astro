@@ -24,7 +24,7 @@ const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 
 const description =
-  "I build software and get it distributed. Sales lead and product at Clique. Founder of Gatekeep and Attiteud.";
+  "I build software and get it distributed. Sales lead and product at Clique. Founder of Gatekeep and Attiteud, a holding company for small tech bets.";
 const ogImage = new URL("/og.png", Astro.site);
 
 const jsonLd = JSON.stringify({
@@ -36,6 +36,10 @@ const jsonLd = JSON.stringify({
   description,
   jobTitle: "Sales Lead & Product",
   worksFor: { "@type": "Organization", name: "Clique", url: LINKS.CLIQUE },
+  founder: [
+    { "@type": "Organization", name: "Gatekeep", url: LINKS.GATEKEEP },
+    { "@type": "Organization", name: "Attiteud", url: LINKS.ATTITEUD },
+  ],
   address: { "@type": "PostalAddress", addressLocality: "Taipei" },
   knowsLanguage: ["en", "zh", "fr"],
   sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD],
@@ -100,8 +104,8 @@ const jsonLd = JSON.stringify({
           <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · SG · HK · TW · EN ZH FR</p>
           <h1 data-i18n="hero.headline">I build software and get it distributed.</h1>
           <p class="bio" data-i18n="hero.bio">
-            Sales lead and product at Clique. Founder of Gatekeep and Attiteud. Two exits, US$10bn+
-            distributed, a decade across maritime, AI and crypto.
+            Sales lead and product at Clique. Founder of Gatekeep and Attiteud, a holding company for
+            small tech bets. Two exits, US$10bn+ distributed.
           </p>
           <p class="timeline" data-i18n="timeline">
             2014 police SOC · 2017 robotics sales · 2020 maritime · 2022 CopyScouts exit 14x · 2024
@@ -117,7 +121,7 @@ const jsonLd = JSON.stringify({
                 <span class="k">Gatekeep</span>
                 <span class="v">
                   <span data-i18n="now.gatekeep"
-                    >AI investor personas. Pass the screen, meet real VCs.</span
+                    >AI-native operating system for venture. Pitch the bar, not the network.</span
                   >
                   <button class="code" onclick="copyCode(this)" title="copy code JCXA">JCXA</button>
                   <a href={LINKS.GATEKEEP} rel="noopener">gatekeep.vc ↗</a>
@@ -127,7 +131,7 @@ const jsonLd = JSON.stringify({
                 <span class="k">Attiteud</span>
                 <span class="v">
                   <span data-i18n="now.attiteud"
-                    >Build studio + Humbl Design. Launch in 2–4 weeks. $10k/mo.</span
+                    >Holding company. Owns and builds a portfolio of small tech bets.</span
                   >
                   <a href={LINKS.ATTITEUD} rel="noopener">attiteud.com ↗</a>
                 </span>
@@ -233,15 +237,15 @@ const jsonLd = JSON.stringify({
             "hero.eyebrow": "台北 · 新加坡 · 香港 · 台湾 · 中英法",
             "hero.headline": "我做软件，并把它分发出去。",
             "hero.bio":
-              "Clique 销售主管 + 产品。Gatekeep 与 Attiteud 创始人。两次退出，100 亿美元+ 分发，十年横跨海事、AI 与加密。",
+              "Clique 销售主管 + 产品。Gatekeep 与 Attiteud 创始人；Attiteud 是一家控股公司，持有并打造小型科技投资组合。两次退出，100 亿美元+ 分发。",
             timeline:
               "2014 警察特勤 · 2017 机器人销售 · 2020 海事 · 2022 CopyScouts 14x 退出 · 2024 Podletter 7x 退出 · 2025 Clique · 2026 Gatekeep + Attiteud",
             "label.now": "现在",
             "label.receipts": "业绩",
             "label.writing": "写作",
             "label.about": "关于",
-            "now.gatekeep": "AI 投资人角色。通过筛选，见到真实 VC。",
-            "now.attiteud": "构建工作室 + Humbl Design。2–4 周启动创业项目。$10k/月。",
+            "now.gatekeep": "面向风投的 AI 原生操作系统。对标真实投资人门槛，不靠人脉。",
+            "now.attiteud": "控股公司。持有并打造小型科技投资组合。",
             "now.clique": "销售主管 + 产品。空投与分发工具。",
             "rec.0": "新加坡港务市场数字化 · elxa。",
             "rec.1": "CopyScouts 14x · Podletter 7x · AI Starter #2 PH。",
