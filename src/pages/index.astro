@@ -14,12 +14,17 @@ const LINKS = {
 };
 const EMAIL = "jcxa@proton.me";
 
-const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#000">${[0, 60, 120, 180, 240, 300]
+const recent = [...studies]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
+
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#1C5C3A">${[0, 60, 120, 180, 240, 300]
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 
-const description = "Justin Chua — software, distribution, deals. Taipei.";
+const description =
+  "I build software and get it distributed. Sales lead and product at Clique. Founder of Gatekeep and Attiteud.";
 const ogImage = new URL("/og.png", Astro.site);
 
 const jsonLd = JSON.stringify({
@@ -29,54 +34,12 @@ const jsonLd = JSON.stringify({
   url: Astro.site?.toString(),
   email: `mailto:${EMAIL}`,
   description,
-  jobTitle: "Founder",
-  worksFor: { "@type": "Organization", name: "Gatekeep", url: "https://gatekeep.vc" },
+  jobTitle: "Sales Lead & Product",
+  worksFor: { "@type": "Organization", name: "Clique", url: LINKS.CLIQUE },
   address: { "@type": "PostalAddress", addressLocality: "Taipei" },
   knowsLanguage: ["en", "zh", "fr"],
   sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD],
 });
-
-const stats = [
-  {
-    eyebrow: "maritime · 2020–24",
-    number: "75%",
-    line: "of SG harbour craft digitalized · elxa",
-    href: LINKS.ZAOBAO,
-    link: "联合早报 →",
-    lang: "zh-Hans",
-  },
-  {
-    eyebrow: "ai saas · 2022–24",
-    number: "2 exits",
-    line: "CopyScouts 14x · Podletter 7x · AI Starter #2 PH",
-    sub: "AI content SaaS · newsletter tool · AI launchpad",
-  },
-  {
-    eyebrow: "clique · 2025– · sales lead + product",
-    number: "US$10bn+",
-    line: "distributed in 2 years · airdrops · bespoke distribution tooling",
-    sub: "75% of top-1000 coins that outsourced development",
-    href: LINKS.CLIQUE,
-    link: "clique.tech →",
-  },
-];
-
-const projects = [
-  {
-    name: "Gatekeep",
-    blurb:
-      "AI investor personas screen your pitch across 12 dimensions. Pass, and your deck lands with real VCs who fund founders like you.",
-    href: LINKS.GATEKEEP,
-    domain: "gatekeep.vc",
-  },
-  {
-    name: "Attiteud",
-    blurb:
-      "Build studio + Humbl Design. Launch your startup in 2-4 weeks. One team, one price. $10K/mo.",
-    href: LINKS.ATTITEUD,
-    domain: "attiteud.com",
-  },
-];
 ---
 
 <!doctype html>
@@ -88,8 +51,8 @@ const projects = [
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.site} />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111111" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F4EC" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14140F" />
     <meta property="og:title" content="Justin Chua" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -120,210 +83,174 @@ const projects = [
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#top">skip to content</a>
-
-    <header class="nav">
-      <div class="wrap nav-inner">
+    <div class="sheet" id="top">
+      <header class="top">
         <a class="wordmark" href="/">Justin Chua</a>
-        <div class="nav-right">
-          <a class="nav-btn" href="/studies">writings</a>
-          <button class="nav-btn theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
-          <button class="nav-btn lang" onclick="toggleLang()" title="切换中文">繁中</button>
+        <div class="top-links">
+          <a href={`mailto:${EMAIL}`}>email</a>
+          <a href={LINKS.LINKEDIN} rel="noopener">linkedin</a>
+          <a href={LINKS.GITHUB} rel="noopener">github</a>
+          <button class="toggle theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
+          <button class="toggle lang" onclick="toggleLang()" title="切换中文">繁中</button>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <main id="top" class="wrap">
-      <section class="hero" aria-label="Introduction">
-        <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · HK · SG</p>
-        <h1 data-i18n="hero.headline">Justin Chua</h1>
-        <p class="lede" data-i18n="hero.lede">
-          I'm the kind of person who takes things apart to see how they work. A decade of that has
-          taken me through maritime software, AI tools, and the plumbing of crypto markets. Two
-          exits along the way, and more than US$10bn in token value moved through Clique. Right now
-          I'm building Gatekeep, which helps founders meet the investors who fund them, and
-          Attiteud, a studio that launches companies. Off the clock I'm usually reading, scribbling
-          notes, and chasing questions about how people think, decide, and talk themselves into
-          things.
-        </p>
-        <p class="timeline" data-i18n="hero.timeline">
-          2014 police SOC · 2017 robotics sales · 2020 maritime · 2022 CopyScouts exit 14x · 2024
-          Podletter exit 7x · 2025 Clique · 2026 Attiteud + Gatekeep
-        </p>
-        <div class="hero-ctas">
-          <a href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="hero.cta-gatekeep">
-            try Gatekeep · 2 months free →
-          </a>
-          <a href="/studies" data-i18n="hero.cta-writings">writings →</a>
-          <a href="#contact">contact</a>
+      <main>
+        <section class="hero" aria-label="Introduction">
+          <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · SG · HK · TW · EN ZH FR</p>
+          <h1 data-i18n="hero.headline">I build software and get it distributed.</h1>
+          <p class="bio" data-i18n="hero.bio">
+            Sales lead and product at Clique. Founder of Gatekeep and Attiteud. Two exits, US$10bn+
+            distributed, a decade across maritime, AI and crypto.
+          </p>
+          <p class="timeline" data-i18n="timeline">
+            2014 police SOC · 2017 robotics sales · 2020 maritime · 2022 CopyScouts exit 14x · 2024
+            Podletter exit 7x · 2025 Clique · 2026 Gatekeep + Attiteud
+          </p>
+        </section>
+
+        <div class="cols">
+          <section class="block" aria-label="Now">
+            <p class="block-label" data-i18n="label.now">now</p>
+            <div class="rows">
+              <div class="row">
+                <span class="k">Gatekeep</span>
+                <span class="v">
+                  <span data-i18n="now.gatekeep"
+                    >AI investor personas. Pass the screen, meet real VCs.</span
+                  >
+                  <button class="code" onclick="copyCode(this)" title="copy code JCXA">JCXA</button>
+                  <a href={LINKS.GATEKEEP} rel="noopener">gatekeep.vc ↗</a>
+                </span>
+              </div>
+              <div class="row">
+                <span class="k">Attiteud</span>
+                <span class="v">
+                  <span data-i18n="now.attiteud"
+                    >Build studio + Humbl Design. Launch in 2–4 weeks. $10k/mo.</span
+                  >
+                  <a href={LINKS.ATTITEUD} rel="noopener">attiteud.com ↗</a>
+                </span>
+              </div>
+              <div class="row">
+                <span class="k">Clique</span>
+                <span class="v">
+                  <span data-i18n="now.clique"
+                    >Sales lead + product. Airdrops and distribution tooling.</span
+                  >
+                  <a href={LINKS.CLIQUE} rel="noopener">clique.tech ↗</a>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section class="block" aria-label="Receipts">
+            <p class="block-label" data-i18n="label.receipts">receipts</p>
+            <div class="rows">
+              <div class="row">
+                <span class="k num">75%</span>
+                <span class="v">
+                  <span data-i18n="rec.0">of Singapore's harbour craft market digitalized at elxa.</span>
+                  <a href={LINKS.ZAOBAO} rel="noopener" lang="zh-Hans">联合早报 ↗</a>
+                </span>
+              </div>
+              <div class="row">
+                <span class="k num">2 exits</span>
+                <span class="v">
+                  <span data-i18n="rec.1"
+                    >CopyScouts 14x · Podletter 7x · AI Starter #2 on Product Hunt.</span
+                  >
+                </span>
+              </div>
+              <div class="row">
+                <span class="k num">US$10bn+</span>
+                <span class="v">
+                  <span data-i18n="rec.2">token value distributed at Clique in two years.</span>
+                </span>
+              </div>
+            </div>
+          </section>
         </div>
-        <p class="kbw-line">
-          <a href="/kbw">KBW Seoul · ad space on 4 dresses — claim a lot →</a>
-        </p>
-      </section>
 
-      <section class="section" id="gatekeep" aria-label="Gatekeep">
-        <h2 class="sec-title" data-i18n="gk.title">
-          Pass the screen. <em>Meet the investors.</em> Get funded.
-        </h2>
-        <p class="gk-sub" data-i18n="gk.sub">
-          AI investor personas stress-test your pitch across 12 dimensions. Pass the screen, and
-          your deck goes straight to real VCs. 2 months free with the code:
-        </p>
-        <div class="gk-row">
-          <button class="gk-code" onclick="copyGatekeepCode(this)" aria-label="Copy code JCXA">
-            <span>JCXA</span>
-            <span class="gk-code-action">copy</span>
-          </button>
-          <a href={LINKS.GATEKEEP_CODE} rel="noopener" data-i18n="gk.cta">start pitching →</a>
-        </div>
-      </section>
+        <section class="block" aria-label="Writing">
+          <p class="block-label" data-i18n="label.writing">writing</p>
+          <p class="line">
+            {recent.map((s) => <a href={`/studies/${s.slug}`}>{s.title}</a>)}
+            <a href="/studies">all {studies.length} →</a>
+          </p>
+        </section>
 
-      <section class="section" id="building" aria-label="Building now">
-        <h2 class="sec-title" data-i18n="label.building-now">building now</h2>
-        {
-          projects.map((p) => (
-            <p class="proj-line">
-              <span class="proj-name">{p.name}</span> — <span class="proj-blurb">{p.blurb}</span>{" "}
-              <a class="proj-link" href={p.href} rel="noopener">{p.domain} →</a>
-            </p>
-          ))
-        }
-      </section>
+        <section class="block about" aria-label="About">
+          <p class="block-label" data-i18n="label.about">about</p>
+          <p class="mono-line" data-i18n="about.certs">AI4I · CrewAI · UX Design · IBMI · CDMS</p>
+          <p class="mono-line">
+            <span data-i18n="about.stack"
+              >TypeScript · React · Node · Python · Postgres · LLM pipelines</span
+            >
+          </p>
+          <p class="mono-line">
+            <span data-i18n="about.site">static · no client js · system fonts ·</span>
+            <a href={LINKS.SOURCE} rel="noopener">view source →</a>
+          </p>
+        </section>
+      </main>
 
-      <section class="section" id="track-record" aria-label="Track record">
-        <h2 class="sec-title" data-i18n="label.track-record">track record</h2>
-        {
-          stats.map((s) => (
-            <p class="stat-line">
-              <span class="stat-number">{s.number}</span> — {s.line}
-              {s.sub && <span class="stat-sub"> · {s.sub}</span>}
-              {s.href && (
-                <>
-                  {" "}
-                  <a href={s.href} rel="noopener" lang={s.lang}>{s.link}</a>
-                </>
-              )}
-            </p>
-          ))
-        }
-        <!-- PENDING internal clearance on figures. -->
-      </section>
-
-      <section class="section" id="writings" aria-label="Writings">
-        <h2 class="sec-title" data-i18n="label.writings">
-          writings <a class="sec-link" href="/studies">(all →)</a>
-        </h2>
-        {
-          [...studies]
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-            .slice(0, 9)
-            .map((s) => {
-              const d = new Date(s.date).toLocaleDateString("en-US", {
-                month: "short",
-                year: "numeric",
-              });
-              return (
-                <a class="writing-row" href={`/studies/${s.slug}`}>
-                  <span class="writing-date">{d}</span>
-                  {s.title}
-                  <span class="writing-tag">{s.backlinkLabel || "note"}</span>
-                </a>
-              );
-            })
-        }
-      </section>
-
-      <section class="section" id="certificates" aria-label="Certificates">
-        <h2 class="sec-title" data-i18n="label.certificates">certificates</h2>
-        <ul>
-          <li>AI4I Foundations in AI · AI Singapore</li>
-          <li>CrewAI · multi-agent systems</li>
-          <li>UX Design · Vertical Institute</li>
-          <li>Economics &amp; Int'l Business · IBMI</li>
-          <li>CDMS</li>
-        </ul>
-      </section>
-
-      <section class="section" id="contact" aria-label="Contact">
-        <h2 class="sec-title" data-i18n="label.contact">contact</h2>
-        <div class="contact-strip">
-          <a class="contact-item" href="https://wa.me/6588175879" rel="noopener">
-            <span data-i18n="contact.whatsapp">WhatsApp</span>
-          </a>
-          <a class="contact-item" href={LINKS.LINKEDIN} rel="noopener">
-            <span data-i18n="contact.linkedin">LinkedIn</span>
-          </a>
-          <a class="contact-item" href={`mailto:${EMAIL}`}>
-            <span data-i18n="contact.email">Email</span>
-          </a>
-          <a class="contact-item" href="/contact.vcf" download="Justin_Chua.vcf">
-            <span data-i18n="contact.save">Save vCard</span>
-          </a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="foot">
-      <div class="wrap foot-inner">
+      <footer class="foot">
         <p class="foot-copy" data-i18n="footer.copy">© Justin Chua · Taipei</p>
-        <p class="colophon">
-          <span data-i18n="colophon">plain html · no frameworks · system fonts ·</span>
-          <a href={LINKS.SOURCE} rel="noopener">view source →</a>
-        </p>
-      </div>
-    </footer>
+        <div class="foot-links">
+          <a href="/contact.vcf" download="Justin_Chua.vcf" data-i18n="footer.save">save contact</a>
+          <a href="/studies">writing</a>
+        </div>
+      </footer>
+    </div>
 
     <script>
-      /* ── gatekeep code copy ── */
-      window.copyGatekeepCode = function (btn) {
-        var code = "JCXA";
-        var done = function () {
-          var a = btn.querySelector(".gk-code-action");
-          if (a) { a.textContent = "copied"; setTimeout(function () { a.textContent = "copy"; }, 1800); }
+      /* JCXA copy */
+      window.copyCode = function (btn) {
+        const code = "JCXA";
+        const done = () => {
+          const old = btn.textContent;
+          btn.textContent = "copied";
+          setTimeout(() => (btn.textContent = old), 1400);
         };
-        function fallback() {
-          var ta = document.createElement("textarea");
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(code).then(done).catch(() => {});
+        } else {
+          const ta = document.createElement("textarea");
           ta.value = code;
-          ta.style.position = "fixed";
-          ta.style.opacity = "0";
           document.body.appendChild(ta);
           ta.select();
-          try { document.execCommand("copy"); } catch (e) {}
-          document.body.removeChild(ta);
+          document.execCommand("copy");
+          ta.remove();
           done();
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(code).then(done).catch(fallback);
-        } else {
-          fallback();
         }
       };
 
-      /* ── i18n ── */
+      /* i18n */
       (function () {
         var M = {
           zh: {
-            "hero.eyebrow": "台北 · 香港 · 新加坡",
-            "hero.headline": "蔡献安",
-            "hero.lede": "我是那种喜欢拆开东西看它们怎么工作的人。十年里走过海事软件、AI 工具和加密市场的底层架构。两次退出，经 Clique 流动了 100 亿美元+ 代币。现在我在做 Gatekeep，帮创始人见到真正投资的人；还有 Attiteud，一个帮刚开始的公司的启动的工作室。不工作时我通常在读书、写笔记，追问人们怎么思考、怎么决定、怎么说服自己的问题。",
-            "hero.timeline": "2014 警察特勤 · 2017 机器人销售 · 2020 海事 · 2022 CopyScouts 14x 退出 · 2024 Podletter 7x 退出 · 2025 Clique · 2026 Attiteud + Gatekeep",
-            "hero.cta-gatekeep": "试用 Gatekeep · 免费 2 个月 →",
-            "hero.cta-writings": "文章 →",
-            "gk.title": "通过 AI 筛选。见到真实投资人。拿到融资。",
-            "gk.sub": "AI 投资人角色对你的路演进行 12 维度压力测试。通过筛选后，你的 deck 直达真实 VC。使用代码免费 2 个月：",
-            "gk.cta": "开始路演 →",
-            "label.building-now": "正在打造",
-            "label.track-record": "业绩记录",
-            "label.writings": "文章",
-            "label.certificates": "证书",
-            "label.contact": "联系",
-            "contact.whatsapp": "WhatsApp",
-            "contact.linkedin": "LinkedIn",
-            "contact.email": "邮件",
-            "contact.save": "保存名片",
+            "hero.eyebrow": "台北 · 新加坡 · 香港 · 台湾 · 中英法",
+            "hero.headline": "我做软件，并把它分发出去。",
+            "hero.bio":
+              "Clique 销售主管 + 产品。Gatekeep 与 Attiteud 创始人。两次退出，100 亿美元+ 分发，十年横跨海事、AI 与加密。",
+            timeline:
+              "2014 警察特勤 · 2017 机器人销售 · 2020 海事 · 2022 CopyScouts 14x 退出 · 2024 Podletter 7x 退出 · 2025 Clique · 2026 Gatekeep + Attiteud",
+            "label.now": "现在",
+            "label.receipts": "业绩",
+            "label.writing": "写作",
+            "label.about": "关于",
+            "now.gatekeep": "AI 投资人角色。通过筛选，见到真实 VC。",
+            "now.attiteud": "构建工作室 + Humbl Design。2–4 周启动创业项目。$10k/月。",
+            "now.clique": "销售主管 + 产品。空投与分发工具。",
+            "rec.0": "新加坡港务市场数字化 · elxa。",
+            "rec.1": "CopyScouts 14x · Podletter 7x · AI Starter #2 PH。",
+            "rec.2": "Clique 两年内分发 100 亿美元+ 代币。",
+            "about.certs": "AI4I · CrewAI · UX 设计 · IBMI · CDMS",
+            "about.stack": "TypeScript · React · Node · Python · Postgres · LLM 管线",
+            "about.site": "静态 · 无客户端 JS · 系统字体 ·",
             "footer.copy": "© 蔡献安 · 台北",
-            "colophon": "纯 HTML · 无框架 · 系统字体 ·",
+            "footer.save": "保存名片",
           },
         };
         var cur = "en";
@@ -333,7 +260,10 @@ const projects = [
           document.querySelectorAll("[data-i18n]").forEach(function (el) {
             var k = el.getAttribute("data-i18n");
             var orig = el.getAttribute("data-i18n-orig");
-            if (!orig) { el.setAttribute("data-i18n-orig", el.textContent); orig = el.textContent; }
+            if (!orig) {
+              el.setAttribute("data-i18n-orig", el.textContent);
+              orig = el.textContent;
+            }
             if (lang === "zh" && M.zh[k]) el.textContent = M.zh[k];
             else el.textContent = orig;
           });
