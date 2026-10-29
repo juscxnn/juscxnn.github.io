@@ -1,35 +1,39 @@
 # juscxnn.github.io
 
-Personal landing page for Justin Chua. Astro, fully static output, zero client-side JavaScript.
+Personal landing page for Justin Chua. Astro, fully static, no client-side framework.
+
+Live: https://justinxa.com (Vercel) · https://juscxnn.github.io (GitHub Pages)
+
+## What's in here
+
+- `/` — single-screen spec sheet: now, receipts, writing, about. No scroll at 360–1440px wide.
+- `/studies/` — essay index + 9 long-form studies.
+- `/write/` — private composer (password-gated) that commits new studies to this repo via the
+  GitHub API. The page hash lives in `src/pages/write.astro`; change it there.
+- `public/contact.vcf` — save-contact card linked from the footer.
+- `public/og.png` — 1200×630 social card (bone, forest mark). Regenerate by rendering an HTML
+  card at `--window-size=1200,630` with headless Chrome.
 
 ## Commands
 
 ```bash
-npm install        # install dependencies
-npm run dev        # dev server at http://localhost:4321
-npm run build      # static build to dist/
-npm run preview    # preview the production build locally
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # static output in dist/
+npm run preview
 ```
 
 ## Deploy
 
-**GitHub Pages (default).** Push to `main` — `.github/workflows/deploy.yml` builds and deploys
-automatically. One-time setup: repo Settings → Pages → Source → **GitHub Actions**.
+Push to `main`. Both happen automatically:
 
-**Vercel / Cloudflare Pages (alternative).** Framework preset: Astro. Build command
-`npm run build`, output directory `dist`.
+- **GitHub Pages** — `.github/workflows/deploy.yml` builds with `withastro/action@v3`
+  (Node 22). One-time setup: repo Settings → Pages → Source → **GitHub Actions**.
+- **Vercel** — project `juscxnn-github-io` is git-linked to this repo; `justinxa.com` points at it.
 
-## Tokens to fill
+## Notes
 
-None. Telegram was removed until a real handle exists — the deal-sheet CTA routes to email.
-To restore it, add a `TELEGRAM` entry to `LINKS` in `src/pages/index.astro`.
-
-## Assets
-
-- `public/logos/` — project marks pulled from each site's favicon (gatekeep.vc, attiteud.com;
-  nichesim.svg is a vector redraw of their ⧉ mark — replace when they ship a favicon).
-- `public/og.png` — generated 1200×630 Open Graph card (dark).
-- `public/portrait.jpg` — 3:4 portrait, optional. Missing file falls back to the asterisk mark;
-  the build never breaks.
-
-Fonts are self-hosted via Fontsource (no third-party requests).
+- Zero client JS except the theme toggle, the EN/繁中 toggle, and the JCXA copy chip.
+- System font stack; no webfont downloads.
+- `astro build` must stay warning-free — the Astro compiler rejects `{expr}` inside `<script>`
+  tags, so page config is passed via `<script type="application/json" set:html>` blocks.
