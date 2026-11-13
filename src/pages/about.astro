@@ -1,0 +1,279 @@
+---
+import "../styles/global.css";
+import { studies } from "../data/studies";
+import { EMAIL, LINKS } from "../data/site";
+
+const recent = [...studies]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
+
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#1C5C3A">${[0, 60, 120, 180, 240, 300]
+  .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
+  .join("")}</g></svg>`;
+const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
+
+const description =
+  "I build software and get it distributed. Sales lead and product at Clique. Founder of Gatekeep and Attiteud, a holding company for small tech bets.";
+const ogImage = new URL("/og.png", Astro.site);
+const canonical = new URL("/about/", Astro.site);
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Justin Chua",
+  url: Astro.site?.toString(),
+  email: `mailto:${EMAIL}`,
+  description,
+  jobTitle: "Sales Lead & Product",
+  worksFor: { "@type": "Organization", name: "Clique", url: LINKS.CLIQUE },
+  founder: [
+    { "@type": "Organization", name: "Gatekeep", url: LINKS.GATEKEEP },
+    { "@type": "Organization", name: "Attiteud", url: LINKS.ATTITEUD },
+  ],
+  address: { "@type": "PostalAddress", addressLocality: "Taipei" },
+  knowsLanguage: ["en", "zh", "fr"],
+  sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD],
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About — Justin Chua</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F4EC" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14140F" />
+    <meta property="og:title" content="About — Justin Chua" />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <script type="application/ld+json" set:html={jsonLd} />
+    <script>
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+        document.addEventListener("DOMContentLoaded", function () {
+          var b = document.querySelector(".theme-btn");
+          if (b) b.textContent = t === "dark" ? "light" : "dark";
+        });
+        window.toggleTheme = function () {
+          var c = document.documentElement.getAttribute("data-theme");
+          var n = c === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", n);
+          localStorage.setItem("theme", n);
+          var b = document.querySelector(".theme-btn");
+          if (b) b.textContent = n === "dark" ? "light" : "dark";
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="sheet" id="top">
+      <header class="top">
+        <a class="wordmark" href="/">Justin Chua</a>
+        <div class="top-links">
+          <a href={`mailto:${EMAIL}`}>email</a>
+          <a href={LINKS.LINKEDIN} rel="noopener">linkedin</a>
+          <a href={LINKS.GITHUB} rel="noopener">github</a>
+          <a href="/" class="play-link">play →</a>
+          <button class="toggle theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
+          <button class="toggle lang" onclick="toggleLang()" title="切换中文">繁中</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-label="Introduction">
+          <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · SG · HK · TW · EN ZH FR</p>
+          <h1 data-i18n="hero.headline">I build software and get it distributed.</h1>
+          <p class="bio" data-i18n="hero.bio">
+            Sales lead and product at Clique. Founder of Gatekeep and Attiteud, a holding company for
+            small tech bets. Two exits, US$10bn+ distributed.
+          </p>
+          <p class="timeline" data-i18n="timeline">
+            2014 police SOC · 2017 robotics sales · 2020 maritime · 2022 CopyScouts exit 14x · 2024
+            Podletter exit 7x · 2025 Clique · 2026 Gatekeep + Attiteud
+          </p>
+        </section>
+
+        <div class="cols">
+          <section class="block" aria-label="Now">
+            <p class="block-label" data-i18n="label.now">now</p>
+            <div class="rows">
+              <div class="row">
+                <span class="k">Gatekeep</span>
+                <span class="v">
+                  <span data-i18n="now.gatekeep"
+                    >AI-native operating system for venture. Pitch the bar, not the network.</span
+                  >
+                  <button class="code" onclick="copyCode(this)" title="copy code JCXA">JCXA</button>
+                  <a href={LINKS.GATEKEEP} rel="noopener">gatekeep.vc ↗</a>
+                </span>
+              </div>
+              <div class="row">
+                <span class="k">Attiteud</span>
+                <span class="v">
+                  <span data-i18n="now.attiteud"
+                    >Holding company. Owns and builds a portfolio of small tech bets.</span
+                  >
+                  <a href={LINKS.ATTITEUD} rel="noopener">attiteud.com ↗</a>
+                </span>
+              </div>
+              <div class="row">
+                <span class="k">Clique</span>
+                <span class="v">
+                  <span data-i18n="now.clique"
+                    >Sales lead + product. Airdrops and distribution tooling.</span
+                  >
+                  <a href={LINKS.CLIQUE} rel="noopener">clique.tech ↗</a>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section class="block" aria-label="Receipts">
+            <p class="block-label" data-i18n="label.receipts">receipts</p>
+            <div class="rows">
+              <div class="row">
+                <span class="k num">75%</span>
+                <span class="v">
+                  <span data-i18n="rec.0">of Singapore's harbour craft market digitalized at elxa.</span>
+                  <a href={LINKS.ZAOBAO} rel="noopener" lang="zh-Hans">联合早报 ↗</a>
+                </span>
+              </div>
+              <div class="row">
+                <span class="k num">2 exits</span>
+                <span class="v">
+                  <span data-i18n="rec.1"
+                    >CopyScouts 14x · Podletter 7x · AI Starter #2 on Product Hunt.</span
+                  >
+                </span>
+              </div>
+              <div class="row">
+                <span class="k num">US$10bn+</span>
+                <span class="v">
+                  <span data-i18n="rec.2">token value distributed at Clique in two years.</span>
+                </span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="block" aria-label="Writing">
+          <p class="block-label" data-i18n="label.writing">writing</p>
+          <p class="line">
+            {recent.map((s) => <a href={`/studies/${s.slug}`}>{s.title}</a>)}
+            <a href="/studies">all {studies.length} →</a>
+          </p>
+        </section>
+
+        <section class="block about" aria-label="About">
+          <p class="block-label" data-i18n="label.about">about</p>
+          <p class="mono-line" data-i18n="about.certs">AI4I · CrewAI · UX Design · IBMI · CDMS</p>
+          <p class="mono-line">
+            <span data-i18n="about.stack"
+              >TypeScript · React · Node · Python · Postgres · LLM pipelines</span
+            >
+          </p>
+          <p class="mono-line">
+            <span data-i18n="about.site">static · system fonts · minimal js</span>
+            <a href={LINKS.SOURCE} rel="noopener">view source →</a>
+          </p>
+        </section>
+      </main>
+
+      <footer class="foot">
+        <p class="foot-copy" data-i18n="footer.copy">© Justin Chua · Taipei</p>
+        <div class="foot-links">
+          <a href="/contact.vcf" download="Justin_Chua.vcf" data-i18n="footer.save">save contact</a>
+          <a href="/studies">writing</a>
+          <a href="/">the climb</a>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      /* JCXA copy */
+      window.copyCode = function (btn) {
+        const code = "JCXA";
+        const done = () => {
+          const old = btn.textContent;
+          btn.textContent = "copied";
+          setTimeout(() => (btn.textContent = old), 1400);
+        };
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(code).then(done).catch(() => {});
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = code;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+          done();
+        }
+      };
+
+      /* i18n */
+      (function () {
+        var M = {
+          zh: {
+            "hero.eyebrow": "台北 · 新加坡 · 香港 · 台湾 · 中英法",
+            "hero.headline": "我做软件，并把它分发出去。",
+            "hero.bio":
+              "Clique 销售主管 + 产品。Gatekeep 与 Attiteud 创始人；Attiteud 是一家控股公司，持有并打造小型科技投资组合。两次退出，100 亿美元+ 分发。",
+            timeline:
+              "2014 警察特勤 · 2017 机器人销售 · 2020 海事 · 2022 CopyScouts 14x 退出 · 2024 Podletter 7x 退出 · 2025 Clique · 2026 Gatekeep + Attiteud",
+            "label.now": "现在",
+            "label.receipts": "业绩",
+            "label.writing": "写作",
+            "label.about": "关于",
+            "now.gatekeep": "面向风投的 AI 原生操作系统。对标真实投资人门槛，不靠人脉。",
+            "now.attiteud": "控股公司。持有并打造小型科技投资组合。",
+            "now.clique": "销售主管 + 产品。空投与分发工具。",
+            "rec.0": "新加坡港务市场数字化 · elxa。",
+            "rec.1": "CopyScouts 14x · Podletter 7x · AI Starter #2 PH。",
+            "rec.2": "Clique 两年内分发 100 亿美元+ 代币。",
+            "about.certs": "AI4I · CrewAI · UX 设计 · IBMI · CDMS",
+            "about.stack": "TypeScript · React · Node · Python · Postgres · LLM 管线",
+            "about.site": "静态 · 系统字体 · 极简 JS",
+            "footer.copy": "© 蔡献安 · 台北",
+            "footer.save": "保存名片",
+            "nav.play": "开始攀爬 →",
+          },
+        };
+        var cur = "en";
+        window.applyLang = function (lang) {
+          cur = lang;
+          document.documentElement.setAttribute("data-lang", lang);
+          document.querySelectorAll("[data-i18n]").forEach(function (el) {
+            var k = el.getAttribute("data-i18n");
+            var orig = el.getAttribute("data-i18n-orig");
+            if (!orig) {
+              el.setAttribute("data-i18n-orig", el.textContent);
+              orig = el.textContent;
+            }
+            if (lang === "zh" && M.zh[k]) el.textContent = M.zh[k];
+            else el.textContent = orig;
+          });
+          var b = document.querySelector(".lang");
+          if (b) b.textContent = lang === "zh" ? "EN" : "繁中";
+        };
+        window.toggleLang = function () {
+          applyLang(cur === "zh" ? "en" : "zh");
+          localStorage.setItem("lang", cur);
+        };
+        var s = localStorage.getItem("lang");
+        if (s === "zh") applyLang("zh");
+      })();
+    </script>
+  </body>
+</html>

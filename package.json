@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:world": "esbuild scripts/test-world.ts --bundle --format=esm --outfile=.tmp/test-world.mjs --log-level=warning && node .tmp/test-world.mjs"
   },
   "dependencies": {
     "astro": "^7.1.1"

@@ -1,39 +1,52 @@
 # juscxnn.github.io
 
-Personal landing page for Justin Chua. Astro, fully static, no client-side framework.
+Justin Chua's site. Astro, static output, one canvas game.
 
 Live: https://justinxa.com (Vercel) · https://juscxnn.github.io (GitHub Pages)
 
-## What's in here
+## Routes
 
-- `/` — single-screen spec sheet: now, receipts, writing, about. No scroll at 360–1440px wide.
-- `/studies/` — essay index + 9 long-form studies.
-- `/write/` — private composer (password-gated) that commits new studies to this repo via the
-  GitHub API. The page hash lives in `src/pages/write.astro`; change it there.
-- `public/contact.vcf` — save-contact card linked from the footer.
-- `public/og.png` — 1200×630 social card (bone, forest mark). Regenerate by rendering an HTML
-  card at `--window-size=1200,630` with headless Chrome.
+- `/` — **The Climb**: a Doodle Jump through the timeline. Auto-bounce, steer with arrows /
+  A-D / touch. Platform stamps are milestones; falling restarts the era. Installable PWA,
+  works offline after first load. `?auto` enables the autopilot (used by headless smoke tests).
+- `/about/` — the flat spec sheet (SEO + no-JS version of the same content).
+- `/studies/` — essay index + long-form studies.
+- `/write/` — private composer (password-gated) committing studies via the GitHub API. The
+  page hash lives in `src/pages/write.astro`.
 
 ## Commands
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321
-npm run build    # static output in dist/
+npm run dev          # http://localhost:4321
+npm run build        # static output in dist/
 npm run preview
+npm run test:world   # generator + physics checks (60 seeds)
 ```
 
-## Deploy
+## Structure
 
-Push to `main`. Both happen automatically:
-
-- **GitHub Pages** — `.github/workflows/deploy.yml` builds with `withastro/action@v3`
-  (Node 22). One-time setup: repo Settings → Pages → Source → **GitHub Actions**.
-- **Vercel** — project `juscxnn-github-io` is git-linked to this repo; `justinxa.com` points at it.
+- `src/data/timeline.ts` — eras, milestone cards, pickups, EN/繁中 copy. Single source of truth.
+- `src/data/site.ts` — links, email, handle.
+- `src/game/` — engine (`engine.ts`), physics, seeded world generator (`world.ts`), paper-ink
+  renderer, DOM UI overlays, WebAudio blips, localStorage save.
+- `src/integrations/pwa.ts` — `astro:build:done` hook that emits `dist/sw.js` with a
+  content-hashed precache list. Every deploy produces a new cache and deletes the old one.
+- `public/manifest.webmanifest`, `public/icons/*` — install assets.
 
 ## Notes
 
-- Zero client JS except the theme toggle, the EN/繁中 toggle, and the JCXA copy chip.
-- System font stack; no webfont downloads.
-- `astro build` must stay warning-free — the Astro compiler rejects `{expr}` inside `<script>`
-  tags, so page config is passed via `<script type="application/json" set:html>` blocks.
+- 33 KB of JS total; studies pages stay static HTML.
+- The engine uses a fixed 60 Hz step; `draw()` samples CSS custom properties, so light/dark
+  both work.
+- Debug hooks are only enabled with `?auto`: `window.__snap()` and `window.__tick(frames)`.
+
+## Deploy
+
+Push to `main`:
+
+- **GitHub Pages** — `.github/workflows/deploy.yml` (`withastro/action@v3`, Node 22).
+- **Vercel** — project `juscxnn-github-io` is git-linked; `justinxa.com` points at it.
+
+After deploying, reload once so the new service worker takes over; the generated `sw.js`
+precaches the fresh build and drops the previous cache on activate.

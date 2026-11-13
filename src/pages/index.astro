@@ -1,33 +1,19 @@
 ---
 import "../styles/global.css";
-import { studies } from "../data/studies";
+import "../styles/game.css";
+import { EMAIL } from "../data/site";
 
-const LINKS = {
-  GATEKEEP: "https://gatekeep.vc",
-  GATEKEEP_CODE: "https://gatekeep.vc/?code=JCXA",
-  ATTITEUD: "https://attiteud.com",
-  CLIQUE: "https://clique.tech",
-  ZAOBAO: "https://www.zaobao.com.sg/news/singapore/story20240102-1459510",
-  LINKEDIN: "https://linkedin.com/in/justincxa",
-  GITHUB: "https://github.com/juscxnn",
-  SOURCE: "https://github.com/juscxnn/juscxnn.github.io",
-};
-const EMAIL = "jcxa@proton.me";
-
-const recent = [...studies]
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 3);
+const description =
+  "A Doodle Jump through Justin Chua's timeline. 2014 police SOC, robotics, maritime, two exits, Clique, Gatekeep, Attiteud. Web and installable as an app.";
+const canonical = new URL("/", Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
 
 const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#1C5C3A">${[0, 60, 120, 180, 240, 300]
   .map((a) => `<ellipse cx="16" cy="8.5" rx="4" ry="7.5" transform="rotate(${a} 16 16)"/>`)
   .join("")}</g></svg>`;
 const favicon = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 
-const description =
-  "I build software and get it distributed. Sales lead and product at Clique. Founder of Gatekeep and Attiteud, a holding company for small tech bets.";
-const ogImage = new URL("/og.png", Astro.site);
-
-const jsonLd = JSON.stringify({
+const person = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Justin Chua",
@@ -35,252 +21,218 @@ const jsonLd = JSON.stringify({
   email: `mailto:${EMAIL}`,
   description,
   jobTitle: "Sales Lead & Product",
-  worksFor: { "@type": "Organization", name: "Clique", url: LINKS.CLIQUE },
+  worksFor: { "@type": "Organization", name: "Clique", url: "https://clique.tech" },
   founder: [
-    { "@type": "Organization", name: "Gatekeep", url: LINKS.GATEKEEP },
-    { "@type": "Organization", name: "Attiteud", url: LINKS.ATTITEUD },
+    { "@type": "Organization", name: "Gatekeep", url: "https://gatekeep.vc" },
+    { "@type": "Organization", name: "Attiteud", url: "https://attiteud.com" },
   ],
   address: { "@type": "PostalAddress", addressLocality: "Taipei" },
   knowsLanguage: ["en", "zh", "fr"],
-  sameAs: [LINKS.LINKEDIN, LINKS.GITHUB, LINKS.GATEKEEP, LINKS.ATTITEUD],
-});
+};
+
+const game = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  name: "The Climb",
+  description,
+  genre: "Platformer",
+  gamePlatform: "Web browser",
+  applicationCategory: "Game",
+  operatingSystem: "Any",
+  author: { "@type": "Person", name: "Justin Chua", url: Astro.site?.toString() },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+
+const jsonLd = JSON.stringify([person, game]);
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Justin Chua</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>The Climb — Justin Chua</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={Astro.site} />
+    <link rel="canonical" href={canonical} />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F4EC" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14140F" />
-    <meta property="og:title" content="Justin Chua" />
+    <meta property="og:title" content="The Climb — Justin Chua" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.site} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href={favicon} />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="The Climb" />
     <script type="application/ld+json" set:html={jsonLd} />
-    <script>
+    <script is:inline>
       (function () {
         var t = localStorage.getItem("theme");
         if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", t);
-        document.addEventListener("DOMContentLoaded", function () {
-          var b = document.querySelector(".theme-btn");
-          if (b) b.textContent = t === "dark" ? "light" : "dark";
-        });
-        window.toggleTheme = function () {
-          var c = document.documentElement.getAttribute("data-theme");
-          var n = c === "dark" ? "light" : "dark";
-          document.documentElement.setAttribute("data-theme", n);
-          localStorage.setItem("theme", n);
-          var b = document.querySelector(".theme-btn");
-          if (b) b.textContent = n === "dark" ? "light" : "dark";
-        };
       })();
     </script>
   </head>
-  <body>
-    <div class="sheet" id="top">
-      <header class="top">
-        <a class="wordmark" href="/">Justin Chua</a>
-        <div class="top-links">
-          <a href={`mailto:${EMAIL}`}>email</a>
-          <a href={LINKS.LINKEDIN} rel="noopener">linkedin</a>
-          <a href={LINKS.GITHUB} rel="noopener">github</a>
-          <button class="toggle theme-btn" onclick="toggleTheme()" aria-label="Toggle color scheme">dark</button>
-          <button class="toggle lang" onclick="toggleLang()" title="切换中文">繁中</button>
-        </div>
-      </header>
+  <body class="game-body">
+    <main class="stage" id="stage">
+      <div class="col">
+        <canvas id="world" class="world" aria-hidden="true"></canvas>
 
-      <main>
-        <section class="hero" aria-label="Introduction">
-          <p class="eyebrow" data-i18n="hero.eyebrow">TAIPEI · SG · HK · TW · EN ZH FR</p>
-          <h1 data-i18n="hero.headline">I build software and get it distributed.</h1>
-          <p class="bio" data-i18n="hero.bio">
-            Sales lead and product at Clique. Founder of Gatekeep and Attiteud, a holding company for
-            small tech bets. Two exits, US$10bn+ distributed.
+        <div class="hud">
+          <div class="hud-left">
+            <span class="hud-year" id="hud-year">2014</span>
+            <span class="hud-era" id="hud-era">Police SOC</span>
+          </div>
+          <div class="hud-right">
+            <span class="hud-best-pill"><span id="hud-best">0m</span></span>
+            <button class="icon-btn" id="btn-pause" aria-label="Pause">II</button>
+          </div>
+        </div>
+
+        <div class="rail" aria-hidden="true">
+          <div class="rail-track"><span class="rail-fill" id="rail-fill"></span></div>
+          <div class="rail-ticks" id="rail-ticks"></div>
+        </div>
+
+        <div class="cards" id="cards"></div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </div>
+
+      <section class="overlay" id="screen-start">
+        <div class="screen-in">
+          <p class="eyebrow">TAIPEI · 2014 → NOW</p>
+          <h1 data-i18n="title">The Climb</h1>
+          <p class="lede" data-i18n="subtitle">
+            2014 → now. Auto-bounce. Steer. Every platform is something I did.
           </p>
-          <p class="timeline" data-i18n="timeline">
+          <p class="bio-line">
+            I build software and get it distributed. Sales lead and product at Clique. Founder of
+            Gatekeep and Attiteud, a holding company for small tech bets.
+          </p>
+          <p class="howto" data-i18n="howto">← → or A / D · touch left / right</p>
+          <div class="actions">
+            <button class="primary" id="btn-start" data-i18n="start">start climbing</button>
+            <a class="ghost js-about" href="/about/" data-i18n="readFlat">read the flat version</a>
+          </div>
+          <div class="mini-row">
+            <span class="mini-label" data-i18n="best">best</span>
+            <span class="mini-value" id="start-best">0m</span>
+            <span class="mini-sep">·</span>
+            <a class="js-studies" href="/studies/" data-i18n="writing">writing</a>
+            <a class="js-github" href="https://github.com/juscxnn" rel="noopener">github</a>
+            <a class="js-linkedin" href="https://linkedin.com/in/justincxa" rel="noopener">linkedin</a>
+            <a class="js-email" href="mailto:jcxa@proton.me" data-i18n="contact">get in touch</a>
+          </div>
+          <div class="toggles">
+            <button class="tog js-lang" data-i18n="langName">繁中</button>
+            <button class="tog js-theme">dark</button>
+            <button class="tog js-sound">sound: off</button>
+            <button class="tog js-install" data-i18n="install" hidden>install app</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="overlay hidden" id="screen-pause">
+        <div class="panel">
+          <p class="eyebrow" data-i18n="paused">paused</p>
+          <h2 data-i18n="climbLog">climb log</h2>
+          <p class="stats" id="pause-stats"></p>
+          <div class="log" id="pause-log"></div>
+          <div class="actions">
+            <button class="primary" id="btn-resume" data-i18n="resume">resume</button>
+            <button class="ghost" id="btn-restart" data-i18n="restart">restart</button>
+          </div>
+          <div class="toggles">
+            <button class="tog js-lang">繁中</button>
+            <button class="tog js-theme">dark</button>
+            <button class="tog js-sound">sound: off</button>
+            <button class="tog js-install" data-i18n="install" hidden>install app</button>
+          </div>
+          <div class="mini-row">
+            <a class="js-about" href="/about/" data-i18n="about">about</a>
+            <a class="js-studies" href="/studies/" data-i18n="allWriting">all writing</a>
+            <a class="js-email" href="mailto:jcxa@proton.me" data-i18n="contact">get in touch</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="overlay hidden" id="screen-finale">
+        <div class="panel finale">
+          <p class="eyebrow">NOW · 2026 · TAIPEI</p>
+          <h2 data-i18n="finaleTitle">You made it.</h2>
+          <p class="lede" data-i18n="finaleSub">Two exits. One holding company. Still shipping.</p>
+          <p class="stats" id="finale-stats"></p>
+          <div class="log" id="finale-log"></div>
+
+          <div class="now-grid">
+            <div class="now-card">
+              <p class="now-name">Gatekeep</p>
+              <p class="now-text" data-i18n="nowGatekeep">
+                AI-native operating system for venture. Pitch the bar, not the network.
+              </p>
+              <div class="now-actions">
+                <button class="code js-copy">JCXA</button>
+                <a class="js-gatekeep" href="https://gatekeep.vc" rel="noopener">gatekeep.vc ↗</a>
+              </div>
+            </div>
+            <div class="now-card">
+              <p class="now-name">Attiteud</p>
+              <p class="now-text" data-i18n="nowAttiteud">
+                Holding company. Owns and builds a portfolio of small tech bets.
+              </p>
+              <div class="now-actions">
+                <a class="js-attiteud" href="https://attiteud.com" rel="noopener">attiteud.com ↗</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-grid">
+            <a class="js-email" href="mailto:jcxa@proton.me">email</a>
+            <a class="js-whatsapp" href="https://wa.me/6588175879" rel="noopener">whatsapp</a>
+            <a class="js-linkedin" href="https://linkedin.com/in/justincxa" rel="noopener">linkedin</a>
+            <a class="js-github" href="https://github.com/juscxnn" rel="noopener">github</a>
+            <a class="js-vcf" href="/contact.vcf" download="Justin_Chua.vcf" data-i18n="saveContact">save contact</a>
+            <a class="js-studies" href="/studies/" data-i18n="allWriting">all writing</a>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="btn-again" data-i18n="playAgain">climb again</button>
+            <button class="tog js-install" data-i18n="install" hidden>install app</button>
+            <a class="ghost js-about" href="/about/" data-i18n="about">about</a>
+          </div>
+        </div>
+      </section>
+
+      <noscript>
+        <div class="noscript-flat">
+          <h1>Justin Chua</h1>
+          <p>
+            I build software and get it distributed. Sales lead and product at Clique. Founder of
+            Gatekeep and Attiteud, a holding company for small tech bets. Two exits, US$10bn+
+            distributed.
+          </p>
+          <p>
             2014 police SOC · 2017 robotics sales · 2020 maritime · 2022 CopyScouts exit 14x · 2024
             Podletter exit 7x · 2025 Clique · 2026 Gatekeep + Attiteud
           </p>
-        </section>
-
-        <div class="cols">
-          <section class="block" aria-label="Now">
-            <p class="block-label" data-i18n="label.now">now</p>
-            <div class="rows">
-              <div class="row">
-                <span class="k">Gatekeep</span>
-                <span class="v">
-                  <span data-i18n="now.gatekeep"
-                    >AI-native operating system for venture. Pitch the bar, not the network.</span
-                  >
-                  <button class="code" onclick="copyCode(this)" title="copy code JCXA">JCXA</button>
-                  <a href={LINKS.GATEKEEP} rel="noopener">gatekeep.vc ↗</a>
-                </span>
-              </div>
-              <div class="row">
-                <span class="k">Attiteud</span>
-                <span class="v">
-                  <span data-i18n="now.attiteud"
-                    >Holding company. Owns and builds a portfolio of small tech bets.</span
-                  >
-                  <a href={LINKS.ATTITEUD} rel="noopener">attiteud.com ↗</a>
-                </span>
-              </div>
-              <div class="row">
-                <span class="k">Clique</span>
-                <span class="v">
-                  <span data-i18n="now.clique"
-                    >Sales lead + product. Airdrops and distribution tooling.</span
-                  >
-                  <a href={LINKS.CLIQUE} rel="noopener">clique.tech ↗</a>
-                </span>
-              </div>
-            </div>
-          </section>
-
-          <section class="block" aria-label="Receipts">
-            <p class="block-label" data-i18n="label.receipts">receipts</p>
-            <div class="rows">
-              <div class="row">
-                <span class="k num">75%</span>
-                <span class="v">
-                  <span data-i18n="rec.0">of Singapore's harbour craft market digitalized at elxa.</span>
-                  <a href={LINKS.ZAOBAO} rel="noopener" lang="zh-Hans">联合早报 ↗</a>
-                </span>
-              </div>
-              <div class="row">
-                <span class="k num">2 exits</span>
-                <span class="v">
-                  <span data-i18n="rec.1"
-                    >CopyScouts 14x · Podletter 7x · AI Starter #2 on Product Hunt.</span
-                  >
-                </span>
-              </div>
-              <div class="row">
-                <span class="k num">US$10bn+</span>
-                <span class="v">
-                  <span data-i18n="rec.2">token value distributed at Clique in two years.</span>
-                </span>
-              </div>
-            </div>
-          </section>
+          <p>
+            <a href="/about/">About</a> · <a href="/studies/">Writing</a> ·
+            <a href="mailto:jcxa@proton.me">Email</a> ·
+            <a href="https://linkedin.com/in/justincxa">LinkedIn</a> ·
+            <a href="https://github.com/juscxnn">GitHub</a>
+          </p>
         </div>
-
-        <section class="block" aria-label="Writing">
-          <p class="block-label" data-i18n="label.writing">writing</p>
-          <p class="line">
-            {recent.map((s) => <a href={`/studies/${s.slug}`}>{s.title}</a>)}
-            <a href="/studies">all {studies.length} →</a>
-          </p>
-        </section>
-
-        <section class="block about" aria-label="About">
-          <p class="block-label" data-i18n="label.about">about</p>
-          <p class="mono-line" data-i18n="about.certs">AI4I · CrewAI · UX Design · IBMI · CDMS</p>
-          <p class="mono-line">
-            <span data-i18n="about.stack"
-              >TypeScript · React · Node · Python · Postgres · LLM pipelines</span
-            >
-          </p>
-          <p class="mono-line">
-            <span data-i18n="about.site">static · no client js · system fonts ·</span>
-            <a href={LINKS.SOURCE} rel="noopener">view source →</a>
-          </p>
-        </section>
-      </main>
-
-      <footer class="foot">
-        <p class="foot-copy" data-i18n="footer.copy">© Justin Chua · Taipei</p>
-        <div class="foot-links">
-          <a href="/contact.vcf" download="Justin_Chua.vcf" data-i18n="footer.save">save contact</a>
-          <a href="/studies">writing</a>
-        </div>
-      </footer>
-    </div>
+      </noscript>
+    </main>
 
     <script>
-      /* JCXA copy */
-      window.copyCode = function (btn) {
-        const code = "JCXA";
-        const done = () => {
-          const old = btn.textContent;
-          btn.textContent = "copied";
-          setTimeout(() => (btn.textContent = old), 1400);
-        };
-        if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(code).then(done).catch(() => {});
-        } else {
-          const ta = document.createElement("textarea");
-          ta.value = code;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          ta.remove();
-          done();
-        }
-      };
-
-      /* i18n */
-      (function () {
-        var M = {
-          zh: {
-            "hero.eyebrow": "台北 · 新加坡 · 香港 · 台湾 · 中英法",
-            "hero.headline": "我做软件，并把它分发出去。",
-            "hero.bio":
-              "Clique 销售主管 + 产品。Gatekeep 与 Attiteud 创始人；Attiteud 是一家控股公司，持有并打造小型科技投资组合。两次退出，100 亿美元+ 分发。",
-            timeline:
-              "2014 警察特勤 · 2017 机器人销售 · 2020 海事 · 2022 CopyScouts 14x 退出 · 2024 Podletter 7x 退出 · 2025 Clique · 2026 Gatekeep + Attiteud",
-            "label.now": "现在",
-            "label.receipts": "业绩",
-            "label.writing": "写作",
-            "label.about": "关于",
-            "now.gatekeep": "面向风投的 AI 原生操作系统。对标真实投资人门槛，不靠人脉。",
-            "now.attiteud": "控股公司。持有并打造小型科技投资组合。",
-            "now.clique": "销售主管 + 产品。空投与分发工具。",
-            "rec.0": "新加坡港务市场数字化 · elxa。",
-            "rec.1": "CopyScouts 14x · Podletter 7x · AI Starter #2 PH。",
-            "rec.2": "Clique 两年内分发 100 亿美元+ 代币。",
-            "about.certs": "AI4I · CrewAI · UX 设计 · IBMI · CDMS",
-            "about.stack": "TypeScript · React · Node · Python · Postgres · LLM 管线",
-            "about.site": "静态 · 无客户端 JS · 系统字体 ·",
-            "footer.copy": "© 蔡献安 · 台北",
-            "footer.save": "保存名片",
-          },
-        };
-        var cur = "en";
-        window.applyLang = function (lang) {
-          cur = lang;
-          document.documentElement.setAttribute("data-lang", lang);
-          document.querySelectorAll("[data-i18n]").forEach(function (el) {
-            var k = el.getAttribute("data-i18n");
-            var orig = el.getAttribute("data-i18n-orig");
-            if (!orig) {
-              el.setAttribute("data-i18n-orig", el.textContent);
-              orig = el.textContent;
-            }
-            if (lang === "zh" && M.zh[k]) el.textContent = M.zh[k];
-            else el.textContent = orig;
-          });
-          var b = document.querySelector(".lang");
-          if (b) b.textContent = lang === "zh" ? "EN" : "繁中";
-        };
-        window.toggleLang = function () {
-          applyLang(cur === "zh" ? "en" : "zh");
-          localStorage.setItem("lang", cur);
-        };
-        var s = localStorage.getItem("lang");
-        if (s === "zh") applyLang("zh");
-      })();
+      import "../game/main";
     </script>
   </body>
 </html>
